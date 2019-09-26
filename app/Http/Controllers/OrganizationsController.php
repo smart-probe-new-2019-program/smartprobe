@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use Illuminate\Support\Facades\Hash;
+use App\Organization;
 
-class UsersController extends Controller
+class OrganizationsController extends Controller
 {
 	private $status;
 	private $data;
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +17,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return Organization::all();
 	}
 	
 	/**
@@ -25,38 +25,19 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers(Request $request)
+    public function getAllOrganizations(Request $request)
     { 
-		return User::orderBy('created_at','desc')->paginate(5);
-
-		// $filter = $request['filter'];
-
-		// if($filter){
-		// 	return User::with('process')
-		// 			->with('shift')
-		// 			->with('line')
-		// 			->where('first_name', 'like', '%' . $filter . '%')
-		// 			->orWhere('last_name', 'like', '%' . $filter . '%')
-		// 			->orderBy('created_at','desc')
-		// 			->paginate(5);
-		// }
-		// else{
-		// 	return User::with('process')
-		// 			->with('shift')
-		// 			->with('line')
-		// 			->orderBy('created_at','desc')
-		// 			->paginate(5);
-		// }
+		return Organization::orderBy('created_at','desc')->paginate(5);
 	}
-	
+
 	/**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function getUsersForDropdown()
+    public function getOrganizationsForDropdown()
     {
-		return User::all();
+		return Organization::all();
 	}
 
     /**
@@ -77,26 +58,13 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-		$request['full_name'] = $request['first_name'] . ' ' . $request['last_name'];
-		$request['password'] = Hash::make($request['password']);
-
-		try{
-			User::create($request->all());
+        try{
+			Organization::create($request->all());
 			$this->status = 'success';
 		}
 		catch(\Illuminate\Database\QueryException $ex){
-			if(strpos($ex->getMessage(), 'users_email_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Email';
-			}
-			else if(strpos($ex->getMessage(), 'users_username_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Username';
-			}
-			else{
-				$this->status = 'error';
-				$this->data = $ex->getMessage();
-			}
+			$this->status = 'error';
+			$this->data = $ex->getMessage();	
 		}
 
 		return response()->json(['status' => $this->status, 'data' => $this->data]);
@@ -110,23 +78,18 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        // return User::with('process')
-		// 			->with('shift')
-		// 			->with('line')
-		// 			->findOrFail($id);
+        return Organization::findOrFail($id);
+    }
 
-		return User::findOrFail($id);
-	}
-	
 	/**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getUser($id)
+    public function getOrganization($id)
     {
-        return User::findOrFail($id);
+        return Organization::findOrFail($id);
     }
 
     /**
@@ -150,23 +113,13 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
 		try{
-			$user = User::findOrFail($id);
-			$user->update($request->all());
+			$organization = Organization::findOrFail($id);
+			$organization->update($request->all());
 			$this->status = 'success';
 		}
 		catch(\Illuminate\Database\QueryException $ex){
-			if(strpos($ex->getMessage(), 'users_email_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Email';
-			}
-			else if(strpos($ex->getMessage(), 'users_username_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Username';
-			}
-			else{
-				$this->status = 'error';
-				$this->data = $ex->getMessage();
-			}
+			$this->status = 'error';
+			$this->data = $ex->getMessage();
 		}
 
 		return response()->json(['status' => $this->status, 'data' => $this->data]);
@@ -180,8 +133,8 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-		try{
-			User::find($id)->delete();
+        try{
+			Organization::find($id)->delete();
 			$this->status = 'success';
 		}
 		catch(\Illuminate\Database\QueryException $ex){

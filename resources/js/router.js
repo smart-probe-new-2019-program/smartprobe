@@ -87,7 +87,7 @@ const routes = [
       {
         path: 'organizations',
         component: Organizations,
-		name: 'users',
+		name: 'organizations',
 	  },
 	  // Organizations - Add
       {

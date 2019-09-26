@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="page-header">
-      <h3 class="page-title">Users</h3>
+      <h3 class="page-title">Organizations</h3>
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -9,10 +9,10 @@
           <div class="card-header">
             <div class="row">
               <div class="col-sm-6">
-                <h5>Add User</h5>
+                <h5>Add an Organization</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/users" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/organizations" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
@@ -23,71 +23,68 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Firstname</label>
-							<input type="text" v-model.trim="userData.first_name" class="form-control" ref="first_name" required>
+							<label class="control-label">Name</label>
+							<input type="text" v-model.trim="organizationData.name" class="form-control" ref="name" required>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Lastname</label>
-							<input type="text" v-model.trim="userData.last_name" class="form-control" ref="last_name" required>
+							<label class="control-label">Description</label>
+							<textarea v-model.trim="organizationData.description" class="form-control" rows="3" ref="description"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Address</label>
+							<input type="text" v-model.trim="organizationData.address" class="form-control" ref="address" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">City</label>
+							<input type="text" v-model.trim="organizationData.city" class="form-control" ref="city" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Country</label>
+							<input type="text" v-model.trim="organizationData.country" class="form-control" ref="country" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">State</label>
+							<input type="text" v-model.trim="organizationData.state" class="form-control" ref="state">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Zip Code</label>
+							<input type="text" v-model.trim="organizationData.zip_code" class="form-control" ref="zip_code">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Email</label>
-							<input type="email" v-model.trim="userData.email" class="form-control" ref="email" required>
+							<input type="email" v-model.trim="organizationData.email" class="form-control" ref="email" required>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Username</label>
-							<input type="text" v-model.trim="userData.username" class="form-control" ref="username" required>
+							<label class="control-label">Office Phone</label>
+							<input type="text" v-model.trim="organizationData.office_phone" class="form-control" ref="office_phone">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Password</label>
-							<input type="password" v-model.trim="userData.password" class="form-control" ref="password" required>
+							<label class="control-label">Office Fax</label>
+							<input type="text" v-model.trim="organizationData.office_fax" class="form-control" ref="office_fax">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Process</label>
-							<select class="form-control" v-model.trim="userData.process" ref="process" required>
-								<option v-for="process in processes" :value="process.id">
-									{{process.name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Shift</label>
-							<select class="form-control" v-model="userData.shift" ref="shift" required>
-								<option v-for="shift in shifts" :value="shift.id">
-									{{shift.shift_name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Production Line</label>
-							<select class="form-control" v-model="userData.line" ref="line" required>
-								<option v-for="line in lines" :value="line.id">
-									{{line.name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Role</label>
-							<select class="form-control" v-model="userData.role" ref="role" required>
-								<option value="admin">Admin</option>
-								<option value="user">User</option>
-							</select>
+							<label class="control-label">Mobile Phone</label>
+							<input type="text" v-model.trim="organizationData.mobile_phone" class="form-control" ref="mobile_phone">
 						</div>
 					</div>
 				</div>
@@ -107,29 +104,23 @@
 export default {
 	data() {
 		return {
-			userData: {
-				first_name: "",
-				last_name: "",
-				full_name: "",
-				email: "",
-				username: "",
-				password: "",
-				process: 0,
-				shift: 0,
-				line: 0,
-				role: "admin",
+			organizationData: {
+				name: "",
+				description: "",
+				address: "",
+				city: "",
+				country: "",
+				state: "",
+				zip_code: "",
+				office_phone: "",
+				office_fax: "",
+				mobile_phone: "",
 				created_by: localStorage.getItem("user.id"),
 				updated_by: localStorage.getItem("user.id")
 			},
-			processes: [],
-			shifts: [],
-			lines: [],
 		};
 	},
 	mounted() {
-		this.getProcesses();
-		this.getShifts();
-		this.getLines();
 		toastr.options = {
 			closeButton: true,
 			debug: false,
@@ -146,57 +137,17 @@ export default {
 		}
 	},
 	methods: {
-		getProcesses() {
-			let app = this;
-			axios.get('/api/admin/process/getProcessesForDropdown')
-			.then(function(resp) {
-				app.processes = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching processes");
-			});
-		},
-		getShifts() {
-			let app = this;
-			axios.get('/api/admin/shifts/getShiftsForDropdown')
-			.then(function(resp) {
-				app.shifts = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching shifts");
-			});
-		},
-		getLines() {
-			let app = this;
-			axios.get('/api/admin/production_lines/getProductionLinesForDropdown')
-			.then(function(resp) {
-				app.lines = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching lines");
-			});
-		},
 		saveForm() {
 			let app = this;
 		
-			axios.post('/api/admin/users', app.userData)
+			axios.post('/api/admin/organizations', app.organizationData)
 			.then(function(resp) {
 				if(resp.data.status == 'error'){
-					if(resp.data.data == 'Duplicate Email'){
-						toastr['error']('Email already taken.', 'Error!');
-						app.$refs.email.focus();
-					}
-					else if(resp.data.data == 'Duplicate Username'){
-						toastr['error']('Username already taken!', 'Error!');
-						app.$refs.username.focus()
-					}
-					else{
-						toastr['error']('Something went wrong while adding the user. Please contact admin about this.', 'Error!');
-					}
+					toastr['error']('Something went wrong while adding the organization. Please contact admin about this.', 'Error!');
 				}
 				else{
-					app.$router.push('/admin/users');
-					toastr['success']('New user added!', 'Success!');
+					app.$router.push('/admin/organizations');
+					toastr['success']('New organization added!', 'Success!');
 				}
 			})
 			.catch(function() {
