@@ -11,6 +11,18 @@ import AuthService from './services/auth'
 // Dashboard
 import Basic from './views/admin/dashboard/Basic.vue'
 
+//Organizations
+import Organizations from './views/admin/modules/organizations/Index.vue'
+import AddOrganizations from './views/admin/modules/organizations/Add.vue'
+import EditOrganizations from './views/admin/modules/organizations/Edit.vue'
+import ViewOrganizations from './views/admin/modules/organizations/View.vue'
+
+//Users
+import Users from './views/admin/modules/users/Index.vue'
+import AddUsers from './views/admin/modules/users/Add.vue'
+import EditUsers from './views/admin/modules/users/Edit.vue'
+import ViewUsers from './views/admin/modules/users/View.vue'
+
 // Layouts
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
 import LayoutLogin from './views/layouts/LayoutLogin.vue'
@@ -70,7 +82,55 @@ const routes = [
         path: 'dashboard',
         component: Basic,
         name: 'dashboard'
-      },
+	  },
+	  // Organizations - Index
+      {
+        path: 'organizations',
+        component: Organizations,
+		name: 'users',
+	  },
+	  // Organizations - Add
+      {
+        path: 'organizations/add',
+        component: AddOrganizations,
+		name: 'add_organizations',
+	  },
+	  // Organizations - Edit
+      {
+        path: 'organizations/edit/:id',
+        component: EditOrganizations,
+		name: 'edit_organizations',
+	  },
+	  // Organizations - View
+      {
+        path: 'organizations/view/:id',
+        component: ViewOrganizations,
+		name: 'view_organizations',
+	  },
+	  // Users - Index
+      {
+        path: 'users',
+        component: Users,
+		name: 'users',
+	  },
+	  // Users - Add
+      {
+        path: 'users/add',
+        component: AddUsers,
+		name: 'add_users',
+	  },
+	  // Users - Edit
+      {
+        path: 'users/edit/:id',
+        component: EditUsers,
+		name: 'edit_users',
+	  },
+	  // Users - View
+      {
+        path: 'users/view/:id',
+        component: ViewUsers,
+		name: 'view_users',
+	  },
     ]
   },
 

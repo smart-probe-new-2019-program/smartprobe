@@ -29,30 +29,39 @@ Route::post('email-exist',[
 // admin route
 Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
-    Route::resource('todos', 'Demo\TodosController');
+	//Organizations
+	Route::get('organizations/get', [
+        'as' => 'admin.organizations', 'uses' => 'OrganizationsController@getAllOrganizations'
+	]);
 
-    Route::post('todos/toggleTodo/{id}', [
-        'as' => 'admin.todos.toggle', 'uses' => 'Demo\TodosController@toggleTodo'
-    ]);
+	Route::get('organizations/getOrganizationsForDropdown',[
+		'as' => 'admin.organizations.getOrganizationsForDropdown', 'uses' => 'OrganizationsController@getOrganizationsForDropdown'
+	]);
 
-    Route::group(['prefix' => 'settings'], function () {
+	Route::get('organizations/getOrganization/{id}',[
+		'as' => 'admin.organizations.getOrganization', 'uses' => 'OrganizationsController@getOrganization'
+	]);
 
-        Route::post('/social', [
-            'as' => 'admin.settings.social', 'uses' => 'Demo\SettingsController@postSocial'
-        ]);
-    });
+	Route::resource('organizations', 'OrganizationsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
-    Route::group(['prefix' => 'users'], function (){
+	//Users
+	Route::get('users/get', [
+        'as' => 'admin.users', 'uses' => 'UsersController@getAllUsers'
+	]);
 
-        Route::get('/get',[
-            'as' => 'admin.users', 'uses' => 'Demo\PagesController@allUsers'
-        ]);
+	Route::get('users/getUsersForDropdown',[
+		'as' => 'admin.users.getUsersForDropdown', 'uses' => 'UsersController@getUsersForDropdown'
+	]);
 
-        Route::delete('/{id}',[
-            'as' => 'admin.users.delete', 'uses' => 'Demo\PagesController@destroy'
-        ]);
+	Route::get('users/getUser/{id}',[
+		'as' => 'admin.users.getUser', 'uses' => 'UsersController@getUser'
+	]);
 
-    });
+	Route::resource('users', 'UsersController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
 });
 

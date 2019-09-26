@@ -1,10 +1,7 @@
 <template>
   <footer class="site-footer">
     <div class="text-right">
-      Powered by
-      <a href="http://bytefury.com/" target="_blank">
-        Bytefury
-      </a>
+      <p>JBKSB © 2019</p>
     </div>
   </footer>
 </template>
