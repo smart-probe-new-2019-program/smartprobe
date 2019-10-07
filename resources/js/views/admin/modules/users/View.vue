@@ -42,20 +42,16 @@
 										<td> <b> {{userData.username}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Process </td>
-										<td> <b> {{userData.process.name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Shift </td>
-										<td> <b> {{userData.shift.shift_name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Production Line </td>
-										<td> <b> {{userData.line.name}} </b> </td>
-									</tr>
-									<tr> 
 										<td> Role </td>
 										<td> <b> {{userData.role}} </b> </td>
+									</tr>
+									<tr v-if="userData.role=='Organizer' || userData.role=='Manager' || userData.role=='Staff'"> 
+										<td> Organization </td>
+										<td> <b> {{userData.organization.name}} </b> </td>
+									</tr>
+									<tr v-if="userData.role=='Manager' || userData.role=='Staff'"> 
+										<td> Location </td>
+										<td> <b> {{userData.location.name}} </b> </td>
 									</tr>
 								</tbody>
 							</table>
@@ -90,7 +86,7 @@ export default {
 				app.userData = resp.data;
 			})
 			.catch(function() {
-				console.log("Error fetching shift data");
+				console.log("Error fetching user data");
 			});
 		}
 	}

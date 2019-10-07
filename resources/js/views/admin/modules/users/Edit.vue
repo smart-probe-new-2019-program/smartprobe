@@ -47,40 +47,38 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Process</label>
-							<select class="form-control" v-model.trim="userData.process" ref="process" required>
-								<option v-for="process in processes" :value="process.id">
-									{{process.name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Shift</label>
-							<select class="form-control" v-model="userData.shift" ref="shift" required>
-								<option v-for="shift in shifts" :value="shift.id">
-									{{shift.shift_name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Production Line</label>
-							<select class="form-control" v-model="userData.line" ref="line" required>
-								<option v-for="line in lines" :value="line.id">
-									{{line.name}}
-								</option>
-							</select>
+							<label class="control-label">Password</label>
+							<input type="password" v-model.trim="userData.password" class="form-control" ref="password">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Role</label>
 							<select class="form-control" v-model="userData.role" ref="role" required>
-								<option value="admin">Admin</option>
-								<option value="user">User</option>
+								<option value="Admin">Admin</option>
+								<option value="Organizer">Organizer</option>
+								<option value="Manager">Manager</option>
+								<option value="Staff">Staff</option>
+							</select>
+						</div>
+					</div>
+					<div class="row" v-if="userData.role=='Organizer' || userData.role=='Manager' || userData.role=='Staff'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Organization</label>
+							<select @change="getLocations(userData.organization_id)" class="form-control" v-model="userData.organization_id" ref="organization_id" required>
+								<option v-for="organization in organizations" :value="organization.id">
+									{{organization.name}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row" v-if="userData.role=='Manager' || userData.role=='Staff'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Location</label>
+							<select class="form-control" v-model="userData.location_id" ref="location_id" required>
+								<option v-for="location in locations" :value="location.id">
+									{{location.name}}
+								</option>
 							</select>
 						</div>
 					</div>
@@ -103,16 +101,13 @@ export default {
 	data() {
 		return {
 			userData: {},
-			processes: [],
-			shifts: [],
-			lines: [],
+			organizations: [],
+			locations: [],
 		};
 	},
 	mounted() {
 		this.getUser();
-		this.getProcesses();
-		this.getShifts();
-		this.getLines();
+		this.getOrganizations();
 		toastr.options = {
 			closeButton: true,
 			debug: false,
@@ -135,39 +130,30 @@ export default {
 			axios.get('/api/admin/users/getUser/' + id)
 			.then(function(resp) {
 				app.userData = resp.data;
+				app.getLocations(app.userData.organization_id);
 			})
 			.catch(function() {
 				console.log("Error fetching user data");
 			});
 		},
-		getProcesses() {
+		getOrganizations() {
 			let app = this;
-			axios.get('/api/admin/process/getProcessesForDropdown')
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown')
 			.then(function(resp) {
-				app.processes = resp.data;
+				app.organizations = resp.data;
 			})
 			.catch(function() {
-				console.log("Error fetching processes");
+				console.log("Error fetching organizations");
 			});
 		},
-		getShifts() {
+		getLocations(organization_id) {
 			let app = this;
-			axios.get('/api/admin/shifts/getShiftsForDropdown')
+			axios.get('/api/admin/locations/getLocationsByOrganizationID/' + organization_id)
 			.then(function(resp) {
-				app.shifts = resp.data;
+				app.locations = resp.data;
 			})
 			.catch(function() {
-				console.log("Error fetching shifts");
-			});
-		},
-		getLines() {
-			let app = this;
-			axios.get('/api/admin/production_lines/getProductionLinesForDropdown')
-			.then(function(resp) {
-				app.lines = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching lines");
+				console.log("Error fetching locations");
 			});
 		},
 		saveForm() {

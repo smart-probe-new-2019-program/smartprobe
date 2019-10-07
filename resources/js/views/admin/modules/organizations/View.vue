@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="page-header">
-      <h3 class="page-title">Users</h3>
+      <h3 class="page-title">Organizations</h3>
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -9,10 +9,10 @@
           <div class="card-header">
             <div class="row">
               <div class="col-sm-6">
-                <h5>View User</h5>
+                <h5>View an Organization</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/users" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/organizations" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
@@ -26,36 +26,12 @@
 							<table class="table table-bordered table-striped">
 								<tbody>
 									<tr> 
-										<td> Firstname </td>
-										<td> <b> {{userData.first_name}} </b> </td>
+										<td> Name </td>
+										<td> <b> {{organizationData.name}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Lastname </td>
-										<td> <b> {{userData.last_name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Email </td>
-										<td> <b> {{userData.email}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Username </td>
-										<td> <b> {{userData.username}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Process </td>
-										<td> <b> {{userData.process.name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Shift </td>
-										<td> <b> {{userData.shift.shift_name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Production Line </td>
-										<td> <b> {{userData.line.name}} </b> </td>
-									</tr>
-									<tr> 
-										<td> Role </td>
-										<td> <b> {{userData.role}} </b> </td>
+										<td> Description </td>
+										<td> <b> {{organizationData.description}} </b> </td>
 									</tr>
 								</tbody>
 							</table>
@@ -75,22 +51,22 @@
 export default {
 	data() {
 		return {
-			userData: {},
+			organizationData: {},
 		};
 	},
 	mounted() {
-		this.getUser();
+		this.getOrganization();
 	},
 	methods: {
-		getUser() {
+		getOrganization() {
 			let app = this;
 			let id = app.$route.params.id;
-			axios.get('/api/admin/users/' + id)
+			axios.get('/api/admin/organizations/' + id)
 			.then(function(resp) {
-				app.userData = resp.data;
+				app.organizationData = resp.data;
 			})
 			.catch(function() {
-				console.log("Error fetching shift data");
+				console.log("Error fetching organization data");
 			});
 		}
 	}

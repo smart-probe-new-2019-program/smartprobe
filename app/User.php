@@ -21,10 +21,11 @@ class User extends Authenticatable
 		'username',
 		'password',
 		'role',
+		'organization_id',
+		'location_id',
 		'last_ip_address',
 		'last_login_date',
 		'status',
-		'organization_id',
 		'created_by',
 		'updated_by',
     ];
@@ -36,5 +37,13 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
-    ];
+	];
+	
+	public function organization() {
+		return $this->belongsTo('App\Organization', 'organization_id');
+	}
+
+	public function location() {
+		return $this->belongsTo('App\Location', 'location_id');
+	}
 }

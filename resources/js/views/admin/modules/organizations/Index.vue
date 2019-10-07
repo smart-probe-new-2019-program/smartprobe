@@ -20,7 +20,6 @@
 				<table-component :data="fetchData" :show-filter="false" filter-placeholder="Search organizations.." filter-no-results="No organizations found!" table-class="table" ref="table">
 					<table-column :sortable="false" :filterable="false" show="name" label="Name"/>
 					<table-column :sortable="false" show="description" label="Description"/>
-					<table-column :sortable="false" show="email" label="Email"/>
 					<table-column :sortable="false" :filterable="false" label="Actions">
 						<template slot-scope="row">
 							<a :href="`/admin/organizations/view/${row.id}`"><i class="icon-fa icon-fa-eye"/></a>
@@ -81,7 +80,7 @@ export default {
 				// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
 			},
 			submitCallback: function () {
-				axios.delete('/api/admin/ogranizations/' + id)
+				axios.delete('/api/admin/organizations/' + id)
 				.then((resp) => {
 					if(resp.data.status == 'error'){
 						toastr['error']('Something went wrong while deleting the organization. Please contact admin about this.', 'Error!');

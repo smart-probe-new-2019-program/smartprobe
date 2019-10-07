@@ -22,10 +22,11 @@ class CreateUsersTable extends Migration
 			$table->string('username')->unique();
             $table->string('password');
 			$table->string('role')->default('Admin');
+			$table->integer('organization_id')->nullable();
+			$table->integer('location_id')->nullable();
 			$table->string('last_ip_address')->nullable();
 			$table->string('last_login_date')->nullable();
 			$table->string('status')->default('Active');
-			$table->integer('organization_id');
 			$table->integer('created_by');
 			$table->integer('updated_by');
             $table->rememberToken();

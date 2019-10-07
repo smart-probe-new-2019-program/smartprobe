@@ -22,7 +22,6 @@ class UsersTableSeeder extends Seeder
 			'last_ip_address' => '',
 			'last_login_date' => '',
 			'status' => 'Active',
-			'organization_id' => '0',
 			'created_by' => '1',
 			'updated_by' => '1',
         ]);

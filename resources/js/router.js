@@ -11,11 +11,23 @@ import AuthService from './services/auth'
 // Dashboard
 import Basic from './views/admin/dashboard/Basic.vue'
 
+//Probes
+import Probes from './views/admin/modules/probes/Index.vue'
+import AddProbes from './views/admin/modules/probes/Add.vue'
+import EditProbes from './views/admin/modules/probes/Edit.vue'
+import ViewProbes from './views/admin/modules/probes/View.vue'
+
 //Organizations
 import Organizations from './views/admin/modules/organizations/Index.vue'
 import AddOrganizations from './views/admin/modules/organizations/Add.vue'
 import EditOrganizations from './views/admin/modules/organizations/Edit.vue'
 import ViewOrganizations from './views/admin/modules/organizations/View.vue'
+
+//Locations
+import Locations from './views/admin/modules/locations/Index.vue'
+import AddLocations from './views/admin/modules/locations/Add.vue'
+import EditLocations from './views/admin/modules/locations/Edit.vue'
+import ViewLocations from './views/admin/modules/locations/View.vue'
 
 //Users
 import Users from './views/admin/modules/users/Index.vue'
@@ -83,6 +95,30 @@ const routes = [
         component: Basic,
         name: 'dashboard'
 	  },
+	  // Probes - Index
+      {
+        path: 'probes',
+        component: Probes,
+		name: 'probes',
+	  },
+	  // Probes - Add
+      {
+        path: 'probes/add',
+        component: AddProbes,
+		name: 'add_probes',
+	  },
+	  // Probes - Edit
+      {
+        path: 'probes/edit/:id',
+        component: EditProbes,
+		name: 'edit_probes',
+	  },
+	  // Probes - View
+      {
+        path: 'probes/view/:id',
+        component: ViewProbes,
+		name: 'view_probes',
+	  },
 	  // Organizations - Index
       {
         path: 'organizations',
@@ -106,6 +142,30 @@ const routes = [
         path: 'organizations/view/:id',
         component: ViewOrganizations,
 		name: 'view_organizations',
+	  },
+	  // Locations - Index
+      {
+        path: 'locations',
+        component: Locations,
+		name: 'locations',
+	  },
+	  // Locations - Add
+      {
+        path: 'locations/add',
+        component: AddLocations,
+		name: 'add_locations',
+	  },
+	  // Locations - Edit
+      {
+        path: 'locations/edit/:id',
+        component: EditLocations,
+		name: 'edit_locations',
+	  },
+	  // Locations - View
+      {
+        path: 'locations/view/:id',
+        component: ViewLocations,
+		name: 'view_locations',
 	  },
 	  // Users - Index
       {

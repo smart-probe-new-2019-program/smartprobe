@@ -13,19 +13,11 @@ class CreateOrganizationsTable extends Migration
      */
     public function up()
     {
+		Schema::dropIfExists('organizations');
         Schema::create('organizations', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->text('description')->nullable();
-			$table->string('address');
-			$table->string('city');
-			$table->string('country');
-			$table->string('state')->nullable();
-			$table->string('zip_code')->nullable();
-			$table->string('email');
-			$table->string('office_phone')->nullable();
-			$table->string('office_fax')->nullable();
-			$table->string('mobile_phone')->nullable();
 			$table->integer('created_by');
 			$table->integer('updated_by');
             $table->timestamps();

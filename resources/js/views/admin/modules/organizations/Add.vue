@@ -33,60 +33,6 @@
 							<textarea v-model.trim="organizationData.description" class="form-control" rows="3" ref="description"/>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Address</label>
-							<input type="text" v-model.trim="organizationData.address" class="form-control" ref="address" required>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">City</label>
-							<input type="text" v-model.trim="organizationData.city" class="form-control" ref="city" required>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Country</label>
-							<input type="text" v-model.trim="organizationData.country" class="form-control" ref="country" required>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">State</label>
-							<input type="text" v-model.trim="organizationData.state" class="form-control" ref="state">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Zip Code</label>
-							<input type="text" v-model.trim="organizationData.zip_code" class="form-control" ref="zip_code">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Email</label>
-							<input type="email" v-model.trim="organizationData.email" class="form-control" ref="email" required>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Office Phone</label>
-							<input type="text" v-model.trim="organizationData.office_phone" class="form-control" ref="office_phone">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Office Fax</label>
-							<input type="text" v-model.trim="organizationData.office_fax" class="form-control" ref="office_fax">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Mobile Phone</label>
-							<input type="text" v-model.trim="organizationData.mobile_phone" class="form-control" ref="mobile_phone">
-						</div>
-					</div>
 				</div>
 
 				<div class="col-xs-12 form-group">
@@ -107,14 +53,6 @@ export default {
 			organizationData: {
 				name: "",
 				description: "",
-				address: "",
-				city: "",
-				country: "",
-				state: "",
-				zip_code: "",
-				office_phone: "",
-				office_fax: "",
-				mobile_phone: "",
 				created_by: localStorage.getItem("user.id"),
 				updated_by: localStorage.getItem("user.id")
 			},

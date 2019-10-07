@@ -115,7 +115,7 @@ class UsersController extends Controller
 		// 			->with('line')
 		// 			->findOrFail($id);
 
-		return User::findOrFail($id);
+		return User::with('organization','location')->findOrFail($id);
 	}
 	
 	/**
@@ -149,6 +149,12 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+		$request['full_name'] = $request['first_name'] . ' ' . $request['last_name'];
+
+		if($request['password']){
+			$request['password'] = Hash::make($request['password']);
+		}
+
 		try{
 			$user = User::findOrFail($id);
 			$user->update($request->all());

@@ -11,6 +11,14 @@
 			</router-link>
 		  </v-collapse-item>
 
+		  <v-collapse-item active-url="/admin/probes">
+			<router-link
+			slot="item-title"
+			to="/admin/probes ">
+			<i class="icon-fa icon-fa-product-hunt"/>Probes
+			</router-link>
+		  </v-collapse-item>
+
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
               <i class="icon-fa icon-fa-user-secret"/>Administration
@@ -18,6 +26,9 @@
             </a>
 			<router-link to="/admin/organizations">
               <i class="icon-fa icon-fa-sitemap"/>Organizations
+            </router-link>
+			<router-link to="/admin/locations">
+              <i class="icon-fa icon-fa-map-marker"/>Locations
             </router-link>
             <router-link to="/admin/users">
               <i class="icon-fa icon-fa-users"/>Users

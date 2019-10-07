@@ -29,20 +29,58 @@ Route::post('email-exist',[
 // admin route
 Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
+	//Probes
+	Route::get('probes/get', [
+        'as' => 'admin.probes', 'uses' => 'ProbesController@getAllProbes'
+	]);
+
+	Route::get('probes/getProbe/{id}',[
+		'as' => 'admin.probes.getProbe', 'uses' => 'ProbesController@getProbe'
+	]);
+
+	Route::get('probes/getProbesForDropdown',[
+		'as' => 'admin.probes.getProbesForDropdown', 'uses' => 'ProbesController@getProbesForDropdown'
+	]);
+
+	Route::resource('probes', 'ProbesController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Organizations
 	Route::get('organizations/get', [
         'as' => 'admin.organizations', 'uses' => 'OrganizationsController@getAllOrganizations'
-	]);
-
-	Route::get('organizations/getOrganizationsForDropdown',[
-		'as' => 'admin.organizations.getOrganizationsForDropdown', 'uses' => 'OrganizationsController@getOrganizationsForDropdown'
 	]);
 
 	Route::get('organizations/getOrganization/{id}',[
 		'as' => 'admin.organizations.getOrganization', 'uses' => 'OrganizationsController@getOrganization'
 	]);
 
+	Route::get('organizations/getOrganizationsForDropdown',[
+		'as' => 'admin.organizations.getOrganizationsForDropdown', 'uses' => 'OrganizationsController@getOrganizationsForDropdown'
+	]);
+
 	Route::resource('organizations', 'OrganizationsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Locations
+	Route::get('locations/get', [
+        'as' => 'admin.locations', 'uses' => 'LocationsController@getAllLocations'
+	]);
+
+	Route::get('locations/getLocationsForDropdown',[
+		'as' => 'admin.locations.getLocationsForDropdown', 'uses' => 'LocationsController@getLocationsForDropdown'
+	]);
+
+	Route::get('locations/getLocation/{id}',[
+		'as' => 'admin.locations.getLocation', 'uses' => 'LocationsController@getLocation'
+	]);
+
+	Route::get('locations/getLocationsByOrganizationID/{id}',[
+		'as' => 'admin.locations.getLocationsByOrganizationID', 'uses' => 'LocationsController@getLocationsByOrganizationID'
+	]);
+
+	Route::resource('locations', 'LocationsController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
