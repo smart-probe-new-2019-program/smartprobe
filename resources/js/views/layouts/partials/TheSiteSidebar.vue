@@ -14,10 +14,23 @@
 		  <v-collapse-item active-url="/admin/probes">
 			<router-link
 			slot="item-title"
-			to="/admin/probes ">
+			to="/admin/probes">
 			<i class="icon-fa icon-fa-product-hunt"/>Probes
 			</router-link>
 		  </v-collapse-item>
+
+		  <v-collapse-item active-url="">
+            <a slot="item-title" href="#">
+              <i class="icon-fa icon-fa-check-square-o"/>Checklists
+              <span class="icon-fa arrow icon-fa-fw"/>
+            </a>
+			<router-link to="/admin/daily_staff_checklists">
+              <i class="icon-fa icon-fa-circle-thin"/>Daily Staff
+            </router-link>
+			<router-link to="/admin/matrix_checklists">
+              <i class="icon-fa icon-fa-circle-thin"/>Matrix
+            </router-link>
+          </v-collapse-item>
 
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
@@ -25,13 +38,19 @@
               <span class="icon-fa arrow icon-fa-fw"/>
             </a>
 			<router-link to="/admin/organizations">
-              <i class="icon-fa icon-fa-sitemap"/>Organizations
+              <i class="icon-fa icon-fa-circle-thin"/>Organizations
             </router-link>
 			<router-link to="/admin/locations">
-              <i class="icon-fa icon-fa-map-marker"/>Locations
+              <i class="icon-fa icon-fa-circle-thin"/>Locations
             </router-link>
             <router-link to="/admin/users">
-              <i class="icon-fa icon-fa-users"/>Users
+              <i class="icon-fa icon-fa-circle-thin"/>Users
+            </router-link>
+			<router-link to="/admin/checklist_areas">
+              <i class="icon-fa icon-fa-circle-thin"/>Checklist Areas
+            </router-link>
+			<router-link to="/admin/checklist_times">
+              <i class="icon-fa icon-fa-circle-thin"/>Checklist Times
             </router-link>
           </v-collapse-item>
 

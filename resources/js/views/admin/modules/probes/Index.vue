@@ -19,7 +19,7 @@
           <div class="card-body">
 				<table-component :data="fetchData" :show-filter="false" filter-placeholder="Search probes.." filter-no-results="No probes found!" table-class="table" ref="table">
 					<table-column :sortable="false" :filterable="false" show="name" label="Name"/>
-					<table-column :sortable="false" :filterable="false" show="serial" label="Serial"/>
+					<table-column :sortable="false" :filterable="false" show="serial_number" label="Serial Number"/>
 					<table-column :sortable="false" :filterable="false" show="organization.name" label="Organization"/>
 					<table-column :sortable="false" :filterable="false" show="location.name" label="Location"/>
 					<table-column :sortable="false" :filterable="false" show="next_calibration_date" label="Next Calibration Date"/>

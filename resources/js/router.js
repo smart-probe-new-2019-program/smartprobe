@@ -35,6 +35,16 @@ import AddUsers from './views/admin/modules/users/Add.vue'
 import EditUsers from './views/admin/modules/users/Edit.vue'
 import ViewUsers from './views/admin/modules/users/View.vue'
 
+//Checklist Areas
+import ChecklistAreas from './views/admin/modules/checklist_areas/Index.vue'
+import AddChecklistAreas from './views/admin/modules/checklist_areas/Add.vue'
+import EditChecklistAreas from './views/admin/modules/checklist_areas/Edit.vue'
+
+//Checklist Times
+import ChecklistTimes from './views/admin/modules/checklist_times/Index.vue'
+import AddChecklistTimes from './views/admin/modules/checklist_times/Add.vue'
+import EditChecklistTimes from './views/admin/modules/checklist_times/Edit.vue'
+
 // Layouts
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
 import LayoutLogin from './views/layouts/LayoutLogin.vue'
@@ -190,6 +200,42 @@ const routes = [
         path: 'users/view/:id',
         component: ViewUsers,
 		name: 'view_users',
+	  },
+	  // Checklist Areas - Index
+      {
+        path: 'checklist_areas',
+        component: ChecklistAreas,
+		name: 'checklist_areas',
+	  },
+	  // Checklist Areas - Add
+      {
+        path: 'checklist_areas/add',
+        component: AddChecklistAreas,
+		name: 'add_checklist_areas',
+	  },
+	  // Checklist Areas - Edit
+      {
+        path: 'checklist_areas/edit/:id',
+        component: EditChecklistAreas,
+		name: 'edit_checklist_areas',
+	  },
+	  // Checklist Times - Index
+      {
+        path: 'checklist_times',
+        component: ChecklistTimes,
+		name: 'checklist_times',
+	  },
+	  // Checklist Times - Add
+      {
+        path: 'checklist_times/add',
+        component: AddChecklistTimes,
+		name: 'add_checklist_times',
+	  },
+	  // Checklist Times - Edit
+      {
+        path: 'checklist_times/edit/:id',
+        component: EditChecklistTimes,
+		name: 'edit_checklist_times',
 	  },
     ]
   },

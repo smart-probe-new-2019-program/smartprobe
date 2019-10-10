@@ -27,7 +27,8 @@ class ProbesController extends Controller
      */
     public function getAllProbes(Request $request)
     { 
-		return Probe::orderBy('created_at','desc')->paginate(5);
+		return Probe::with('organization','location')
+				->orderBy('created_at','desc')->paginate(5);
 	}
 
 	/**
@@ -78,7 +79,7 @@ class ProbesController extends Controller
      */
     public function show($id)
     {
-        return Probe::findOrFail($id);
+        return Probe::with('organization','location')->findOrFail($id);
 	}
 	
 	/**

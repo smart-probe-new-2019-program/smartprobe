@@ -101,5 +101,39 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Checklist Areas
+	Route::get('checklist_areas/get', [
+        'as' => 'admin.checklist_areas', 'uses' => 'ChecklistAreasController@getAllChecklistAreas'
+	]);
+
+	Route::get('checklist_areas/getChecklistAreasForDropdown',[
+		'as' => 'admin.checklist_areas.getChecklistAreasForDropdown', 'uses' => 'ChecklistAreasController@getChecklistAreasForDropdown'
+	]);
+
+	Route::get('checklist_areas/getChecklistArea/{id}',[
+		'as' => 'admin.checklist_areas.getChecklistArea', 'uses' => 'ChecklistAreasController@getChecklistArea'
+	]);
+
+	Route::resource('checklist_areas', 'ChecklistAreasController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Checklist Times
+	Route::get('checklist_times/get', [
+        'as' => 'admin.checklist_times', 'uses' => 'ChecklistTimesController@getAllChecklistTimes'
+	]);
+
+	Route::get('checklist_times/getChecklistTimesForDropdown',[
+		'as' => 'admin.checklist_times.getChecklistTimesForDropdown', 'uses' => 'ChecklistTimesController@getChecklistTimesForDropdown'
+	]);
+
+	Route::get('checklist_times/getChecklistTime/{id}',[
+		'as' => 'admin.checklist_times.getChecklistTime', 'uses' => 'ChecklistTimesController@getChecklistTime'
+	]);
+
+	Route::resource('checklist_times', 'ChecklistTimesController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 });
 

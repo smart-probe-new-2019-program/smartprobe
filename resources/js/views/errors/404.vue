@@ -4,7 +4,7 @@
       <div class="col-sm-12 text-sm-center">
         <h1 style="color: white;">404</h1>
         <h5>Whoops! You got Lost!</h5>
-        <router-link class="btn btn-lg" style="background-color: white;" to="/">
+        <router-link class="btn btn-lg" style="background-color: white;" to="/admin/dashboard">
           <i class="icon-fa icon-fa-arrow-left"/> Go Home
         </router-link>
       </div>

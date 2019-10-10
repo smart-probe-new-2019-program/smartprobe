@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="page-header">
-      <h3 class="page-title">Locations</h3>
+      <h3 class="page-title">Probes</h3>
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -9,10 +9,10 @@
           <div class="card-header">
             <div class="row">
               <div class="col-sm-6">
-                <h5>View a Location</h5>
+                <h5>View a Probe</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/locations" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/probes" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
@@ -26,48 +26,84 @@
 							<table class="table table-bordered table-striped">
 								<tbody>
 									<tr> 
-										<td> Organization </td>
-										<td> <b> {{locationData.organization.name}} </b> </td>
+										<td> Serial Number </td>
+										<td> <b> {{probeData.serial_number}} </b> </td>
 									</tr>
 									<tr> 
 										<td> Name </td>
-										<td> <b> {{locationData.name}} </b> </td>
+										<td> <b> {{probeData.name}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Address </td>
-										<td> <b> {{locationData.address}} </b> </td>
+										<td> Cooling Device </td>
+										<td> <b> {{probeData.cooling_device}} </b> </td>
 									</tr>
 									<tr> 
-										<td> City </td>
-										<td> <b> {{locationData.city}} </b> </td>
+										<td> Temperature Unit </td>
+										<td> <b> {{probeData.temperature_unit}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Country </td>
-										<td> <b> {{locationData.country}} </b> </td>
+										<td> High Temperature Warning </td>
+										<td> <b> {{probeData.temperature_warning_high}} </b> </td>
 									</tr>
 									<tr> 
-										<td> State </td>
-										<td> <b> {{locationData.state}} </b> </td>
+										<td> Low Temperature Warning </td>
+										<td> <b> {{probeData.temperature_warning_low}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Zip Code </td>
-										<td> <b> {{locationData.zip_code}} </b> </td>
+										<td> High Temperature Alert </td>
+										<td> <b> {{probeData.temperature_alert_high}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Email </td>
-										<td> <b> {{locationData.email}} </b> </td>
+										<td> Low Temperature Alert </td>
+										<td> <b> {{probeData.temperature_alert_low}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Office Phone </td>
-										<td> <b> {{locationData.office_phone}} </b> </td>
+										<td> Minimum Voltage </td>
+										<td> <b> {{probeData.minimum_voltage}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Office Fax </td>
-										<td> <b> {{locationData.office_fax}} </b> </td>
+										<td> Probe Type </td>
+										<td> <b> {{probeData.probe_type}} </b> </td>
 									</tr>
 									<tr> 
-										<td> Mobile Phone </td>
-										<td> <b> {{locationData.mobile_phone}} </b> </td>
+										<td> Next Calibration Date </td>
+										<td> <b> {{probeData.next_calibration_date}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Frequency To Check Temperatures </td>
+										<td> <b> {{probeData.frequency_to_check_temperatures_value}} {{probeData.frequency_to_check_temperatures_unit}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Alarm Time </td>
+										<td> <b> {{probeData.alarm_time_value}} {{probeData.alarm_time_unit}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Default Sensor </td>
+										<td> <b> {{probeData.default_sensor}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Status </td>
+										<td> <b> {{probeData.status}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Configured </td>
+										<td> <b> {{probeData.is_configured}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Monitored </td>
+										<td> <b> {{probeData.is_monitored}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Online Monitoring Date </td>
+										<td> <b> {{probeData.online_monitoring_date}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Organization </td>
+										<td> <b> {{probeData.organization.name}} </b> </td>
+									</tr>
+									<tr> 
+										<td> Location </td>
+										<td> <b> {{probeData.location.name}} </b> </td>
 									</tr>
 								</tbody>
 							</table>
@@ -87,22 +123,22 @@
 export default {
 	data() {
 		return {
-			locationData: {},
+			probeData: {},
 		};
 	},
 	mounted() {
-		this.getLocation();
+		this.getProbe();
 	},
 	methods: {
-		getLocation() {
+		getProbe() {
 			let app = this;
 			let id = app.$route.params.id;
-			axios.get('/api/admin/locations/' + id)
+			axios.get('/api/admin/probes/' + id)
 			.then(function(resp) {
-				app.locationData = resp.data;
+				app.probeData = resp.data;
 			})
 			.catch(function() {
-				console.log("Error fetching organization data");
+				console.log("Error fetching probe data");
 			});
 		}
 	}
