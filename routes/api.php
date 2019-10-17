@@ -46,6 +46,40 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Staff Daily Checklists
+	Route::get('staff_daily_checklists/get', [
+        'as' => 'admin.staff_daily_checklists', 'uses' => 'StaffDailyChecklistsController@getAllStaffDailyChecklists'
+	]);
+
+	Route::get('staff_daily_checklists/getStaffDailyChecklist/{id}',[
+		'as' => 'admin.staff_daily_checklists.getStaffDailyChecklist', 'uses' => 'StaffDailyChecklistsController@getStaffDailyChecklist'
+	]);
+
+	Route::get('staff_daily_checklists/getStaffDailyChecklistsForDropdown',[
+		'as' => 'admin.staff_daily_checklists.getStaffDailyChecklistsForDropdown', 'uses' => 'StaffDailyChecklistsController@getStaffDailyChecklistsForDropdown'
+	]);
+
+	Route::resource('staff_daily_checklists', 'StaffDailyChecklistsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Matrix Checklists
+	Route::get('matrix_checklists/get', [
+        'as' => 'admin.matrix_checklists', 'uses' => 'MatrixChecklistsController@getAllMatrixChecklists'
+	]);
+
+	Route::get('matrix_checklists/getMatrixChecklist/{id}',[
+		'as' => 'admin.matrix_checklists.getMatrixChecklist', 'uses' => 'MatrixChecklistsController@getMatrixChecklist'
+	]);
+
+	Route::get('matrix_checklists/getMatrixChecklistsForDropdown',[
+		'as' => 'admin.matrix_checklists.getMatrixChecklistsForDropdown', 'uses' => 'MatrixChecklistsController@getMatrixChecklistsForDropdown'
+	]);
+
+	Route::resource('matrix_checklists', 'MatrixChecklistsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Organizations
 	Route::get('organizations/get', [
         'as' => 'admin.organizations', 'uses' => 'OrganizationsController@getAllOrganizations'
@@ -114,6 +148,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 		'as' => 'admin.checklist_areas.getChecklistArea', 'uses' => 'ChecklistAreasController@getChecklistArea'
 	]);
 
+	Route::get('checklist_areas/getChecklistAreasByOrganizationID/{id}',[
+		'as' => 'admin.checklist_areas.getChecklistAreasByOrganizationID', 'uses' => 'ChecklistAreasController@getChecklistAreasByOrganizationID'
+	]);
+
 	Route::resource('checklist_areas', 'ChecklistAreasController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
@@ -131,7 +169,74 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 		'as' => 'admin.checklist_times.getChecklistTime', 'uses' => 'ChecklistTimesController@getChecklistTime'
 	]);
 
+	Route::get('checklist_times/getChecklistTimesByOrganizationID/{id}',[
+		'as' => 'admin.checklist_times.getChecklistTimesByOrganizationID', 'uses' => 'ChecklistTimesController@getChecklistTimesByOrganizationID'
+	]);
+
 	Route::resource('checklist_times', 'ChecklistTimesController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Checklist Categories
+	Route::get('checklist_categories/get', [
+        'as' => 'admin.checklist_categories', 'uses' => 'ChecklistCategoriesController@getAllChecklistCategories'
+	]);
+
+	Route::get('checklist_categories/getChecklistTimesForDropdown',[
+		'as' => 'admin.checklist_categories.getChecklistCategoriesForDropdown', 'uses' => 'ChecklistCategoriesController@getChecklistCategoriesForDropdown'
+	]);
+
+	Route::get('checklist_categories/getChecklistCategory/{id}',[
+		'as' => 'admin.checklist_categories.getChecklistCategory', 'uses' => 'ChecklistCategoriesController@getChecklistCategory'
+	]);
+
+	Route::get('checklist_categories/getChecklistCategoriesByOrganizationID/{id}',[
+		'as' => 'admin.checklist_categories.getChecklistCategoriesByOrganizationID', 'uses' => 'ChecklistCategoriesController@getChecklistCategoriesByOrganizationID'
+	]);
+
+	Route::resource('checklist_categories', 'ChecklistCategoriesController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Checklist Items
+	Route::get('checklist_items/get', [
+        'as' => 'admin.checklist_items', 'uses' => 'ChecklistItemsController@getAllChecklistItems'
+	]);
+
+	Route::get('checklist_items/getChecklistItemsForDropdown',[
+		'as' => 'admin.checklist_items.getChecklistItemsForDropdown', 'uses' => 'ChecklistItemsController@getChecklistItemsForDropdown'
+	]);
+
+	Route::get('checklist_items/getChecklistItem/{id}',[
+		'as' => 'admin.checklist_items.getChecklistItem', 'uses' => 'ChecklistItemsController@getChecklistItem'
+	]);
+
+	Route::get('checklist_items/getChecklistItemsByOrganizationID/{id}',[
+		'as' => 'admin.checklist_items.getChecklistItemsByOrganizationID', 'uses' => 'ChecklistItemsController@getChecklistItemsByOrganizationID'
+	]);
+
+	Route::resource('checklist_items', 'ChecklistItemsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Manage Checklists
+	Route::get('manage_checklists/get', [
+        'as' => 'admin.manage_checklists', 'uses' => 'ManageChecklistsController@getAllManageChecklists'
+	]);
+
+	Route::get('manage_checklists/getManageChecklistsForDropdown',[
+		'as' => 'admin.manage_checklists.getManageChecklistsForDropdown', 'uses' => 'ManageChecklistsController@getManageChecklistsForDropdown'
+	]);
+
+	Route::get('manage_checklists/getManageChecklist/{id}',[
+		'as' => 'admin.manage_checklists.getManageChecklist', 'uses' => 'ManageChecklistsController@getManageChecklist'
+	]);
+
+	Route::get('manage_checklists/getChecklistItems',[
+		'as' => 'admin.manage_checklists.getChecklistItems', 'uses' => 'ManageChecklistsController@getChecklistItems'
+	]);
+
+	Route::resource('manage_checklists', 'ManageChecklistsController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 

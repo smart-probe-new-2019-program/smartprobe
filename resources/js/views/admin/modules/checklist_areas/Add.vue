@@ -12,7 +12,7 @@
                 <h5>Add an Area</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/checklist_areas" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/checklists" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
@@ -100,7 +100,7 @@ export default {
 					toastr['error']('Something went wrong while adding the area. Please contact admin about this.', 'Error!');
 				}
 				else{
-					app.$router.push('/admin/checklist_areas');
+					app.$router.push('/admin/checklists');
 					toastr['success']('New area added!', 'Success!');
 				}
 			})

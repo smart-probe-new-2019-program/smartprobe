@@ -21,14 +21,23 @@
 
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
-              <i class="icon-fa icon-fa-check-square-o"/>Checklists
+              <i class="icon-fa icon-fa-list-alt"/>Actions
               <span class="icon-fa arrow icon-fa-fw"/>
             </a>
-			<router-link to="/admin/daily_staff_checklists">
-              <i class="icon-fa icon-fa-circle-thin"/>Daily Staff
+			<router-link to="/admin/corrective_action">
+              <i class="icon-fa icon-fa-circle-thin"/>Corrective Action
+            </router-link>
+			<router-link to="/admin/cook_chill_check">
+              <i class="icon-fa icon-fa-circle-thin"/>Cook-Chill-Check
+            </router-link>
+			<router-link to="/admin/incoming_delivery">
+              <i class="icon-fa icon-fa-circle-thin"/>Incoming Delivery
+            </router-link>
+			<router-link to="/admin/staff_daily_checklists">
+              <i class="icon-fa icon-fa-circle-thin"/>Staff Daily Checklists
             </router-link>
 			<router-link to="/admin/matrix_checklists">
-              <i class="icon-fa icon-fa-circle-thin"/>Matrix
+              <i class="icon-fa icon-fa-circle-thin"/>Matrix Checklists
             </router-link>
           </v-collapse-item>
 
@@ -46,11 +55,11 @@
             <router-link to="/admin/users">
               <i class="icon-fa icon-fa-circle-thin"/>Users
             </router-link>
-			<router-link to="/admin/checklist_areas">
-              <i class="icon-fa icon-fa-circle-thin"/>Checklist Areas
+			<router-link to="/admin/checklists">
+              <i class="icon-fa icon-fa-circle-thin"/>Set Checklist Entries
             </router-link>
-			<router-link to="/admin/checklist_times">
-              <i class="icon-fa icon-fa-circle-thin"/>Checklist Times
+			<router-link to="/admin/manage_checklists">
+              <i class="icon-fa icon-fa-circle-thin"/>Manage Checklists
             </router-link>
           </v-collapse-item>
 

@@ -17,6 +17,18 @@ import AddProbes from './views/admin/modules/probes/Add.vue'
 import EditProbes from './views/admin/modules/probes/Edit.vue'
 import ViewProbes from './views/admin/modules/probes/View.vue'
 
+//Staff Daily Checklists
+import StaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Index.vue'
+import AddStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Add.vue'
+import EditStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Edit.vue'
+import ViewStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/View.vue'
+
+//Matrix Checklists
+import MatrixChecklists from './views/admin/modules/matrix_checklists/Index.vue'
+import AddMatrixChecklists from './views/admin/modules/matrix_checklists/Add.vue'
+import EditMatrixChecklists from './views/admin/modules/matrix_checklists/Edit.vue'
+import ViewMatrixChecklists from './views/admin/modules/matrix_checklists/View.vue'
+
 //Organizations
 import Organizations from './views/admin/modules/organizations/Index.vue'
 import AddOrganizations from './views/admin/modules/organizations/Add.vue'
@@ -35,15 +47,30 @@ import AddUsers from './views/admin/modules/users/Add.vue'
 import EditUsers from './views/admin/modules/users/Edit.vue'
 import ViewUsers from './views/admin/modules/users/View.vue'
 
+//Set Checklists 
+import Checklists from './views/admin/modules/checklists/Index.vue'
+
 //Checklist Areas
-import ChecklistAreas from './views/admin/modules/checklist_areas/Index.vue'
 import AddChecklistAreas from './views/admin/modules/checklist_areas/Add.vue'
 import EditChecklistAreas from './views/admin/modules/checklist_areas/Edit.vue'
 
 //Checklist Times
-import ChecklistTimes from './views/admin/modules/checklist_times/Index.vue'
 import AddChecklistTimes from './views/admin/modules/checklist_times/Add.vue'
 import EditChecklistTimes from './views/admin/modules/checklist_times/Edit.vue'
+
+//Checklist Categories
+import AddChecklistCategories from './views/admin/modules/checklist_categories/Add.vue'
+import EditChecklistCategories from './views/admin/modules/checklist_categories/Edit.vue'
+
+//Checklist Items
+import AddChecklistItems from './views/admin/modules/checklist_items/Add.vue'
+import EditChecklistItems from './views/admin/modules/checklist_items/Edit.vue'
+
+//Manage Checklists
+import ManageChecklists from './views/admin/modules/manage_checklists/Index.vue'
+import AddManageChecklists from './views/admin/modules/manage_checklists/Add.vue'
+import EditManageChecklists from './views/admin/modules/manage_checklists/Edit.vue'
+import ViewManageChecklists from './views/admin/modules/manage_checklists/View.vue'
 
 // Layouts
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
@@ -201,11 +228,11 @@ const routes = [
         component: ViewUsers,
 		name: 'view_users',
 	  },
-	  // Checklist Areas - Index
+	  // Checklists - Index
       {
-        path: 'checklist_areas',
-        component: ChecklistAreas,
-		name: 'checklist_areas',
+        path: 'checklists',
+        component: Checklists,
+		name: 'checklists',
 	  },
 	  // Checklist Areas - Add
       {
@@ -219,12 +246,6 @@ const routes = [
         component: EditChecklistAreas,
 		name: 'edit_checklist_areas',
 	  },
-	  // Checklist Times - Index
-      {
-        path: 'checklist_times',
-        component: ChecklistTimes,
-		name: 'checklist_times',
-	  },
 	  // Checklist Times - Add
       {
         path: 'checklist_times/add',
@@ -236,6 +257,102 @@ const routes = [
         path: 'checklist_times/edit/:id',
         component: EditChecklistTimes,
 		name: 'edit_checklist_times',
+	  },
+	  // Checklist Categories - Add
+      {
+        path: 'checklist_categories/add',
+        component: AddChecklistCategories,
+		name: 'add_checklist_categories',
+	  },
+	  // Checklist Categories - Edit
+      {
+        path: 'checklist_categories/edit/:id',
+        component: EditChecklistCategories,
+		name: 'edit_checklist_categories',
+	  },
+	  // Checklist Items - Add
+      {
+        path: 'checklist_items/add',
+        component: AddChecklistItems,
+		name: 'add_checklist_items',
+	  },
+	  // Checklist Items - Edit
+      {
+        path: 'checklist_items/edit/:id',
+        component: EditChecklistItems,
+		name: 'edit_checklist_items',
+	  },
+	  // Manage Checklists - Index
+      {
+        path: 'manage_checklists',
+        component: ManageChecklists,
+		name: 'manage_checklists',
+	  },
+	  // Manage Checklists - Add
+      {
+        path: 'manage_checklists/add',
+        component: AddManageChecklists,
+		name: 'add_manage_checklists',
+	  },
+	  // Manage Checklists - Edit
+      {
+        path: 'manage_checklists/edit/:id',
+        component: EditManageChecklists,
+		name: 'edit_manage_checklists',
+	  },
+	  // Manage Checklists - View
+      {
+        path: 'manage_checklists/view/:id',
+        component: ViewManageChecklists,
+		name: 'view_manage_checklists',
+	  },
+	  // Staff Daily Checklists - Index
+      {
+        path: 'staff_daily_checklists',
+        component: StaffDailyChecklists,
+		name: 'staff_daily_checklists',
+	  },
+	  // Staff Daily Checklists - Add
+      {
+        path: 'staff_daily_checklists/add',
+        component: AddStaffDailyChecklists,
+		name: 'add_staff_daily_checklists',
+	  },
+	  // Staff Daily Checklists - Edit
+      {
+        path: 'staff_daily_checklists/edit/:id',
+        component: EditStaffDailyChecklists,
+		name: 'edit_staff_daily_checklists',
+	  },
+	  // Staff Daily Checklists - View
+      {
+        path: 'staff_daily_checklists/view/:id',
+        component: ViewStaffDailyChecklists,
+		name: 'view_staff_daily_checklists',
+	  },
+	  // Matrix Checklists - Index
+      {
+        path: 'matrix_checklists',
+        component: MatrixChecklists,
+		name: 'matrix_checklists',
+	  },
+	  // Matrix Checklists - Add
+      {
+        path: 'matrix_checklists/add',
+        component: AddMatrixChecklists,
+		name: 'add_matrix_checklists',
+	  },
+	  // Matrix Checklists - Edit
+      {
+        path: 'matrix_checklists/edit/:id',
+        component: EditMatrixChecklists,
+		name: 'edit_matrix_checklists',
+	  },
+	  // Matrix Checklists - View
+      {
+        path: 'matrix_checklists/view/:id',
+        component: ViewMatrixChecklists,
+		name: 'view_matrix_checklists',
 	  },
     ]
   },

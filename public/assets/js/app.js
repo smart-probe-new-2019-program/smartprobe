@@ -4734,7 +4734,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.regex = exports.ref = exports.len = exports.req = exports.withParams = undefined;
 
-var _withParams = __webpack_require__(387);
+var _withParams = __webpack_require__(432);
 
 var _withParams2 = _interopRequireDefault(_withParams);
 
@@ -4805,7 +4805,7 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 
 var bind = __webpack_require__(196);
-var isBuffer = __webpack_require__(451);
+var isBuffer = __webpack_require__(496);
 
 /*global toString:true*/
 
@@ -5250,6 +5250,57 @@ module.exports = Element;
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(206);
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _promise = __webpack_require__(48);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new _promise2.default(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          return _promise2.default.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -5297,7 +5348,7 @@ module.exports = {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5311,200 +5362,7 @@ module.exports.Rectangle = __webpack_require__(262);
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(206);
-
-
-/***/ }),
 /* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _promise = __webpack_require__(48);
-
-var _promise2 = _interopRequireDefault(_promise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new _promise2.default(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
-          resolve(value);
-        } else {
-          return _promise2.default.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.6.1' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(19);
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(29);
-var createDesc = __webpack_require__(51);
-module.exports = __webpack_require__(20) ? function (object, key, value) {
-  return dP.f(object, key, createDesc(1, value));
-} : function (object, key, value) {
-  object[key] = value;
-  return object;
-};
-
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -10619,6 +10477,148 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_139__;
 });
 
 /***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.6.1' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(19);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(29);
+var createDesc = __webpack_require__(51);
+module.exports = __webpack_require__(20) ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
 /* 19 */
 /***/ (function(module, exports) {
 
@@ -12105,11 +12105,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
@@ -12238,9 +12238,9 @@ exports.default = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
-var core = __webpack_require__(14);
+var core = __webpack_require__(15);
 var ctx = __webpack_require__(27);
-var hide = __webpack_require__(17);
+var hide = __webpack_require__(18);
 var has = __webpack_require__(30);
 var PROTOTYPE = 'prototype';
 
@@ -12341,7 +12341,7 @@ module.exports = function (it) {
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var IE8_DOM_DEFINE = __webpack_require__(212);
 var toPrimitive = __webpack_require__(213);
 var dP = Object.defineProperty;
@@ -13076,13 +13076,13 @@ Chart.Animation = __webpack_require__(64);
 Chart.animationService = __webpack_require__(65);
 Chart.defaults = __webpack_require__(3);
 Chart.Element = __webpack_require__(8);
-Chart.elements = __webpack_require__(10);
+Chart.elements = __webpack_require__(12);
 Chart.Interaction = __webpack_require__(66);
 Chart.layouts = __webpack_require__(22);
 Chart.platform = __webpack_require__(67);
 Chart.plugins = __webpack_require__(68);
 Chart.Scale = __webpack_require__(23);
-Chart.scaleService = __webpack_require__(9);
+Chart.scaleService = __webpack_require__(11);
 Chart.Ticks = __webpack_require__(24);
 Chart.Tooltip = __webpack_require__(69);
 
@@ -13234,7 +13234,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(439);
+var	fixUrls = __webpack_require__(484);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -13554,7 +13554,7 @@ function updateLink (link, options, obj) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(6);
-var normalizeHeaderName = __webpack_require__(453);
+var normalizeHeaderName = __webpack_require__(498);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -24741,7 +24741,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(204).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(204).setImmediate))
 
 /***/ }),
 /* 46 */
@@ -27461,7 +27461,7 @@ module.exports = { "default": __webpack_require__(208), __esModule: true };
 var LIBRARY = __webpack_require__(36);
 var $export = __webpack_require__(26);
 var redefine = __webpack_require__(214);
-var hide = __webpack_require__(17);
+var hide = __webpack_require__(18);
 var Iterators = __webpack_require__(21);
 var $iterCreate = __webpack_require__(215);
 var setToStringTag = __webpack_require__(40);
@@ -27571,7 +27571,7 @@ module.exports = function (it) {
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core = __webpack_require__(14);
+var core = __webpack_require__(15);
 var global = __webpack_require__(5);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
@@ -27648,7 +27648,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var aFunction = __webpack_require__(28);
 var SPECIES = __webpack_require__(7)('species');
 module.exports = function (O, D) {
@@ -27765,7 +27765,7 @@ module.exports = function (exec) {
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var isObject = __webpack_require__(19);
 var newPromiseCapability = __webpack_require__(41);
 
@@ -42376,12 +42376,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(6);
-var settle = __webpack_require__(454);
-var buildURL = __webpack_require__(456);
-var parseHeaders = __webpack_require__(457);
-var isURLSameOrigin = __webpack_require__(458);
+var settle = __webpack_require__(499);
+var buildURL = __webpack_require__(501);
+var parseHeaders = __webpack_require__(502);
+var isURLSameOrigin = __webpack_require__(503);
 var createError = __webpack_require__(198);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(459);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(504);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -42478,7 +42478,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(460);
+      var cookies = __webpack_require__(505);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -42562,7 +42562,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(455);
+var enhanceError = __webpack_require__(500);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -42623,7 +42623,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(202);
-module.exports = __webpack_require__(469);
+module.exports = __webpack_require__(514);
 
 
 /***/ }),
@@ -42637,17 +42637,17 @@ var _router = __webpack_require__(203);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _utilities = __webpack_require__(411);
+var _utilities = __webpack_require__(456);
 
 var _utilities2 = _interopRequireDefault(_utilities);
 
-var _ThemeSwitcher = __webpack_require__(412);
+var _ThemeSwitcher = __webpack_require__(457);
 
 var _ThemeSwitcher2 = _interopRequireDefault(_ThemeSwitcher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(415); /**
+__webpack_require__(460); /**
                          * First we will load all of this project's JavaScript dependencies which
                          * include Vue and Vue Resource. This gives a great starting point for
                          * building robust, powerful web applications using Vue and Laravel.
@@ -42773,50 +42773,119 @@ var _Edit9 = __webpack_require__(358);
 
 var _Edit10 = _interopRequireDefault(_Edit9);
 
-var _Index11 = __webpack_require__(361);
+var _View9 = __webpack_require__(361);
+
+var _View10 = _interopRequireDefault(_View9);
+
+var _Index11 = __webpack_require__(364);
 
 var _Index12 = _interopRequireDefault(_Index11);
 
-var _Add11 = __webpack_require__(364);
+var _Add11 = __webpack_require__(367);
 
 var _Add12 = _interopRequireDefault(_Add11);
 
-var _Edit11 = __webpack_require__(367);
+var _Edit11 = __webpack_require__(370);
 
 var _Edit12 = _interopRequireDefault(_Edit11);
 
-var _LayoutBasic = __webpack_require__(370);
+var _View11 = __webpack_require__(373);
+
+var _View12 = _interopRequireDefault(_View11);
+
+var _Index13 = __webpack_require__(376);
+
+var _Index14 = _interopRequireDefault(_Index13);
+
+var _Add13 = __webpack_require__(379);
+
+var _Add14 = _interopRequireDefault(_Add13);
+
+var _Edit13 = __webpack_require__(382);
+
+var _Edit14 = _interopRequireDefault(_Edit13);
+
+var _Add15 = __webpack_require__(385);
+
+var _Add16 = _interopRequireDefault(_Add15);
+
+var _Edit15 = __webpack_require__(388);
+
+var _Edit16 = _interopRequireDefault(_Edit15);
+
+var _Add17 = __webpack_require__(391);
+
+var _Add18 = _interopRequireDefault(_Add17);
+
+var _Edit17 = __webpack_require__(394);
+
+var _Edit18 = _interopRequireDefault(_Edit17);
+
+var _Add19 = __webpack_require__(397);
+
+var _Add20 = _interopRequireDefault(_Add19);
+
+var _Edit19 = __webpack_require__(400);
+
+var _Edit20 = _interopRequireDefault(_Edit19);
+
+var _Index15 = __webpack_require__(403);
+
+var _Index16 = _interopRequireDefault(_Index15);
+
+var _Add21 = __webpack_require__(406);
+
+var _Add22 = _interopRequireDefault(_Add21);
+
+var _Edit21 = __webpack_require__(409);
+
+var _Edit22 = _interopRequireDefault(_Edit21);
+
+var _View13 = __webpack_require__(412);
+
+var _View14 = _interopRequireDefault(_View13);
+
+var _LayoutBasic = __webpack_require__(415);
 
 var _LayoutBasic2 = _interopRequireDefault(_LayoutBasic);
 
-var _LayoutLogin = __webpack_require__(381);
+var _LayoutLogin = __webpack_require__(426);
 
 var _LayoutLogin2 = _interopRequireDefault(_LayoutLogin);
 
-var _Login = __webpack_require__(383);
+var _Login = __webpack_require__(428);
 
 var _Login2 = _interopRequireDefault(_Login);
 
-var _ = __webpack_require__(406);
+var _ = __webpack_require__(451);
 
 var _2 = _interopRequireDefault(_);
 
-var _Home = __webpack_require__(409);
+var _Home = __webpack_require__(454);
 
 var _Home2 = _interopRequireDefault(_Home);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//Checklist Times
+//Set Checklists 
 
 
-/*
- |--------------------------------------------------------------------------
- | Admin Views
- |--------------------------------------------------------------------------|
- */
+//Users
 
-// Dashboard
+
+//Locations
+
+
+//Organizations
+
+
+//Matrix Checklists
+
+
+//Staff Daily Checklists
+
+
+//Probes
 _vue2.default.use(_vueRouter2.default);
 
 /*
@@ -42837,19 +42906,28 @@ _vue2.default.use(_vueRouter2.default);
 // Layouts
 
 
+//Manage Checklists
+
+
+//Checklist Items
+
+
+//Checklist Categories
+
+
+//Checklist Times
+
+
 //Checklist Areas
 
 
-//Users
+/*
+ |--------------------------------------------------------------------------
+ | Admin Views
+ |--------------------------------------------------------------------------|
+ */
 
-
-//Locations
-
-
-//Organizations
-
-
-//Probes
+// Dashboard
 
 
 var routes = [
@@ -42913,110 +42991,200 @@ var routes = [
   // Organizations - Index
   {
     path: 'organizations',
-    component: _Index4.default,
+    component: _Index8.default,
     name: 'organizations'
   },
   // Organizations - Add
   {
     path: 'organizations/add',
-    component: _Add4.default,
+    component: _Add8.default,
     name: 'add_organizations'
   },
   // Organizations - Edit
   {
     path: 'organizations/edit/:id',
-    component: _Edit4.default,
+    component: _Edit8.default,
     name: 'edit_organizations'
   },
   // Organizations - View
   {
     path: 'organizations/view/:id',
-    component: _View4.default,
+    component: _View8.default,
     name: 'view_organizations'
   },
   // Locations - Index
   {
     path: 'locations',
-    component: _Index6.default,
+    component: _Index10.default,
     name: 'locations'
   },
   // Locations - Add
   {
     path: 'locations/add',
-    component: _Add6.default,
+    component: _Add10.default,
     name: 'add_locations'
   },
   // Locations - Edit
   {
     path: 'locations/edit/:id',
-    component: _Edit6.default,
+    component: _Edit10.default,
     name: 'edit_locations'
   },
   // Locations - View
   {
     path: 'locations/view/:id',
-    component: _View6.default,
+    component: _View10.default,
     name: 'view_locations'
   },
   // Users - Index
   {
     path: 'users',
-    component: _Index8.default,
+    component: _Index12.default,
     name: 'users'
   },
   // Users - Add
   {
     path: 'users/add',
-    component: _Add8.default,
+    component: _Add12.default,
     name: 'add_users'
   },
   // Users - Edit
   {
     path: 'users/edit/:id',
-    component: _Edit8.default,
+    component: _Edit12.default,
     name: 'edit_users'
   },
   // Users - View
   {
     path: 'users/view/:id',
-    component: _View8.default,
+    component: _View12.default,
     name: 'view_users'
   },
-  // Checklist Areas - Index
+  // Checklists - Index
   {
-    path: 'checklist_areas',
-    component: _Index10.default,
-    name: 'checklist_areas'
+    path: 'checklists',
+    component: _Index14.default,
+    name: 'checklists'
   },
   // Checklist Areas - Add
   {
     path: 'checklist_areas/add',
-    component: _Add10.default,
+    component: _Add14.default,
     name: 'add_checklist_areas'
   },
   // Checklist Areas - Edit
   {
     path: 'checklist_areas/edit/:id',
-    component: _Edit10.default,
+    component: _Edit14.default,
     name: 'edit_checklist_areas'
-  },
-  // Checklist Times - Index
-  {
-    path: 'checklist_times',
-    component: _Index12.default,
-    name: 'checklist_times'
   },
   // Checklist Times - Add
   {
     path: 'checklist_times/add',
-    component: _Add12.default,
+    component: _Add16.default,
     name: 'add_checklist_times'
   },
   // Checklist Times - Edit
   {
     path: 'checklist_times/edit/:id',
-    component: _Edit12.default,
+    component: _Edit16.default,
     name: 'edit_checklist_times'
+  },
+  // Checklist Categories - Add
+  {
+    path: 'checklist_categories/add',
+    component: _Add18.default,
+    name: 'add_checklist_categories'
+  },
+  // Checklist Categories - Edit
+  {
+    path: 'checklist_categories/edit/:id',
+    component: _Edit18.default,
+    name: 'edit_checklist_categories'
+  },
+  // Checklist Items - Add
+  {
+    path: 'checklist_items/add',
+    component: _Add20.default,
+    name: 'add_checklist_items'
+  },
+  // Checklist Items - Edit
+  {
+    path: 'checklist_items/edit/:id',
+    component: _Edit20.default,
+    name: 'edit_checklist_items'
+  },
+  // Manage Checklists - Index
+  {
+    path: 'manage_checklists',
+    component: _Index16.default,
+    name: 'manage_checklists'
+  },
+  // Manage Checklists - Add
+  {
+    path: 'manage_checklists/add',
+    component: _Add22.default,
+    name: 'add_manage_checklists'
+  },
+  // Manage Checklists - Edit
+  {
+    path: 'manage_checklists/edit/:id',
+    component: _Edit22.default,
+    name: 'edit_manage_checklists'
+  },
+  // Manage Checklists - View
+  {
+    path: 'manage_checklists/view/:id',
+    component: _View14.default,
+    name: 'view_manage_checklists'
+  },
+  // Staff Daily Checklists - Index
+  {
+    path: 'staff_daily_checklists',
+    component: _Index4.default,
+    name: 'staff_daily_checklists'
+  },
+  // Staff Daily Checklists - Add
+  {
+    path: 'staff_daily_checklists/add',
+    component: _Add4.default,
+    name: 'add_staff_daily_checklists'
+  },
+  // Staff Daily Checklists - Edit
+  {
+    path: 'staff_daily_checklists/edit/:id',
+    component: _Edit4.default,
+    name: 'edit_staff_daily_checklists'
+  },
+  // Staff Daily Checklists - View
+  {
+    path: 'staff_daily_checklists/view/:id',
+    component: _View4.default,
+    name: 'view_staff_daily_checklists'
+  },
+  // Matrix Checklists - Index
+  {
+    path: 'matrix_checklists',
+    component: _Index6.default,
+    name: 'matrix_checklists'
+  },
+  // Matrix Checklists - Add
+  {
+    path: 'matrix_checklists/add',
+    component: _Add6.default,
+    name: 'add_matrix_checklists'
+  },
+  // Matrix Checklists - Edit
+  {
+    path: 'matrix_checklists/edit/:id',
+    component: _Edit6.default,
+    name: 'edit_matrix_checklists'
+  },
+  // Matrix Checklists - View
+  {
+    path: 'matrix_checklists/view/:id',
+    component: _View6.default,
+    name: 'view_matrix_checklists'
   }]
 },
 
@@ -43132,7 +43300,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
 /* 205 */
@@ -43325,7 +43493,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(46)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(46)))
 
 /***/ }),
 /* 206 */
@@ -44111,7 +44279,7 @@ __webpack_require__(225);
 __webpack_require__(229);
 __webpack_require__(241);
 __webpack_require__(242);
-module.exports = __webpack_require__(14).Promise;
+module.exports = __webpack_require__(15).Promise;
 
 
 /***/ }),
@@ -44198,7 +44366,7 @@ module.exports = function (it, S) {
 /* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(17);
+module.exports = __webpack_require__(18);
 
 
 /***/ }),
@@ -44213,7 +44381,7 @@ var setToStringTag = __webpack_require__(40);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(17)(IteratorPrototype, __webpack_require__(7)('iterator'), function () { return this; });
+__webpack_require__(18)(IteratorPrototype, __webpack_require__(7)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -44226,7 +44394,7 @@ module.exports = function (Constructor, NAME, next) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var dPs = __webpack_require__(217);
 var enumBugKeys = __webpack_require__(55);
 var IE_PROTO = __webpack_require__(39)('IE_PROTO');
@@ -44273,7 +44441,7 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(29);
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var getKeys = __webpack_require__(218);
 
 module.exports = __webpack_require__(20) ? Object.defineProperties : function defineProperties(O, Properties) {
@@ -44413,7 +44581,7 @@ module.exports = function (it) {
 
 __webpack_require__(226);
 var global = __webpack_require__(5);
-var hide = __webpack_require__(17);
+var hide = __webpack_require__(18);
 var Iterators = __webpack_require__(21);
 var TO_STRING_TAG = __webpack_require__(7)('toStringTag');
 
@@ -44718,7 +44886,7 @@ if (!USE_NATIVE) {
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
 __webpack_require__(40)($Promise, PROMISE);
 __webpack_require__(239)(PROMISE);
-Wrapper = __webpack_require__(14)[PROMISE];
+Wrapper = __webpack_require__(15)[PROMISE];
 
 // statics
 $export($export.S + $export.F * !USE_NATIVE, PROMISE, {
@@ -44800,7 +44968,7 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 var ctx = __webpack_require__(27);
 var call = __webpack_require__(232);
 var isArrayIter = __webpack_require__(233);
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 var toLength = __webpack_require__(52);
 var getIterFn = __webpack_require__(234);
 var BREAK = {};
@@ -44829,7 +44997,7 @@ exports.RETURN = RETURN;
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
-var anObject = __webpack_require__(15);
+var anObject = __webpack_require__(16);
 module.exports = function (iterator, fn, value, entries) {
   try {
     return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -44863,7 +45031,7 @@ module.exports = function (it) {
 var classof = __webpack_require__(57);
 var ITERATOR = __webpack_require__(7)('iterator');
 var Iterators = __webpack_require__(21);
-module.exports = __webpack_require__(14).getIteratorMethod = function (it) {
+module.exports = __webpack_require__(15).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
@@ -44981,7 +45149,7 @@ module.exports = navigator && navigator.userAgent || '';
 /* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hide = __webpack_require__(17);
+var hide = __webpack_require__(18);
 module.exports = function (target, src, safe) {
   for (var key in src) {
     if (safe && target[key]) target[key] = src[key];
@@ -44997,7 +45165,7 @@ module.exports = function (target, src, safe) {
 "use strict";
 
 var global = __webpack_require__(5);
-var core = __webpack_require__(14);
+var core = __webpack_require__(15);
 var dP = __webpack_require__(29);
 var DESCRIPTORS = __webpack_require__(20);
 var SPECIES = __webpack_require__(7)('species');
@@ -45047,7 +45215,7 @@ module.exports = function (exec, skipClosing) {
 // https://github.com/tc39/proposal-promise-finally
 
 var $export = __webpack_require__(26);
-var core = __webpack_require__(14);
+var core = __webpack_require__(15);
 var global = __webpack_require__(5);
 var speciesConstructor = __webpack_require__(58);
 var promiseResolve = __webpack_require__(61);
@@ -45393,12 +45561,12 @@ if(false) {
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(true);
+exports = module.exports = __webpack_require__(17)(true);
 // imports
 
 
 // module
-exports.push([module.i, "\n.graph-container[data-v-532afbf2] {\r\n  height: 300px;\n}\r\n", "", {"version":3,"sources":["E:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/LineChart.vue"],"names":[],"mappings":";AAyEA;EACA,cAAA;CACA","file":"LineChart.vue","sourcesContent":["<template>\r\n  <div class=\"graph-container\">\r\n    <canvas id=\"graph\" ref=\"graph\"/>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport Chart from 'chart.js'\r\n\r\nexport default {\r\n  props: {\r\n    labels: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    },\r\n    values: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    }\r\n  },\r\n\r\n  mounted () {\r\n    let context = this.$refs.graph.getContext('2d')\r\n    let options = {\r\n      responsive: true,\r\n      maintainAspectRatio: false,\r\n      legend: {\r\n        display: false\r\n      }\r\n    }\r\n    let data = {\r\n      labels: this.labels,\r\n      datasets: [\r\n        {\r\n          label: 'Sales',\r\n          fill: false,\r\n          lineTension: 0.1,\r\n          backgroundColor: 'rgba(0,125,204,0.4)',\r\n          borderColor: 'rgba(0,125,204,1)',\r\n          borderCapStyle: 'butt',\r\n          borderDash: [],\r\n          borderDashOffset: 0.0,\r\n          borderJoinStyle: 'miter',\r\n          pointBorderColor: 'rgba(75,192,192,1)',\r\n          pointBackgroundColor: '#fff',\r\n          pointBorderWidth: 1,\r\n          pointHoverRadius: 5,\r\n          pointHoverBackgroundColor: 'rgba(75,192,192,1)',\r\n          pointHoverBorderColor: 'rgba(220,220,220,1)',\r\n          pointHoverBorderWidth: 2,\r\n          pointRadius: 1,\r\n          pointHitRadius: 10,\r\n          data: this.values\r\n        }\r\n      ]\r\n    }\r\n\r\n    this.myLineChart = new Chart(context, {\r\n      type: 'line',\r\n      data: data,\r\n      options: options\r\n    })\r\n  },\r\n\r\n  beforeDestroy () {\r\n    this.myLineChart.destroy()\r\n  }\r\n}\r\n</script>\r\n\r\n<style scoped>\r\n.graph-container {\r\n  height: 300px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+exports.push([module.i, "\n.graph-container[data-v-532afbf2] {\n  height: 300px;\n}\n", "", {"version":3,"sources":["D:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/LineChart.vue"],"names":[],"mappings":";AAyEA;EACA,cAAA;CACA","file":"LineChart.vue","sourcesContent":["<template>\n  <div class=\"graph-container\">\n    <canvas id=\"graph\" ref=\"graph\"/>\n  </div>\n</template>\n\n<script>\nimport Chart from 'chart.js'\n\nexport default {\n  props: {\n    labels: {\n      type: Array,\n      require: true,\n      default: Array\n    },\n    values: {\n      type: Array,\n      require: true,\n      default: Array\n    }\n  },\n\n  mounted () {\n    let context = this.$refs.graph.getContext('2d')\n    let options = {\n      responsive: true,\n      maintainAspectRatio: false,\n      legend: {\n        display: false\n      }\n    }\n    let data = {\n      labels: this.labels,\n      datasets: [\n        {\n          label: 'Sales',\n          fill: false,\n          lineTension: 0.1,\n          backgroundColor: 'rgba(0,125,204,0.4)',\n          borderColor: 'rgba(0,125,204,1)',\n          borderCapStyle: 'butt',\n          borderDash: [],\n          borderDashOffset: 0.0,\n          borderJoinStyle: 'miter',\n          pointBorderColor: 'rgba(75,192,192,1)',\n          pointBackgroundColor: '#fff',\n          pointBorderWidth: 1,\n          pointHoverRadius: 5,\n          pointHoverBackgroundColor: 'rgba(75,192,192,1)',\n          pointHoverBorderColor: 'rgba(220,220,220,1)',\n          pointHoverBorderWidth: 2,\n          pointRadius: 1,\n          pointHitRadius: 10,\n          data: this.values\n        }\n      ]\n    }\n\n    this.myLineChart = new Chart(context, {\n      type: 'line',\n      data: data,\n      options: options\n    })\n  },\n\n  beforeDestroy () {\n    this.myLineChart.destroy()\n  }\n}\n</script>\n\n<style scoped>\n.graph-container {\n  height: 300px;\n}\n</style>\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -46161,7 +46329,7 @@ module.exports = {
 var color = __webpack_require__(63);
 var defaults = __webpack_require__(3);
 var helpers = __webpack_require__(2);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 
 module.exports = function() {
 
@@ -49009,7 +49177,7 @@ var Interaction = __webpack_require__(66);
 var layouts = __webpack_require__(22);
 var platform = __webpack_require__(67);
 var plugins = __webpack_require__(68);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 var Tooltip = __webpack_require__(69);
 
 module.exports = function(Chart) {
@@ -50509,7 +50677,7 @@ module.exports = function(Chart) {
 
 
 var Scale = __webpack_require__(23);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 
 module.exports = function() {
 
@@ -50652,7 +50820,7 @@ module.exports = function() {
 
 var defaults = __webpack_require__(3);
 var helpers = __webpack_require__(2);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 var Ticks = __webpack_require__(24);
 
 module.exports = function(Chart) {
@@ -50851,7 +51019,7 @@ module.exports = function(Chart) {
 
 var helpers = __webpack_require__(2);
 var Scale = __webpack_require__(23);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 var Ticks = __webpack_require__(24);
 
 /**
@@ -51207,7 +51375,7 @@ module.exports = function(Chart) {
 
 var defaults = __webpack_require__(3);
 var helpers = __webpack_require__(2);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 var Ticks = __webpack_require__(24);
 
 module.exports = function(Chart) {
@@ -51749,7 +51917,7 @@ moment = typeof moment === 'function' ? moment : window.moment;
 var defaults = __webpack_require__(3);
 var helpers = __webpack_require__(2);
 var Scale = __webpack_require__(23);
-var scaleService = __webpack_require__(9);
+var scaleService = __webpack_require__(11);
 
 // Integer constants are from the ES6 spec.
 var MIN_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;
@@ -52805,7 +52973,7 @@ webpackContext.id = 273;
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('bar', {
@@ -53293,7 +53461,7 @@ module.exports = function(Chart) {
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('bubble', {
@@ -53473,7 +53641,7 @@ module.exports = function(Chart) {
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('doughnut', {
@@ -53781,7 +53949,7 @@ module.exports = function(Chart) {
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('line', {
@@ -54132,7 +54300,7 @@ module.exports = function(Chart) {
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('polarArea', {
@@ -54394,7 +54562,7 @@ module.exports = function(Chart) {
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('radar', {
@@ -54754,7 +54922,7 @@ module.exports.title = __webpack_require__(291);
 
 
 var defaults = __webpack_require__(3);
-var elements = __webpack_require__(10);
+var elements = __webpack_require__(12);
 var helpers = __webpack_require__(2);
 
 defaults._set('global', {
@@ -56010,12 +56178,12 @@ if(false) {
 /* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(true);
+exports = module.exports = __webpack_require__(17)(true);
 // imports
 
 
 // module
-exports.push([module.i, "\n.graph-container[data-v-6d8667de] {\r\n  height: 300px;\n}\r\n", "", {"version":3,"sources":["E:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/BarChart.vue"],"names":[],"mappings":";AA8DA;EACA,cAAA;CACA","file":"BarChart.vue","sourcesContent":["<template>\r\n  <div class=\"graph-container\">\r\n    <canvas id=\"graph\" ref=\"graph\"/>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport Chart from 'chart.js'\r\n\r\nexport default {\r\n  props: {\r\n    labels: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    },\r\n    values: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    }\r\n  },\r\n\r\n  mounted () {\r\n    let context = this.$refs.graph.getContext('2d')\r\n    let options = {\r\n      responsive: true,\r\n      maintainAspectRatio: false,\r\n      legend: {\r\n        display: false\r\n      }\r\n    }\r\n\r\n    let data = {\r\n      labels: this.labels,\r\n      datasets: [\r\n        {\r\n          label: 'My First dataset',\r\n          backgroundColor: 'rgba(79, 196, 127,0.2)',\r\n          borderColor: 'rgba(79, 196, 127,1)',\r\n          borderWidth: 1,\r\n          hoverBackgroundColor: 'rgba(79, 196, 127,0.4)',\r\n          hoverBorderColor: 'rgba(79, 196, 127,1)',\r\n          data: this.values\r\n        }\r\n      ]\r\n    }\r\n\r\n    this.myBarChart = new Chart(context, {\r\n      type: 'bar',\r\n      data: data,\r\n      options: options\r\n    })\r\n  },\r\n\r\n  beforeDestroy () {\r\n    this.myBarChart.destroy()\r\n  }\r\n}\r\n</script>\r\n\r\n<style scoped>\r\n.graph-container {\r\n  height: 300px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+exports.push([module.i, "\n.graph-container[data-v-6d8667de] {\n  height: 300px;\n}\n", "", {"version":3,"sources":["D:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/BarChart.vue"],"names":[],"mappings":";AA8DA;EACA,cAAA;CACA","file":"BarChart.vue","sourcesContent":["<template>\n  <div class=\"graph-container\">\n    <canvas id=\"graph\" ref=\"graph\"/>\n  </div>\n</template>\n\n<script>\nimport Chart from 'chart.js'\n\nexport default {\n  props: {\n    labels: {\n      type: Array,\n      require: true,\n      default: Array\n    },\n    values: {\n      type: Array,\n      require: true,\n      default: Array\n    }\n  },\n\n  mounted () {\n    let context = this.$refs.graph.getContext('2d')\n    let options = {\n      responsive: true,\n      maintainAspectRatio: false,\n      legend: {\n        display: false\n      }\n    }\n\n    let data = {\n      labels: this.labels,\n      datasets: [\n        {\n          label: 'My First dataset',\n          backgroundColor: 'rgba(79, 196, 127,0.2)',\n          borderColor: 'rgba(79, 196, 127,1)',\n          borderWidth: 1,\n          hoverBackgroundColor: 'rgba(79, 196, 127,0.4)',\n          hoverBorderColor: 'rgba(79, 196, 127,1)',\n          data: this.values\n        }\n      ]\n    }\n\n    this.myBarChart = new Chart(context, {\n      type: 'bar',\n      data: data,\n      options: options\n    })\n  },\n\n  beforeDestroy () {\n    this.myBarChart.destroy()\n  }\n}\n</script>\n\n<style scoped>\n.graph-container {\n  height: 300px;\n}\n</style>\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -56193,12 +56361,12 @@ if(false) {
 /* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(true);
+exports = module.exports = __webpack_require__(17)(true);
 // imports
 
 
 // module
-exports.push([module.i, "\n.graph-container[data-v-18a84a85] {\r\n  height: 300px;\n}\r\n", "", {"version":3,"sources":["E:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/PieChart.vue"],"names":[],"mappings":";AAkEA;EACA,cAAA;CACA","file":"PieChart.vue","sourcesContent":["<template>\r\n  <div class=\"graph-container\">\r\n    <canvas id=\"graph\" ref=\"graph\"/>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport Chart from 'chart.js'\r\n\r\nexport default {\r\n  props: {\r\n    labels: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    },\r\n    values: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    },\r\n    bgColors: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    },\r\n    hoverBgColors: {\r\n      type: Array,\r\n      require: true,\r\n      default: Array\r\n    }\r\n  },\r\n\r\n  mounted () {\r\n    let context = this.$refs.graph.getContext('2d')\r\n\r\n    let options = {\r\n      responsive: true,\r\n      maintainAspectRatio: false\r\n    }\r\n\r\n    let data = {\r\n      labels: this.labels,\r\n      datasets: [\r\n        {\r\n          data: this.values,\r\n          backgroundColor: this.bgColors,\r\n          hoverBackgroundColor: this.hoverBgColors\r\n        }\r\n      ]\r\n    }\r\n\r\n    this.pieChart = new Chart(context, {\r\n      type: 'pie',\r\n      data: data,\r\n      options: options\r\n    })\r\n  },\r\n\r\n  beforeDestroy () {\r\n    this.pieChart.destroy()\r\n  }\r\n}\r\n</script>\r\n\r\n<style scoped>\r\n.graph-container {\r\n  height: 300px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+exports.push([module.i, "\n.graph-container[data-v-18a84a85] {\n  height: 300px;\n}\n", "", {"version":3,"sources":["D:/Work/Laravel/Projects/smartprobe/resources/js/components/chartjs/resources/js/components/chartjs/PieChart.vue"],"names":[],"mappings":";AAkEA;EACA,cAAA;CACA","file":"PieChart.vue","sourcesContent":["<template>\n  <div class=\"graph-container\">\n    <canvas id=\"graph\" ref=\"graph\"/>\n  </div>\n</template>\n\n<script>\nimport Chart from 'chart.js'\n\nexport default {\n  props: {\n    labels: {\n      type: Array,\n      require: true,\n      default: Array\n    },\n    values: {\n      type: Array,\n      require: true,\n      default: Array\n    },\n    bgColors: {\n      type: Array,\n      require: true,\n      default: Array\n    },\n    hoverBgColors: {\n      type: Array,\n      require: true,\n      default: Array\n    }\n  },\n\n  mounted () {\n    let context = this.$refs.graph.getContext('2d')\n\n    let options = {\n      responsive: true,\n      maintainAspectRatio: false\n    }\n\n    let data = {\n      labels: this.labels,\n      datasets: [\n        {\n          data: this.values,\n          backgroundColor: this.bgColors,\n          hoverBackgroundColor: this.hoverBgColors\n        }\n      ]\n    }\n\n    this.pieChart = new Chart(context, {\n      type: 'pie',\n      data: data,\n      options: options\n    })\n  },\n\n  beforeDestroy () {\n    this.pieChart.destroy()\n  }\n}\n</script>\n\n<style scoped>\n.graph-container {\n  height: 300px;\n}\n</style>\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -56654,15 +56822,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _vueTableComponent = __webpack_require__(18);
+var _vueTableComponent = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60941,6 +61109,4616 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
+Component.options.__file = "resources/js/views/admin/modules/staff_daily_checklists/Index.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0b65315c", Component.options)
+  } else {
+    hotAPI.reload("data-v-0b65315c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 317 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _regenerator = __webpack_require__(9);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(10);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _vueTableComponent = __webpack_require__(13);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	components: {
+		TableComponent: _vueTableComponent.TableComponent,
+		TableColumn: _vueTableComponent.TableColumn
+	},
+	methods: {
+		mounted: function mounted() {
+			toastr.options = {
+				closeButton: true,
+				debug: false,
+				positionClass: 'toast-top-right',
+				onclick: null,
+				showDuration: '1000',
+				hideDuration: '1000',
+				timeOut: '5000',
+				extendedTimeOut: '1000',
+				showEasing: 'swing',
+				hideEasing: 'linear',
+				showMethod: 'fadeIn',
+				hideMethod: 'fadeOut'
+			};
+		},
+		fetchData: function fetchData(_ref) {
+			var _this = this;
+
+			var page = _ref.page,
+			    filter = _ref.filter,
+			    sort = _ref.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+				var response;
+				return _regenerator2.default.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return axios.get('/api/admin/manage_checklists/get?page=' + page);
+
+							case 2:
+								response = _context.sent;
+								return _context.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, _this);
+			}))();
+		},
+		deleteManageChecklist: function deleteManageChecklist(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this Checklist?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/manage_checklists/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the checklist. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist deleted!', 'Success!');
+							app.$refs.table.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		}
+	}
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+/* 318 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/staff_daily_checklists/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Checklist")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" })
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [
+        _vm._v("Staff Daily Checklists")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Staff Daily Checklists")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0b65315c", module.exports)
+  }
+}
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(320)
+/* template */
+var __vue_template__ = __webpack_require__(321)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/staff_daily_checklists/Add.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c167d3aa", Component.options)
+  } else {
+    hotAPI.reload("data-v-c167d3aa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	data: function data() {
+		return {
+			organization_id: null,
+			area_id: null,
+			time_id: null,
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checkedItems: [],
+			itemsData: []
+		};
+	},
+	mounted: function mounted() {
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+		},
+		getChecklistItems: function getChecklistItems() {
+			var app = this;
+
+			axios.get('/api/admin/manage_checklists/getChecklistItems?organization_id=' + app.organization_id + '&area_id=' + app.area_id + '&time_id=' + app.time_id).then(function (resp) {
+				app.itemsData = resp.data;
+
+				if (app.itemsData.length == 0) {
+					toastr['error']('No checklist items found.', 'Error!');
+				} else {
+					toastr['success']('Checklist items found.', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error fetching checklist data");
+			});
+		},
+		saveChecklist: function saveChecklist() {
+			var app = this;
+
+			console.log(app.itemsData);
+			console.log(app.checkedItems);
+
+			// axios.post('/api/admin/manage_checklists', app.manageChecklistsData)
+			// .then(function(resp) {
+			// 	if(resp.data.status == 'error'){
+			// 		toastr['error']('Something went wrong while adding the checklist. Please contact admin about this.', 'Error!');
+			// 	}
+			// 	else{
+			// 		app.$router.push('/admin/manage_checklists');
+			// 		toastr['success']('New checklist added!', 'Success!');
+			// 	}
+			// })
+			// .catch(function() {
+			// 	console.log("Error on ajax call!");
+			// });
+		},
+		comparer: function comparer(otherArray) {
+			return function (current) {
+				return otherArray.filter(function (other) {
+					return other.value == current.value && other.display == current.display;
+				}).length == 0;
+			};
+		}
+	}
+};
+
+/***/ }),
+/* 321 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/staff_daily_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "panel-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-sm-3 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Organization")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.trim",
+                          value: _vm.organization_id,
+                          expression: "organization_id",
+                          modifiers: { trim: true }
+                        }
+                      ],
+                      ref: "organization_id",
+                      staticClass: "form-control",
+                      attrs: { required: "" },
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.organization_id = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          function($event) {
+                            _vm.getChecklistsDropdown()
+                          }
+                        ]
+                      }
+                    },
+                    _vm._l(_vm.organizations, function(organization) {
+                      return _c(
+                        "option",
+                        { domProps: { value: organization.id } },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t\t\t" +
+                              _vm._s(organization.name) +
+                              "\n\t\t\t\t\t\t\t\t"
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-sm-3 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Area")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.trim",
+                          value: _vm.area_id,
+                          expression: "area_id",
+                          modifiers: { trim: true }
+                        }
+                      ],
+                      ref: "area_id",
+                      staticClass: "form-control",
+                      attrs: { required: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.area_id = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    _vm._l(_vm.checklistAreas, function(checklistArea) {
+                      return _c(
+                        "option",
+                        { domProps: { value: checklistArea.id } },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t\t\t" +
+                              _vm._s(checklistArea.name) +
+                              "\n\t\t\t\t\t\t\t\t"
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-sm-3 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Time")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.trim",
+                          value: _vm.time_id,
+                          expression: "time_id",
+                          modifiers: { trim: true }
+                        }
+                      ],
+                      ref: "time_id",
+                      staticClass: "form-control",
+                      attrs: { required: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.time_id = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    _vm._l(_vm.checklistTimes, function(checklistTime) {
+                      return _c(
+                        "option",
+                        { domProps: { value: checklistTime.id } },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t\t\t" +
+                              _vm._s(checklistTime.name) +
+                              "\n\t\t\t\t\t\t\t\t"
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-sm-3 form-group",
+                    staticStyle: { margin: "auto" }
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.getChecklistItems()
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "icon-fa icon-fa-check" }),
+                        _vm._v(" Select")
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-10" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("h5", { staticClass: "card-header" }, [
+                    _vm._v("Checklist Items")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _vm.itemsData.length == 0
+                        ? _c(
+                            "h6",
+                            [
+                              _c("font", { attrs: { color: "red" } }, [
+                                _vm._v("No Checklist Items!")
+                              ])
+                            ],
+                            1
+                          )
+                        : _vm._l(_vm.itemsData, function(itemData) {
+                            return _c(
+                              "div",
+                              {
+                                key: itemData.id,
+                                staticClass:
+                                  "custom-control custom-checkbox mb-3"
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.checkedItems,
+                                      expression: "checkedItems"
+                                    }
+                                  ],
+                                  attrs: { type: "checkbox" },
+                                  domProps: {
+                                    value: itemData,
+                                    checked: Array.isArray(_vm.checkedItems)
+                                      ? _vm._i(_vm.checkedItems, itemData) > -1
+                                      : _vm.checkedItems
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.checkedItems,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = itemData,
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            (_vm.checkedItems = $$a.concat([
+                                              $$v
+                                            ]))
+                                        } else {
+                                          $$i > -1 &&
+                                            (_vm.checkedItems = $$a
+                                              .slice(0, $$i)
+                                              .concat($$a.slice($$i + 1)))
+                                        }
+                                      } else {
+                                        _vm.checkedItems = $$c
+                                      }
+                                    }
+                                  }
+                                }),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(itemData.item.name) +
+                                    "\n\t\t\t\t\t\t\t\t"
+                                )
+                              ]
+                            )
+                          }),
+                      _vm._v(" "),
+                      _vm.itemsData.length != 0
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-success",
+                                on: {
+                                  click: function($event) {
+                                    _vm.saveChecklist()
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-save"
+                                }),
+                                _vm._v(" Submit")
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [
+        _vm._v("Staff Daily Checklists")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Add a Staff Daily Checklist")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c167d3aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 322 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(323)
+/* template */
+var __vue_template__ = __webpack_require__(324)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/staff_daily_checklists/Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-14055320", Component.options)
+  } else {
+    hotAPI.reload("data-v-14055320", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 323 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {},
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checklistCategories: [],
+			checklistItems: []
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/getManageChecklist/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+				app.getChecklistsDropdown();
+			}).catch(function () {
+				console.log("Error fetching checklist data");
+			});
+		},
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+			app.getChecklistCategoriesByOrganizationID();
+			app.getChecklistItemsByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		getChecklistCategoriesByOrganizationID: function getChecklistCategoriesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistCategories = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist categories");
+			});
+		},
+		getChecklistItemsByOrganizationID: function getChecklistItemsByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistItems = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist items");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.checklistCategories = [];
+			app.checklistItems = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+			app.manageChecklistsData.day_of_the_week = null;
+			app.manageChecklistsData.category_id = null;
+			app.manageChecklistsData.item_id = null;
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			app.manageChecklistsData.updated_by = localStorage.getItem("user.id"); //update user id of the one who edited
+			axios.patch('/api/admin/manage_checklists/' + app.manageChecklistsData.id, app.manageChecklistsData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while updating the checklist. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/manage_checklists');
+					toastr['success']('Checklist details updated!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 324 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Checklist Type")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.manageChecklistsData.type,
+                              expression: "manageChecklistsData.type"
+                            }
+                          ],
+                          ref: "type",
+                          staticClass: "form-control",
+                          attrs: { disabled: "", required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.clearChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "Staff Daily Checklists" } },
+                            [_vm._v("Staff Daily Checklists")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Cleaning - Hygiene" } },
+                            [_vm._v("Cleaning - Hygiene")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: {
+                                value: "Pest Control - Daily - Quarterly"
+                              }
+                            },
+                            [_vm._v("Pest Control - Daily - Quarterly")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Equipment" } }, [
+                            _vm._v("Equipment")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Misc Procedures" } },
+                            [_vm._v("Misc Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: { value: "Staff Manuals and Procedures" }
+                            },
+                            [_vm._v("Staff Manuals and Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Matrix Checklists" } },
+                            [_vm._v("Matrix Checklists")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.organization_id,
+                              expression:
+                                "manageChecklistsData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "organization_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.getChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Time")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.time_id,
+                                  expression: "manageChecklistsData.time_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "time_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "time_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistTimes, function(checklistTime) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistTime.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistTime.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Area")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.area_id,
+                              expression: "manageChecklistsData.area_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "area_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "area_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistAreas, function(checklistArea) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistArea.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistArea.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type == "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Day of the Week")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.manageChecklistsData.day_of_the_week,
+                                  expression:
+                                    "manageChecklistsData.day_of_the_week"
+                                }
+                              ],
+                              ref: "day_of_the_week",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "day_of_the_week",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Sunday" } }, [
+                                _vm._v("Sunday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Monday" } }, [
+                                _vm._v("Monday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tuesday" } }, [
+                                _vm._v("Tuesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Wednesday" } }, [
+                                _vm._v("Wednesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Thursday" } }, [
+                                _vm._v("Thursday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Friday" } }, [
+                                _vm._v("Friday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Saturday" } }, [
+                                _vm._v("Saturday")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.category_id,
+                                  expression:
+                                    "manageChecklistsData.category_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "category_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "category_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistCategories, function(
+                              checklistCategory
+                            ) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistCategory.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistCategory.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Item")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.item_id,
+                              expression: "manageChecklistsData.item_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "item_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "item_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistItems, function(checklistItem) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistItem.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistItem.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Edit a Checklist")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-floppy-o" }),
+        _vm._v(" Save")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-14055320", module.exports)
+  }
+}
+
+/***/ }),
+/* 325 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(326)
+/* template */
+var __vue_template__ = __webpack_require__(327)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/staff_daily_checklists/View.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-447144ea", Component.options)
+  } else {
+    hotAPI.reload("data-v-447144ea", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 326 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {}
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+			}).catch(function () {
+				console.log("Error fetching manage checklist data");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 327 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "panel-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _c("div", { staticClass: "table-responsive" }, [
+                    _c(
+                      "table",
+                      { staticClass: "table table-bordered table-striped" },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", [_vm._v(" Checklist Type ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.type) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Organization ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.manageChecklistsData.organization.name
+                                    ) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Time ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.time.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Area ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.area.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type == "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Day of the Week ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData
+                                            .day_of_the_week
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Category ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.category.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Item ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.item.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View a Checklist")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-447144ea", module.exports)
+  }
+}
+
+/***/ }),
+/* 328 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(329)
+/* template */
+var __vue_template__ = __webpack_require__(330)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/matrix_checklists/Index.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f258f292", Component.options)
+  } else {
+    hotAPI.reload("data-v-f258f292", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 329 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _regenerator = __webpack_require__(9);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(10);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _vueTableComponent = __webpack_require__(13);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	components: {
+		TableComponent: _vueTableComponent.TableComponent,
+		TableColumn: _vueTableComponent.TableColumn
+	},
+	methods: {
+		mounted: function mounted() {
+			toastr.options = {
+				closeButton: true,
+				debug: false,
+				positionClass: 'toast-top-right',
+				onclick: null,
+				showDuration: '1000',
+				hideDuration: '1000',
+				timeOut: '5000',
+				extendedTimeOut: '1000',
+				showEasing: 'swing',
+				hideEasing: 'linear',
+				showMethod: 'fadeIn',
+				hideMethod: 'fadeOut'
+			};
+		},
+		fetchData: function fetchData(_ref) {
+			var _this = this;
+
+			var page = _ref.page,
+			    filter = _ref.filter,
+			    sort = _ref.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+				var response;
+				return _regenerator2.default.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return axios.get('/api/admin/manage_checklists/get?page=' + page);
+
+							case 2:
+								response = _context.sent;
+								return _context.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, _this);
+			}))();
+		},
+		deleteManageChecklist: function deleteManageChecklist(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this Checklist?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/manage_checklists/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the checklist. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist deleted!', 'Success!');
+							app.$refs.table.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		}
+	}
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+/* 330 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Checklist")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "table-component",
+                {
+                  ref: "table",
+                  attrs: {
+                    data: _vm.fetchData,
+                    "show-filter": false,
+                    "filter-placeholder": "Search checklists..",
+                    "filter-no-results": "No checklists found!",
+                    "table-class": "table"
+                  }
+                },
+                [
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "type",
+                      label: "Type"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "organization.name",
+                      label: "Organization"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "area.name",
+                      label: "Area"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "item.name",
+                      label: "Item"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      label: "Actions"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href:
+                                    "/admin/manage_checklists/view/" + row.id
+                                }
+                              },
+                              [_c("i", { staticClass: "icon-fa icon-fa-eye" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href:
+                                    "/admin/manage_checklists/edit/" + row.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-pencil-square-o"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteManageChecklist("" + row.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-trash"
+                                })
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Managed Checklists")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f258f292", module.exports)
+  }
+}
+
+/***/ }),
+/* 331 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(332)
+/* template */
+var __vue_template__ = __webpack_require__(333)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/matrix_checklists/Add.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0513f374", Component.options)
+  } else {
+    hotAPI.reload("data-v-0513f374", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 332 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {
+				type: null,
+				organization_id: null,
+				time_id: null,
+				area_id: null,
+				day_of_the_week: null,
+				category_id: null,
+				item_id: null,
+				created_by: localStorage.getItem("user.id"),
+				updated_by: localStorage.getItem("user.id")
+			},
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checklistCategories: [],
+			checklistItems: []
+		};
+	},
+	mounted: function mounted() {
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+			app.getChecklistCategoriesByOrganizationID();
+			app.getChecklistItemsByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		getChecklistCategoriesByOrganizationID: function getChecklistCategoriesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistCategories = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist categories");
+			});
+		},
+		getChecklistItemsByOrganizationID: function getChecklistItemsByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistItems = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist items");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.checklistCategories = [];
+			app.checklistItems = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+			app.manageChecklistsData.day_of_the_week = null;
+			app.manageChecklistsData.category_id = null;
+			app.manageChecklistsData.item_id = null;
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			axios.post('/api/admin/manage_checklists', app.manageChecklistsData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while adding the checklist. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/manage_checklists');
+					toastr['success']('New checklist added!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 333 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Checklist Type")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.manageChecklistsData.type,
+                              expression: "manageChecklistsData.type"
+                            }
+                          ],
+                          ref: "type",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.clearChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "Staff Daily Checklists" } },
+                            [_vm._v("Staff Daily Checklists")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Cleaning - Hygiene" } },
+                            [_vm._v("Cleaning - Hygiene")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: {
+                                value: "Pest Control - Daily - Quarterly"
+                              }
+                            },
+                            [_vm._v("Pest Control - Daily - Quarterly")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Equipment" } }, [
+                            _vm._v("Equipment")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Misc Procedures" } },
+                            [_vm._v("Misc Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: { value: "Staff Manuals and Procedures" }
+                            },
+                            [_vm._v("Staff Manuals and Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Matrix Checklists" } },
+                            [_vm._v("Matrix Checklists")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.organization_id,
+                              expression:
+                                "manageChecklistsData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "organization_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.getChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Time")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.time_id,
+                                  expression: "manageChecklistsData.time_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "time_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "time_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistTimes, function(checklistTime) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistTime.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistTime.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Area")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.area_id,
+                              expression: "manageChecklistsData.area_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "area_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "area_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistAreas, function(checklistArea) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistArea.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistArea.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type == "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Day of the Week")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.manageChecklistsData.day_of_the_week,
+                                  expression:
+                                    "manageChecklistsData.day_of_the_week"
+                                }
+                              ],
+                              ref: "day_of_the_week",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "day_of_the_week",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Sunday" } }, [
+                                _vm._v("Sunday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Monday" } }, [
+                                _vm._v("Monday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tuesday" } }, [
+                                _vm._v("Tuesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Wednesday" } }, [
+                                _vm._v("Wednesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Thursday" } }, [
+                                _vm._v("Thursday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Friday" } }, [
+                                _vm._v("Friday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Saturday" } }, [
+                                _vm._v("Saturday")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.category_id,
+                                  expression:
+                                    "manageChecklistsData.category_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "category_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "category_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistCategories, function(
+                              checklistCategory
+                            ) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistCategory.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistCategory.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Item")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.item_id,
+                              expression: "manageChecklistsData.item_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "item_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "item_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistItems, function(checklistItem) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistItem.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistItem.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Add a Checklist")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+        _vm._v(" Create")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0513f374", module.exports)
+  }
+}
+
+/***/ }),
+/* 334 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(335)
+/* template */
+var __vue_template__ = __webpack_require__(336)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/matrix_checklists/Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5d1169b5", Component.options)
+  } else {
+    hotAPI.reload("data-v-5d1169b5", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 335 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {},
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checklistCategories: [],
+			checklistItems: []
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/getManageChecklist/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+				app.getChecklistsDropdown();
+			}).catch(function () {
+				console.log("Error fetching checklist data");
+			});
+		},
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+			app.getChecklistCategoriesByOrganizationID();
+			app.getChecklistItemsByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		getChecklistCategoriesByOrganizationID: function getChecklistCategoriesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistCategories = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist categories");
+			});
+		},
+		getChecklistItemsByOrganizationID: function getChecklistItemsByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistItems = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist items");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.checklistCategories = [];
+			app.checklistItems = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+			app.manageChecklistsData.day_of_the_week = null;
+			app.manageChecklistsData.category_id = null;
+			app.manageChecklistsData.item_id = null;
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			app.manageChecklistsData.updated_by = localStorage.getItem("user.id"); //update user id of the one who edited
+			axios.patch('/api/admin/manage_checklists/' + app.manageChecklistsData.id, app.manageChecklistsData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while updating the checklist. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/manage_checklists');
+					toastr['success']('Checklist details updated!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 336 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Checklist Type")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.manageChecklistsData.type,
+                              expression: "manageChecklistsData.type"
+                            }
+                          ],
+                          ref: "type",
+                          staticClass: "form-control",
+                          attrs: { disabled: "", required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.clearChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "Staff Daily Checklists" } },
+                            [_vm._v("Staff Daily Checklists")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Cleaning - Hygiene" } },
+                            [_vm._v("Cleaning - Hygiene")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: {
+                                value: "Pest Control - Daily - Quarterly"
+                              }
+                            },
+                            [_vm._v("Pest Control - Daily - Quarterly")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Equipment" } }, [
+                            _vm._v("Equipment")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Misc Procedures" } },
+                            [_vm._v("Misc Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: { value: "Staff Manuals and Procedures" }
+                            },
+                            [_vm._v("Staff Manuals and Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Matrix Checklists" } },
+                            [_vm._v("Matrix Checklists")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.organization_id,
+                              expression:
+                                "manageChecklistsData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "organization_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.getChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Time")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.time_id,
+                                  expression: "manageChecklistsData.time_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "time_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "time_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistTimes, function(checklistTime) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistTime.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistTime.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Area")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.area_id,
+                              expression: "manageChecklistsData.area_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "area_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "area_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistAreas, function(checklistArea) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistArea.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistArea.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type == "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Day of the Week")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.manageChecklistsData.day_of_the_week,
+                                  expression:
+                                    "manageChecklistsData.day_of_the_week"
+                                }
+                              ],
+                              ref: "day_of_the_week",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "day_of_the_week",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Sunday" } }, [
+                                _vm._v("Sunday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Monday" } }, [
+                                _vm._v("Monday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tuesday" } }, [
+                                _vm._v("Tuesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Wednesday" } }, [
+                                _vm._v("Wednesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Thursday" } }, [
+                                _vm._v("Thursday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Friday" } }, [
+                                _vm._v("Friday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Saturday" } }, [
+                                _vm._v("Saturday")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.category_id,
+                                  expression:
+                                    "manageChecklistsData.category_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "category_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "category_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistCategories, function(
+                              checklistCategory
+                            ) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistCategory.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistCategory.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Item")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.item_id,
+                              expression: "manageChecklistsData.item_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "item_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "item_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistItems, function(checklistItem) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistItem.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistItem.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Edit a Checklist")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-floppy-o" }),
+        _vm._v(" Save")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5d1169b5", module.exports)
+  }
+}
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(338)
+/* template */
+var __vue_template__ = __webpack_require__(339)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/matrix_checklists/View.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-44db70d0", Component.options)
+  } else {
+    hotAPI.reload("data-v-44db70d0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 338 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {}
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+			}).catch(function () {
+				console.log("Error fetching manage checklist data");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 339 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "panel-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _c("div", { staticClass: "table-responsive" }, [
+                    _c(
+                      "table",
+                      { staticClass: "table table-bordered table-striped" },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", [_vm._v(" Checklist Type ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.type) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Organization ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.manageChecklistsData.organization.name
+                                    ) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Time ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.time.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Area ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.area.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type == "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Day of the Week ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData
+                                            .day_of_the_week
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Category ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.category.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Item ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.item.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View a Checklist")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-44db70d0", module.exports)
+  }
+}
+
+/***/ }),
+/* 340 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(341)
+/* template */
+var __vue_template__ = __webpack_require__(342)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
 Component.options.__file = "resources/js/views/admin/modules/organizations/Index.vue"
 
 /* hot reload */
@@ -60963,7 +65741,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 317 */
+/* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60973,15 +65751,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _vueTableComponent = __webpack_require__(18);
+var _vueTableComponent = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61102,7 +65880,7 @@ exports.default = {
 //
 
 /***/ }),
-/* 318 */
+/* 342 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -61268,15 +66046,15 @@ if (false) {
 }
 
 /***/ }),
-/* 319 */
+/* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(320)
+var __vue_script__ = __webpack_require__(344)
 /* template */
-var __vue_template__ = __webpack_require__(321)
+var __vue_template__ = __webpack_require__(345)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -61315,7 +66093,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 320 */
+/* 344 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61420,7 +66198,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 321 */
+/* 345 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -61598,15 +66376,15 @@ if (false) {
 }
 
 /***/ }),
-/* 322 */
+/* 346 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(323)
+var __vue_script__ = __webpack_require__(347)
 /* template */
-var __vue_template__ = __webpack_require__(324)
+var __vue_template__ = __webpack_require__(348)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -61645,7 +66423,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 323 */
+/* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61757,7 +66535,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 324 */
+/* 348 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -61935,15 +66713,15 @@ if (false) {
 }
 
 /***/ }),
-/* 325 */
+/* 349 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(326)
+var __vue_script__ = __webpack_require__(350)
 /* template */
-var __vue_template__ = __webpack_require__(327)
+var __vue_template__ = __webpack_require__(351)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -61982,7 +66760,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 326 */
+/* 350 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62065,7 +66843,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 327 */
+/* 351 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -62179,15 +66957,15 @@ if (false) {
 }
 
 /***/ }),
-/* 328 */
+/* 352 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(329)
+var __vue_script__ = __webpack_require__(353)
 /* template */
-var __vue_template__ = __webpack_require__(330)
+var __vue_template__ = __webpack_require__(354)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62226,7 +67004,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 329 */
+/* 353 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62236,15 +67014,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _vueTableComponent = __webpack_require__(18);
+var _vueTableComponent = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62365,7 +67143,7 @@ exports.default = {
 //
 
 /***/ }),
-/* 330 */
+/* 354 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -62532,15 +67310,15 @@ if (false) {
 }
 
 /***/ }),
-/* 331 */
+/* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(332)
+var __vue_script__ = __webpack_require__(356)
 /* template */
-var __vue_template__ = __webpack_require__(333)
+var __vue_template__ = __webpack_require__(357)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62579,7 +67357,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 332 */
+/* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62760,7 +67538,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 333 */
+/* 357 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63309,15 +68087,15 @@ if (false) {
 }
 
 /***/ }),
-/* 334 */
+/* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(335)
+var __vue_script__ = __webpack_require__(359)
 /* template */
-var __vue_template__ = __webpack_require__(336)
+var __vue_template__ = __webpack_require__(360)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -63356,7 +68134,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 335 */
+/* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63536,7 +68314,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 336 */
+/* 360 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -64085,15 +68863,15 @@ if (false) {
 }
 
 /***/ }),
-/* 337 */
+/* 361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(338)
+var __vue_script__ = __webpack_require__(362)
 /* template */
-var __vue_template__ = __webpack_require__(339)
+var __vue_template__ = __webpack_require__(363)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -64132,7 +68910,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 338 */
+/* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64251,7 +69029,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 339 */
+/* 363 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -64479,15 +69257,15 @@ if (false) {
 }
 
 /***/ }),
-/* 340 */
+/* 364 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(341)
+var __vue_script__ = __webpack_require__(365)
 /* template */
-var __vue_template__ = __webpack_require__(342)
+var __vue_template__ = __webpack_require__(366)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -64526,7 +69304,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 341 */
+/* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64536,15 +69314,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _vueTableComponent = __webpack_require__(18);
+var _vueTableComponent = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64668,7 +69446,7 @@ exports.default = {
 //
 
 /***/ }),
-/* 342 */
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -64846,15 +69624,15 @@ if (false) {
 }
 
 /***/ }),
-/* 343 */
+/* 367 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(344)
+var __vue_script__ = __webpack_require__(368)
 /* template */
-var __vue_template__ = __webpack_require__(345)
+var __vue_template__ = __webpack_require__(369)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -64893,7 +69671,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 344 */
+/* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65082,7 +69860,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 345 */
+/* 369 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -65569,15 +70347,15 @@ if (false) {
 }
 
 /***/ }),
-/* 346 */
+/* 370 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(347)
+var __vue_script__ = __webpack_require__(371)
 /* template */
-var __vue_template__ = __webpack_require__(348)
+var __vue_template__ = __webpack_require__(372)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -65616,7 +70394,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 347 */
+/* 371 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65805,7 +70583,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 348 */
+/* 372 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -66292,15 +71070,15 @@ if (false) {
 }
 
 /***/ }),
-/* 349 */
+/* 373 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(350)
+var __vue_script__ = __webpack_require__(374)
 /* template */
-var __vue_template__ = __webpack_require__(351)
+var __vue_template__ = __webpack_require__(375)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -66339,7 +71117,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 350 */
+/* 374 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66442,7 +71220,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 351 */
+/* 375 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -66621,15 +71399,15 @@ if (false) {
 }
 
 /***/ }),
-/* 352 */
+/* 376 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(353)
+var __vue_script__ = __webpack_require__(377)
 /* template */
-var __vue_template__ = __webpack_require__(354)
+var __vue_template__ = __webpack_require__(378)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -66646,7 +71424,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/views/admin/modules/checklist_areas/Index.vue"
+Component.options.__file = "resources/js/views/admin/modules/checklists/Index.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -66655,9 +71433,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-369d014e", Component.options)
+    hotAPI.createRecord("data-v-011680b7", Component.options)
   } else {
-    hotAPI.reload("data-v-369d014e", Component.options)
+    hotAPI.reload("data-v-011680b7", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -66668,7 +71446,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 353 */
+/* 377 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66678,15 +71456,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _regenerator = __webpack_require__(12);
+var _regenerator = __webpack_require__(9);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = __webpack_require__(13);
+var _asyncToGenerator2 = __webpack_require__(10);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _vueTableComponent = __webpack_require__(18);
+var _vueTableComponent = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66712,7 +71490,7 @@ exports.default = {
 				hideMethod: 'fadeOut'
 			};
 		},
-		fetchData: function fetchData(_ref) {
+		fetchChecklistsAreaData: function fetchChecklistsAreaData(_ref) {
 			var _this = this;
 
 			var page = _ref.page,
@@ -66746,6 +71524,108 @@ exports.default = {
 				}, _callee, _this);
 			}))();
 		},
+		fetchChecklistsTimeData: function fetchChecklistsTimeData(_ref2) {
+			var _this2 = this;
+
+			var page = _ref2.page,
+			    filter = _ref2.filter,
+			    sort = _ref2.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+				var response;
+				return _regenerator2.default.wrap(function _callee2$(_context2) {
+					while (1) {
+						switch (_context2.prev = _context2.next) {
+							case 0:
+								_context2.next = 2;
+								return axios.get('/api/admin/checklist_times/get?page=' + page);
+
+							case 2:
+								response = _context2.sent;
+								return _context2.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context2.stop();
+						}
+					}
+				}, _callee2, _this2);
+			}))();
+		},
+		fetchChecklistsCategoryData: function fetchChecklistsCategoryData(_ref3) {
+			var _this3 = this;
+
+			var page = _ref3.page,
+			    filter = _ref3.filter,
+			    sort = _ref3.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
+				var response;
+				return _regenerator2.default.wrap(function _callee3$(_context3) {
+					while (1) {
+						switch (_context3.prev = _context3.next) {
+							case 0:
+								_context3.next = 2;
+								return axios.get('/api/admin/checklist_categories/get?page=' + page);
+
+							case 2:
+								response = _context3.sent;
+								return _context3.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context3.stop();
+						}
+					}
+				}, _callee3, _this3);
+			}))();
+		},
+		fetchChecklistsItemData: function fetchChecklistsItemData(_ref4) {
+			var _this4 = this;
+
+			var page = _ref4.page,
+			    filter = _ref4.filter,
+			    sort = _ref4.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
+				var response;
+				return _regenerator2.default.wrap(function _callee4$(_context4) {
+					while (1) {
+						switch (_context4.prev = _context4.next) {
+							case 0:
+								_context4.next = 2;
+								return axios.get('/api/admin/checklist_items/get?page=' + page);
+
+							case 2:
+								response = _context4.sent;
+								return _context4.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context4.stop();
+						}
+					}
+				}, _callee4, _this4);
+			}))();
+		},
 		deleteChecklistArea: function deleteChecklistArea(id) {
 			var app = this;
 			notie.confirm({
@@ -66759,7 +71639,70 @@ exports.default = {
 							toastr['error']('Something went wrong while deleting the area. Please contact admin about this.', 'Error!');
 						} else {
 							toastr['success']('Checklist Area deleted!', 'Success!');
-							app.$refs.table.refresh();
+							app.$refs.checklistAreaTable.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		},
+		deleteChecklistTime: function deleteChecklistTime(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this checklist time?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/checklist_times/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the time. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist Time deleted!', 'Success!');
+							app.$refs.checklistTimeTable.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		},
+		deleteChecklistCategory: function deleteChecklistCategory(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this checklist category?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/checklist_categories/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the category. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist Category deleted!', 'Success!');
+							app.$refs.checklistCategoryTable.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		},
+		deleteChecklistItem: function deleteChecklistItem(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this checklist item?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/checklist_items/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the item. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist Item deleted!', 'Success!');
+							app.$refs.checklistItemTable.refresh();
 						}
 					}).catch(function (error) {
 						console.log("Error on ajax call!");
@@ -66804,9 +71747,89 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
-/* 354 */
+/* 378 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -66817,7 +71840,7 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-12" }, [
+      _c("div", { staticClass: "col-sm-6" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _c("div", { staticClass: "row" }, [
@@ -66835,7 +71858,7 @@ var render = function() {
                     },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
-                      _vm._v("Add Checklist Area")
+                      _vm._v("Add Area")
                     ]
                   )
                 ],
@@ -66851,12 +71874,12 @@ var render = function() {
               _c(
                 "table-component",
                 {
-                  ref: "table",
+                  ref: "checklistAreaTable",
                   attrs: {
-                    data: _vm.fetchData,
+                    data: _vm.fetchChecklistsAreaData,
                     "show-filter": false,
-                    "filter-placeholder": "Search checklists..",
-                    "filter-no-results": "No checklists found!",
+                    "filter-placeholder": "Search areas..",
+                    "filter-no-results": "No areas found!",
                     "table-class": "table"
                   }
                 },
@@ -66931,6 +71954,357 @@ var render = function() {
             1
           )
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/checklist_times/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Time")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "table-component",
+                {
+                  ref: "checklistTimeTable",
+                  attrs: {
+                    data: _vm.fetchChecklistsTimeData,
+                    "show-filter": false,
+                    "filter-placeholder": "Search times..",
+                    "filter-no-results": "No times found!",
+                    "table-class": "table"
+                  }
+                },
+                [
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "name",
+                      label: "Name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "organization.name",
+                      label: "Organization"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      label: "Actions"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href: "/admin/checklist_times/edit/" + row.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-pencil-square-o"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteChecklistTime("" + row.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-trash"
+                                })
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/checklist_categories/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Category")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "table-component",
+                {
+                  ref: "checklistCategoryTable",
+                  attrs: {
+                    data: _vm.fetchChecklistsCategoryData,
+                    "show-filter": false,
+                    "filter-placeholder": "Search categories..",
+                    "filter-no-results": "No categories found!",
+                    "table-class": "table"
+                  }
+                },
+                [
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "name",
+                      label: "Name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "organization.name",
+                      label: "Organization"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      label: "Actions"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href:
+                                    "/admin/checklist_categories/edit/" + row.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-pencil-square-o"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteChecklistCategory("" + row.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-trash"
+                                })
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/checklist_items/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Item")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "table-component",
+                {
+                  ref: "checklistItemTable",
+                  attrs: {
+                    data: _vm.fetchChecklistsItemData,
+                    "show-filter": false,
+                    "filter-placeholder": "Search items..",
+                    "filter-no-results": "No items found!",
+                    "table-class": "table"
+                  }
+                },
+                [
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "name",
+                      label: "Name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "organization.name",
+                      label: "Organization"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      label: "Actions"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href: "/admin/checklist_items/edit/" + row.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-pencil-square-o"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteChecklistItem("" + row.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-trash"
+                                })
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
       ])
     ])
   ])
@@ -66941,7 +72315,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "page-header" }, [
-      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Areas")])
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklists")])
     ])
   },
   function() {
@@ -66951,6 +72325,30 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-sm-6" }, [
       _c("h5", [_vm._v("View All Checklist Areas")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Checklist Times")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Checklist Categories")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Checklist Items")])
+    ])
   }
 ]
 render._withStripped = true
@@ -66958,20 +72356,20 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-369d014e", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-011680b7", module.exports)
   }
 }
 
 /***/ }),
-/* 355 */
+/* 379 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(356)
+var __vue_script__ = __webpack_require__(380)
 /* template */
-var __vue_template__ = __webpack_require__(357)
+var __vue_template__ = __webpack_require__(381)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -67010,7 +72408,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 356 */
+/* 380 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67118,7 +72516,7 @@ exports.default = {
 				if (resp.data.status == 'error') {
 					toastr['error']('Something went wrong while adding the area. Please contact admin about this.', 'Error!');
 				} else {
-					app.$router.push('/admin/checklist_areas');
+					app.$router.push('/admin/checklists');
 					toastr['success']('New area added!', 'Success!');
 				}
 			}).catch(function () {
@@ -67129,7 +72527,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 357 */
+/* 381 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -67154,7 +72552,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "btn btn-dark btn-xs float-right",
-                      attrs: { to: "/admin/checklist_areas" }
+                      attrs: { to: "/admin/checklists" }
                     },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
@@ -67327,15 +72725,15 @@ if (false) {
 }
 
 /***/ }),
-/* 358 */
+/* 382 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(359)
+var __vue_script__ = __webpack_require__(383)
 /* template */
-var __vue_template__ = __webpack_require__(360)
+var __vue_template__ = __webpack_require__(384)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -67374,7 +72772,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 359 */
+/* 383 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67489,7 +72887,7 @@ exports.default = {
 				if (resp.data.status == 'error') {
 					toastr['error']('Something went wrong while updating the checklist area. Please contact admin about this.', 'Error!');
 				} else {
-					app.$router.push('/admin/checklist_areas');
+					app.$router.push('/admin/checklists');
 					toastr['success']('Checklist area details updated!', 'Success!');
 				}
 			}).catch(function () {
@@ -67500,7 +72898,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 360 */
+/* 384 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -67525,7 +72923,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "btn btn-dark btn-xs float-right",
-                      attrs: { to: "/admin/checklist_areas" }
+                      attrs: { to: "/admin/checklists" }
                     },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
@@ -67698,357 +73096,15 @@ if (false) {
 }
 
 /***/ }),
-/* 361 */
+/* 385 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(362)
+var __vue_script__ = __webpack_require__(386)
 /* template */
-var __vue_template__ = __webpack_require__(363)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/views/admin/modules/checklist_times/Index.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-320d1519", Component.options)
-  } else {
-    hotAPI.reload("data-v-320d1519", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 362 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _regenerator = __webpack_require__(12);
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = __webpack_require__(13);
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _vueTableComponent = __webpack_require__(18);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-	components: {
-		TableComponent: _vueTableComponent.TableComponent,
-		TableColumn: _vueTableComponent.TableColumn
-	},
-	methods: {
-		mounted: function mounted() {
-			toastr.options = {
-				closeButton: true,
-				debug: false,
-				positionClass: 'toast-top-right',
-				onclick: null,
-				showDuration: '1000',
-				hideDuration: '1000',
-				timeOut: '5000',
-				extendedTimeOut: '1000',
-				showEasing: 'swing',
-				hideEasing: 'linear',
-				showMethod: 'fadeIn',
-				hideMethod: 'fadeOut'
-			};
-		},
-		fetchData: function fetchData(_ref) {
-			var _this = this;
-
-			var page = _ref.page,
-			    filter = _ref.filter,
-			    sort = _ref.sort;
-			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-				var response;
-				return _regenerator2.default.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								_context.next = 2;
-								return axios.get('/api/admin/checklist_times/get?page=' + page);
-
-							case 2:
-								response = _context.sent;
-								return _context.abrupt('return', {
-									data: response.data.data,
-									pagination: {
-										totalPages: response.data.last_page,
-										currentPage: page,
-										count: response.data.count
-									}
-								});
-
-							case 4:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, _this);
-			}))();
-		},
-		deleteChecklistTime: function deleteChecklistTime(id) {
-			var app = this;
-			notie.confirm({
-				text: "Are you sure you want to delete this checklist time?",
-				cancelCallback: function cancelCallback() {
-					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
-				},
-				submitCallback: function submitCallback() {
-					axios.delete('/api/admin/checklist_times/' + id).then(function (resp) {
-						if (resp.data.status == 'error') {
-							toastr['error']('Something went wrong while deleting the time. Please contact admin about this.', 'Error!');
-						} else {
-							toastr['success']('Checklist Time deleted!', 'Success!');
-							app.$refs.table.refresh();
-						}
-					}).catch(function (error) {
-						console.log("Error on ajax call!");
-					});
-				}
-			});
-		}
-	}
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/***/ }),
-/* 363 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "main-content" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("div", { staticClass: "row" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-sm-6" },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "btn btn-success btn-xs float-right",
-                      attrs: { to: "/admin/checklist_times/add" }
-                    },
-                    [
-                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
-                      _vm._v("Add Checklist Time")
-                    ]
-                  )
-                ],
-                1
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card-body" },
-            [
-              _c(
-                "table-component",
-                {
-                  ref: "table",
-                  attrs: {
-                    data: _vm.fetchData,
-                    "show-filter": false,
-                    "filter-placeholder": "Search checklists..",
-                    "filter-no-results": "No checklists found!",
-                    "table-class": "table"
-                  }
-                },
-                [
-                  _c("table-column", {
-                    attrs: {
-                      sortable: false,
-                      filterable: false,
-                      show: "name",
-                      label: "Name"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("table-column", {
-                    attrs: {
-                      sortable: false,
-                      filterable: false,
-                      show: "organization.name",
-                      label: "Organization"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("table-column", {
-                    attrs: {
-                      sortable: false,
-                      filterable: false,
-                      label: "Actions"
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function(row) {
-                          return [
-                            _c(
-                              "a",
-                              {
-                                attrs: {
-                                  href: "/admin/checklist_times/edit/" + row.id
-                                }
-                              },
-                              [
-                                _c("i", {
-                                  staticClass: "icon-fa icon-fa-pencil-square-o"
-                                })
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                on: {
-                                  click: function($event) {
-                                    _vm.deleteChecklistTime("" + row.id)
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", {
-                                  staticClass: "icon-fa icon-fa-trash"
-                                })
-                              ]
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "page-header" }, [
-      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Times")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-6" }, [
-      _c("h5", [_vm._v("View All Checklist Times")])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-320d1519", module.exports)
-  }
-}
-
-/***/ }),
-/* 364 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = __webpack_require__(365)
-/* template */
-var __vue_template__ = __webpack_require__(366)
+var __vue_template__ = __webpack_require__(387)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -68087,7 +73143,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 365 */
+/* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68195,7 +73251,7 @@ exports.default = {
 				if (resp.data.status == 'error') {
 					toastr['error']('Something went wrong while adding the time. Please contact admin about this.', 'Error!');
 				} else {
-					app.$router.push('/admin/checklist_times');
+					app.$router.push('/admin/checklists');
 					toastr['success']('New time added!', 'Success!');
 				}
 			}).catch(function () {
@@ -68206,7 +73262,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 366 */
+/* 387 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -68231,7 +73287,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "btn btn-dark btn-xs float-right",
-                      attrs: { to: "/admin/checklist_times" }
+                      attrs: { to: "/admin/checklists" }
                     },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
@@ -68404,15 +73460,15 @@ if (false) {
 }
 
 /***/ }),
-/* 367 */
+/* 388 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(368)
+var __vue_script__ = __webpack_require__(389)
 /* template */
-var __vue_template__ = __webpack_require__(369)
+var __vue_template__ = __webpack_require__(390)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -68451,7 +73507,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 368 */
+/* 389 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68566,7 +73622,7 @@ exports.default = {
 				if (resp.data.status == 'error') {
 					toastr['error']('Something went wrong while updating the checklist time. Please contact admin about this.', 'Error!');
 				} else {
-					app.$router.push('/admin/checklist_times');
+					app.$router.push('/admin/checklists');
 					toastr['success']('Checklist time details updated!', 'Success!');
 				}
 			}).catch(function () {
@@ -68577,7 +73633,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 369 */
+/* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -68602,7 +73658,7 @@ var render = function() {
                     "router-link",
                     {
                       staticClass: "btn btn-dark btn-xs float-right",
-                      attrs: { to: "/admin/checklist_times" }
+                      attrs: { to: "/admin/checklists" }
                     },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
@@ -68775,15 +73831,3976 @@ if (false) {
 }
 
 /***/ }),
-/* 370 */
+/* 391 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(371)
+var __vue_script__ = __webpack_require__(392)
 /* template */
-var __vue_template__ = __webpack_require__(380)
+var __vue_template__ = __webpack_require__(393)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/checklist_categories/Add.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-982ae764", Component.options)
+  } else {
+    hotAPI.reload("data-v-982ae764", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 392 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	data: function data() {
+		return {
+			checklistCategoriesData: {
+				organization_id: "",
+				name: "",
+				created_by: localStorage.getItem("user.id"),
+				updated_by: localStorage.getItem("user.id")
+			},
+			organizations: []
+		};
+	},
+	mounted: function mounted() {
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			axios.post('/api/admin/checklist_categories', app.checklistCategoriesData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while adding the category. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/checklists');
+					toastr['success']('New category added!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 393 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value:
+                                _vm.checklistCategoriesData.organization_id,
+                              expression:
+                                "checklistCategoriesData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.checklistCategoriesData,
+                                "organization_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.trim",
+                            value: _vm.checklistCategoriesData.name,
+                            expression: "checklistCategoriesData.name",
+                            modifiers: { trim: true }
+                          }
+                        ],
+                        ref: "name",
+                        staticClass: "form-control",
+                        attrs: { type: "text", required: "" },
+                        domProps: { value: _vm.checklistCategoriesData.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.checklistCategoriesData,
+                              "name",
+                              $event.target.value.trim()
+                            )
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Categories")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Add a Category")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+        _vm._v(" Create")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-982ae764", module.exports)
+  }
+}
+
+/***/ }),
+/* 394 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(395)
+/* template */
+var __vue_template__ = __webpack_require__(396)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/checklist_categories/Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-752da4ad", Component.options)
+  } else {
+    hotAPI.reload("data-v-752da4ad", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 395 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			checklistCategoriesData: {},
+			organizations: []
+		};
+	},
+	mounted: function mounted() {
+		this.getChecklistCategory();
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getChecklistCategory: function getChecklistCategory() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/checklist_categories/getChecklistCategory/' + id).then(function (resp) {
+				app.checklistCategoriesData = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist category data");
+			});
+		},
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			app.checklistCategoriesData.updated_by = localStorage.getItem("user.id"); //update user id of the one who edited
+			axios.patch('/api/admin/checklist_categories/' + app.checklistCategoriesData.id, app.checklistCategoriesData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while updating the checklist category. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/checklists');
+					toastr['success']('Checklist category details updated!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 396 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value:
+                                _vm.checklistCategoriesData.organization_id,
+                              expression:
+                                "checklistCategoriesData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.checklistCategoriesData,
+                                "organization_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.trim",
+                            value: _vm.checklistCategoriesData.name,
+                            expression: "checklistCategoriesData.name",
+                            modifiers: { trim: true }
+                          }
+                        ],
+                        ref: "name",
+                        staticClass: "form-control",
+                        attrs: { type: "text", required: "" },
+                        domProps: { value: _vm.checklistCategoriesData.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.checklistCategoriesData,
+                              "name",
+                              $event.target.value.trim()
+                            )
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Categories")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Edit a Category")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-floppy-o" }),
+        _vm._v(" Save")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-752da4ad", module.exports)
+  }
+}
+
+/***/ }),
+/* 397 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(398)
+/* template */
+var __vue_template__ = __webpack_require__(399)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/checklist_items/Add.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-256ae8bc", Component.options)
+  } else {
+    hotAPI.reload("data-v-256ae8bc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 398 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	data: function data() {
+		return {
+			checklistItemData: {
+				organization_id: "",
+				name: "",
+				created_by: localStorage.getItem("user.id"),
+				updated_by: localStorage.getItem("user.id")
+			},
+			organizations: []
+		};
+	},
+	mounted: function mounted() {
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			axios.post('/api/admin/checklist_items', app.checklistItemData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while adding the item. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/checklists');
+					toastr['success']('New item added!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 399 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.checklistItemData.organization_id,
+                              expression: "checklistItemData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.checklistItemData,
+                                "organization_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.trim",
+                            value: _vm.checklistItemData.name,
+                            expression: "checklistItemData.name",
+                            modifiers: { trim: true }
+                          }
+                        ],
+                        ref: "name",
+                        staticClass: "form-control",
+                        attrs: { type: "text", required: "" },
+                        domProps: { value: _vm.checklistItemData.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.checklistItemData,
+                              "name",
+                              $event.target.value.trim()
+                            )
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Items")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Add an Item")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+        _vm._v(" Create")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-256ae8bc", module.exports)
+  }
+}
+
+/***/ }),
+/* 400 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(401)
+/* template */
+var __vue_template__ = __webpack_require__(402)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/checklist_items/Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-67cd8fd9", Component.options)
+  } else {
+    hotAPI.reload("data-v-67cd8fd9", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 401 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			checklistItemData: {},
+			organizations: []
+		};
+	},
+	mounted: function mounted() {
+		this.getChecklistItem();
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getChecklistItem: function getChecklistItem() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/checklist_items/getChecklistItem/' + id).then(function (resp) {
+				app.checklistItemData = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist item data");
+			});
+		},
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			app.checklistItemData.updated_by = localStorage.getItem("user.id"); //update user id of the one who edited
+			axios.patch('/api/admin/checklist_items/' + app.checklistItemData.id, app.checklistItemData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while updating the checklist item. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/checklists');
+					toastr['success']('Checklist item details updated!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.checklistItemData.organization_id,
+                              expression: "checklistItemData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.checklistItemData,
+                                "organization_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.trim",
+                            value: _vm.checklistItemData.name,
+                            expression: "checklistItemData.name",
+                            modifiers: { trim: true }
+                          }
+                        ],
+                        ref: "name",
+                        staticClass: "form-control",
+                        attrs: { type: "text", required: "" },
+                        domProps: { value: _vm.checklistItemData.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.checklistItemData,
+                              "name",
+                              $event.target.value.trim()
+                            )
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Checklist Items")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Edit an Item")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-floppy-o" }),
+        _vm._v(" Save")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-67cd8fd9", module.exports)
+  }
+}
+
+/***/ }),
+/* 403 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(404)
+/* template */
+var __vue_template__ = __webpack_require__(405)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/manage_checklists/Index.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-21472f93", Component.options)
+  } else {
+    hotAPI.reload("data-v-21472f93", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 404 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _regenerator = __webpack_require__(9);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(10);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _vueTableComponent = __webpack_require__(13);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	components: {
+		TableComponent: _vueTableComponent.TableComponent,
+		TableColumn: _vueTableComponent.TableColumn
+	},
+	methods: {
+		mounted: function mounted() {
+			toastr.options = {
+				closeButton: true,
+				debug: false,
+				positionClass: 'toast-top-right',
+				onclick: null,
+				showDuration: '1000',
+				hideDuration: '1000',
+				timeOut: '5000',
+				extendedTimeOut: '1000',
+				showEasing: 'swing',
+				hideEasing: 'linear',
+				showMethod: 'fadeIn',
+				hideMethod: 'fadeOut'
+			};
+		},
+		fetchData: function fetchData(_ref) {
+			var _this = this;
+
+			var page = _ref.page,
+			    filter = _ref.filter,
+			    sort = _ref.sort;
+			return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+				var response;
+				return _regenerator2.default.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return axios.get('/api/admin/manage_checklists/get?page=' + page);
+
+							case 2:
+								response = _context.sent;
+								return _context.abrupt('return', {
+									data: response.data.data,
+									pagination: {
+										totalPages: response.data.last_page,
+										currentPage: page,
+										count: response.data.count
+									}
+								});
+
+							case 4:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, _this);
+			}))();
+		},
+		deleteManageChecklist: function deleteManageChecklist(id) {
+			var app = this;
+			notie.confirm({
+				text: "Are you sure you want to delete this Checklist?",
+				cancelCallback: function cancelCallback() {
+					// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
+				},
+				submitCallback: function submitCallback() {
+					axios.delete('/api/admin/manage_checklists/' + id).then(function (resp) {
+						if (resp.data.status == 'error') {
+							toastr['error']('Something went wrong while deleting the checklist. Please contact admin about this.', 'Error!');
+						} else {
+							toastr['success']('Checklist deleted!', 'Success!');
+							app.$refs.table.refresh();
+						}
+					}).catch(function (error) {
+						console.log("Error on ajax call!");
+					});
+				}
+			});
+		}
+	}
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+/* 405 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-success btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists/add" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+                      _vm._v("Add Checklist")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "table-component",
+                {
+                  ref: "table",
+                  attrs: {
+                    data: _vm.fetchData,
+                    "show-filter": false,
+                    "filter-placeholder": "Search checklists..",
+                    "filter-no-results": "No checklists found!",
+                    "table-class": "table"
+                  }
+                },
+                [
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "type",
+                      label: "Type"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "organization.name",
+                      label: "Organization"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "area.name",
+                      label: "Area"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      show: "item.name",
+                      label: "Item"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("table-column", {
+                    attrs: {
+                      sortable: false,
+                      filterable: false,
+                      label: "Actions"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href:
+                                    "/admin/manage_checklists/view/" + row.id
+                                }
+                              },
+                              [_c("i", { staticClass: "icon-fa icon-fa-eye" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: {
+                                  href:
+                                    "/admin/manage_checklists/edit/" + row.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-pencil-square-o"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteManageChecklist("" + row.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "icon-fa icon-fa-trash"
+                                })
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View All Managed Checklists")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-21472f93", module.exports)
+  }
+}
+
+/***/ }),
+/* 406 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(407)
+/* template */
+var __vue_template__ = __webpack_require__(408)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/manage_checklists/Add.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-07363622", Component.options)
+  } else {
+    hotAPI.reload("data-v-07363622", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 407 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {
+				type: null,
+				organization_id: null,
+				time_id: null,
+				area_id: null,
+				day_of_the_week: null,
+				category_id: null,
+				item_id: null,
+				created_by: localStorage.getItem("user.id"),
+				updated_by: localStorage.getItem("user.id")
+			},
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checklistCategories: [],
+			checklistItems: []
+		};
+	},
+	mounted: function mounted() {
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+			app.getChecklistCategoriesByOrganizationID();
+			app.getChecklistItemsByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		getChecklistCategoriesByOrganizationID: function getChecklistCategoriesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistCategories = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist categories");
+			});
+		},
+		getChecklistItemsByOrganizationID: function getChecklistItemsByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistItems = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist items");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.checklistCategories = [];
+			app.checklistItems = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+			app.manageChecklistsData.day_of_the_week = null;
+			app.manageChecklistsData.category_id = null;
+			app.manageChecklistsData.item_id = null;
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			axios.post('/api/admin/manage_checklists', app.manageChecklistsData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while adding the checklist. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/manage_checklists');
+					toastr['success']('New checklist added!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 408 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Checklist Type")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.manageChecklistsData.type,
+                              expression: "manageChecklistsData.type"
+                            }
+                          ],
+                          ref: "type",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.clearChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "Staff Daily Checklists" } },
+                            [_vm._v("Staff Daily Checklists")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Cleaning - Hygiene" } },
+                            [_vm._v("Cleaning - Hygiene")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: {
+                                value: "Pest Control - Daily - Quarterly"
+                              }
+                            },
+                            [_vm._v("Pest Control - Daily - Quarterly")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Equipment" } }, [
+                            _vm._v("Equipment")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Misc Procedures" } },
+                            [_vm._v("Misc Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: { value: "Staff Manuals and Procedures" }
+                            },
+                            [_vm._v("Staff Manuals and Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Matrix Checklists" } },
+                            [_vm._v("Matrix Checklists")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.organization_id,
+                              expression:
+                                "manageChecklistsData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "organization_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.getChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Time")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.time_id,
+                                  expression: "manageChecklistsData.time_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "time_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "time_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistTimes, function(checklistTime) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistTime.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistTime.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Area")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.area_id,
+                              expression: "manageChecklistsData.area_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "area_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "area_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistAreas, function(checklistArea) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistArea.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistArea.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type == "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Day of the Week")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.manageChecklistsData.day_of_the_week,
+                                  expression:
+                                    "manageChecklistsData.day_of_the_week"
+                                }
+                              ],
+                              ref: "day_of_the_week",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "day_of_the_week",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Sunday" } }, [
+                                _vm._v("Sunday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Monday" } }, [
+                                _vm._v("Monday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tuesday" } }, [
+                                _vm._v("Tuesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Wednesday" } }, [
+                                _vm._v("Wednesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Thursday" } }, [
+                                _vm._v("Thursday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Friday" } }, [
+                                _vm._v("Friday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Saturday" } }, [
+                                _vm._v("Saturday")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.category_id,
+                                  expression:
+                                    "manageChecklistsData.category_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "category_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "category_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistCategories, function(
+                              checklistCategory
+                            ) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistCategory.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistCategory.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Item")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.item_id,
+                              expression: "manageChecklistsData.item_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "item_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "item_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistItems, function(checklistItem) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistItem.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistItem.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Add a Checklist")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-plus-circle" }),
+        _vm._v(" Create")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-07363622", module.exports)
+  }
+}
+
+/***/ }),
+/* 409 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(410)
+/* template */
+var __vue_template__ = __webpack_require__(411)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/manage_checklists/Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e951954e", Component.options)
+  } else {
+    hotAPI.reload("data-v-e951954e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 410 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {},
+			organizations: [],
+			checklistTimes: [],
+			checklistAreas: [],
+			checklistCategories: [],
+			checklistItems: []
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+		this.getOrganizations();
+		toastr.options = {
+			closeButton: true,
+			debug: false,
+			positionClass: 'toast-top-right',
+			onclick: null,
+			showDuration: '1000',
+			hideDuration: '1000',
+			timeOut: '5000',
+			extendedTimeOut: '1000',
+			showEasing: 'swing',
+			hideEasing: 'linear',
+			showMethod: 'fadeIn',
+			hideMethod: 'fadeOut'
+		};
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/getManageChecklist/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+				app.getChecklistsDropdown();
+			}).catch(function () {
+				console.log("Error fetching checklist data");
+			});
+		},
+		getOrganizations: function getOrganizations() {
+			var app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown').then(function (resp) {
+				app.organizations = resp.data;
+			}).catch(function () {
+				console.log("Error fetching organizations");
+			});
+		},
+		getChecklistsDropdown: function getChecklistsDropdown() {
+			var app = this;
+
+			app.getChecklistTimesByOrganizationID();
+			app.getChecklistAreasByOrganizationID();
+			app.getChecklistCategoriesByOrganizationID();
+			app.getChecklistItemsByOrganizationID();
+		},
+		getChecklistTimesByOrganizationID: function getChecklistTimesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistTimes = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist time");
+			});
+		},
+		getChecklistAreasByOrganizationID: function getChecklistAreasByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistAreas = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist areas");
+			});
+		},
+		getChecklistCategoriesByOrganizationID: function getChecklistCategoriesByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistCategories = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist categories");
+			});
+		},
+		getChecklistItemsByOrganizationID: function getChecklistItemsByOrganizationID() {
+			var app = this;
+			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id).then(function (resp) {
+				app.checklistItems = resp.data;
+			}).catch(function () {
+				console.log("Error fetching checklist items");
+			});
+		},
+		clearChecklistsDropdown: function clearChecklistsDropdown() {
+			var app = this;
+
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.checklistCategories = [];
+			app.checklistItems = [];
+
+			app.manageChecklistsData.organization_id = null;
+			app.manageChecklistsData.time_id = null;
+			app.manageChecklistsData.area_id = null;
+			app.manageChecklistsData.day_of_the_week = null;
+			app.manageChecklistsData.category_id = null;
+			app.manageChecklistsData.item_id = null;
+		},
+		saveForm: function saveForm() {
+			var app = this;
+
+			app.manageChecklistsData.updated_by = localStorage.getItem("user.id"); //update user id of the one who edited
+			axios.patch('/api/admin/manage_checklists/' + app.manageChecklistsData.id, app.manageChecklistsData).then(function (resp) {
+				if (resp.data.status == 'error') {
+					toastr['error']('Something went wrong while updating the checklist. Please contact admin about this.', 'Error!');
+				} else {
+					app.$router.push('/admin/manage_checklists');
+					toastr['success']('Checklist details updated!', 'Success!');
+				}
+			}).catch(function () {
+				console.log("Error on ajax call!");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 411 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveForm($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Checklist Type")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.manageChecklistsData.type,
+                              expression: "manageChecklistsData.type"
+                            }
+                          ],
+                          ref: "type",
+                          staticClass: "form-control",
+                          attrs: { disabled: "", required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.clearChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "Staff Daily Checklists" } },
+                            [_vm._v("Staff Daily Checklists")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Cleaning - Hygiene" } },
+                            [_vm._v("Cleaning - Hygiene")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: {
+                                value: "Pest Control - Daily - Quarterly"
+                              }
+                            },
+                            [_vm._v("Pest Control - Daily - Quarterly")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Equipment" } }, [
+                            _vm._v("Equipment")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Misc Procedures" } },
+                            [_vm._v("Misc Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            {
+                              attrs: { value: "Staff Manuals and Procedures" }
+                            },
+                            [_vm._v("Staff Manuals and Procedures")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "option",
+                            { attrs: { value: "Matrix Checklists" } },
+                            [_vm._v("Matrix Checklists")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Organization")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.organization_id,
+                              expression:
+                                "manageChecklistsData.organization_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "organization_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.manageChecklistsData,
+                                  "organization_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.getChecklistsDropdown()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.organizations, function(organization) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organization.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(organization.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Time")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.time_id,
+                                  expression: "manageChecklistsData.time_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "time_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "time_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistTimes, function(checklistTime) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistTime.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistTime.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Area")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.area_id,
+                              expression: "manageChecklistsData.area_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "area_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "area_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistAreas, function(checklistArea) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistArea.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistArea.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type == "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Day of the Week")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value:
+                                    _vm.manageChecklistsData.day_of_the_week,
+                                  expression:
+                                    "manageChecklistsData.day_of_the_week"
+                                }
+                              ],
+                              ref: "day_of_the_week",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "day_of_the_week",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Sunday" } }, [
+                                _vm._v("Sunday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Monday" } }, [
+                                _vm._v("Monday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tuesday" } }, [
+                                _vm._v("Tuesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Wednesday" } }, [
+                                _vm._v("Wednesday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Thursday" } }, [
+                                _vm._v("Thursday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Friday" } }, [
+                                _vm._v("Friday")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Saturday" } }, [
+                                _vm._v("Saturday")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.manageChecklistsData.type != "Matrix Checklists"
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-sm-6 form-group" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.manageChecklistsData.category_id,
+                                  expression:
+                                    "manageChecklistsData.category_id",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              ref: "category_id",
+                              staticClass: "form-control",
+                              attrs: { required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.manageChecklistsData,
+                                    "category_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.checklistCategories, function(
+                              checklistCategory
+                            ) {
+                              return _c(
+                                "option",
+                                { domProps: { value: checklistCategory.id } },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t\t" +
+                                      _vm._s(checklistCategory.name) +
+                                      "\n\t\t\t\t\t\t\t\t"
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm-6 form-group" }, [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Item")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.trim",
+                              value: _vm.manageChecklistsData.item_id,
+                              expression: "manageChecklistsData.item_id",
+                              modifiers: { trim: true }
+                            }
+                          ],
+                          ref: "item_id",
+                          staticClass: "form-control",
+                          attrs: { required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.manageChecklistsData,
+                                "item_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.checklistItems, function(checklistItem) {
+                          return _c(
+                            "option",
+                            { domProps: { value: checklistItem.id } },
+                            [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(checklistItem.name) +
+                                  "\n\t\t\t\t\t\t\t\t"
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("Edit a Checklist")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _c("i", { staticClass: "icon-fa icon-fa-floppy-o" }),
+        _vm._v(" Save")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e951954e", module.exports)
+  }
+}
+
+/***/ }),
+/* 412 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(413)
+/* template */
+var __vue_template__ = __webpack_require__(414)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/admin/modules/manage_checklists/View.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-73213c74", Component.options)
+  } else {
+    hotAPI.reload("data-v-73213c74", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 413 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+	data: function data() {
+		return {
+			manageChecklistsData: {}
+		};
+	},
+	mounted: function mounted() {
+		this.getManageChecklist();
+	},
+
+	methods: {
+		getManageChecklist: function getManageChecklist() {
+			var app = this;
+			var id = app.$route.params.id;
+			axios.get('/api/admin/manage_checklists/' + id).then(function (resp) {
+				app.manageChecklistsData = resp.data;
+			}).catch(function () {
+				console.log("Error fetching manage checklist data");
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 414 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "main-content" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-sm-6" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-dark btn-xs float-right",
+                      attrs: { to: "/admin/manage_checklists" }
+                    },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-arrow-left" }),
+                      _vm._v("Back\n                ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "panel-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _c("div", { staticClass: "table-responsive" }, [
+                    _c(
+                      "table",
+                      { staticClass: "table table-bordered table-striped" },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", [_vm._v(" Checklist Type ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.type) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Organization ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.manageChecklistsData.organization.name
+                                    ) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Time ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.time.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Area ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.area.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type == "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Day of the Week ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData
+                                            .day_of_the_week
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.manageChecklistsData.type != "Matrix Checklists"
+                            ? _c("tr", [
+                                _c("td", [_vm._v(" Category ")]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("b", [
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.manageChecklistsData.category.name
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v(" Item ")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("b", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.manageChecklistsData.item.name) +
+                                    " "
+                                )
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "page-header" }, [
+      _c("h3", { staticClass: "page-title" }, [_vm._v("Manage Checklists")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", [_vm._v("View a Checklist")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-73213c74", module.exports)
+  }
+}
+
+/***/ }),
+/* 415 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(416)
+/* template */
+var __vue_template__ = __webpack_require__(425)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -68822,7 +77839,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 371 */
+/* 416 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68832,15 +77849,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _TheSiteHeader = __webpack_require__(372);
+var _TheSiteHeader = __webpack_require__(417);
 
 var _TheSiteHeader2 = _interopRequireDefault(_TheSiteHeader);
 
-var _TheSiteFooter = __webpack_require__(375);
+var _TheSiteFooter = __webpack_require__(420);
 
 var _TheSiteFooter2 = _interopRequireDefault(_TheSiteFooter);
 
-var _TheSiteSidebar = __webpack_require__(377);
+var _TheSiteSidebar = __webpack_require__(422);
 
 var _TheSiteSidebar2 = _interopRequireDefault(_TheSiteSidebar);
 
@@ -68866,15 +77883,15 @@ exports.default = {
 //
 
 /***/ }),
-/* 372 */
+/* 417 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(373)
+var __vue_script__ = __webpack_require__(418)
 /* template */
-var __vue_template__ = __webpack_require__(374)
+var __vue_template__ = __webpack_require__(419)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -68913,7 +77930,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 373 */
+/* 418 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68955,7 +77972,7 @@ exports.default = {
 //
 
 /***/ }),
-/* 374 */
+/* 419 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -69004,7 +78021,7 @@ if (false) {
 }
 
 /***/ }),
-/* 375 */
+/* 420 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -69012,7 +78029,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(376)
+var __vue_template__ = __webpack_require__(421)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -69051,7 +78068,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 376 */
+/* 421 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -69082,15 +78099,15 @@ if (false) {
 }
 
 /***/ }),
-/* 377 */
+/* 422 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(378)
+var __vue_script__ = __webpack_require__(423)
 /* template */
-var __vue_template__ = __webpack_require__(379)
+var __vue_template__ = __webpack_require__(424)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -69129,7 +78146,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 378 */
+/* 423 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69225,9 +78242,18 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
-/* 379 */
+/* 424 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -69293,20 +78319,45 @@ var render = function() {
                       slot: "item-title"
                     },
                     [
-                      _c("i", {
-                        staticClass: "icon-fa icon-fa-check-square-o"
-                      }),
-                      _vm._v("Checklists\n              "),
+                      _c("i", { staticClass: "icon-fa icon-fa-list-alt" }),
+                      _vm._v("Actions\n              "),
                       _c("span", { staticClass: "icon-fa arrow icon-fa-fw" })
                     ]
                   ),
                   _vm._v(" "),
                   _c(
                     "router-link",
-                    { attrs: { to: "/admin/daily_staff_checklists" } },
+                    { attrs: { to: "/admin/corrective_action" } },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
-                      _vm._v("Daily Staff\n            ")
+                      _vm._v("Corrective Action\n            ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    { attrs: { to: "/admin/cook_chill_check" } },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
+                      _vm._v("Cook-Chill-Check\n            ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    { attrs: { to: "/admin/incoming_delivery" } },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
+                      _vm._v("Incoming Delivery\n            ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    { attrs: { to: "/admin/staff_daily_checklists" } },
+                    [
+                      _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
+                      _vm._v("Staff Daily Checklists\n            ")
                     ]
                   ),
                   _vm._v(" "),
@@ -69315,7 +78366,7 @@ var render = function() {
                     { attrs: { to: "/admin/matrix_checklists" } },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
-                      _vm._v("Matrix\n            ")
+                      _vm._v("Matrix Checklists\n            ")
                     ]
                   )
                 ],
@@ -69354,21 +78405,17 @@ var render = function() {
                     _vm._v("Users\n            ")
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "router-link",
-                    { attrs: { to: "/admin/checklist_areas" } },
-                    [
-                      _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
-                      _vm._v("Checklist Areas\n            ")
-                    ]
-                  ),
+                  _c("router-link", { attrs: { to: "/admin/checklists" } }, [
+                    _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
+                    _vm._v("Set Checklist Entries\n            ")
+                  ]),
                   _vm._v(" "),
                   _c(
                     "router-link",
-                    { attrs: { to: "/admin/checklist_times" } },
+                    { attrs: { to: "/admin/manage_checklists" } },
                     [
                       _c("i", { staticClass: "icon-fa icon-fa-circle-thin" }),
-                      _vm._v("Checklist Times\n            ")
+                      _vm._v("Manage Checklists\n            ")
                     ]
                   )
                 ],
@@ -69414,7 +78461,7 @@ if (false) {
 }
 
 /***/ }),
-/* 380 */
+/* 425 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -69452,7 +78499,7 @@ if (false) {
 }
 
 /***/ }),
-/* 381 */
+/* 426 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -69460,7 +78507,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(382)
+var __vue_template__ = __webpack_require__(427)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -69499,7 +78546,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 382 */
+/* 427 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -69552,15 +78599,15 @@ if (false) {
 }
 
 /***/ }),
-/* 383 */
+/* 428 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(384)
+var __vue_script__ = __webpack_require__(429)
 /* template */
-var __vue_template__ = __webpack_require__(405)
+var __vue_template__ = __webpack_require__(450)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -69599,7 +78646,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 384 */
+/* 429 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69609,7 +78656,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _validators = __webpack_require__(385);
+var _validators = __webpack_require__(430);
 
 var _auth = __webpack_require__(25);
 
@@ -69725,7 +78772,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 385 */
+/* 430 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69736,75 +78783,75 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.maxValue = exports.minValue = exports.and = exports.or = exports.url = exports.sameAs = exports.requiredUnless = exports.requiredIf = exports.required = exports.minLength = exports.maxLength = exports.macAddress = exports.ipAddress = exports.email = exports.between = exports.numeric = exports.alphaNum = exports.alpha = undefined;
 
-var _alpha = __webpack_require__(386);
+var _alpha = __webpack_require__(431);
 
 var _alpha2 = _interopRequireDefault(_alpha);
 
-var _alphaNum = __webpack_require__(388);
+var _alphaNum = __webpack_require__(433);
 
 var _alphaNum2 = _interopRequireDefault(_alphaNum);
 
-var _numeric = __webpack_require__(389);
+var _numeric = __webpack_require__(434);
 
 var _numeric2 = _interopRequireDefault(_numeric);
 
-var _between = __webpack_require__(390);
+var _between = __webpack_require__(435);
 
 var _between2 = _interopRequireDefault(_between);
 
-var _email = __webpack_require__(391);
+var _email = __webpack_require__(436);
 
 var _email2 = _interopRequireDefault(_email);
 
-var _ipAddress = __webpack_require__(392);
+var _ipAddress = __webpack_require__(437);
 
 var _ipAddress2 = _interopRequireDefault(_ipAddress);
 
-var _macAddress = __webpack_require__(393);
+var _macAddress = __webpack_require__(438);
 
 var _macAddress2 = _interopRequireDefault(_macAddress);
 
-var _maxLength = __webpack_require__(394);
+var _maxLength = __webpack_require__(439);
 
 var _maxLength2 = _interopRequireDefault(_maxLength);
 
-var _minLength = __webpack_require__(395);
+var _minLength = __webpack_require__(440);
 
 var _minLength2 = _interopRequireDefault(_minLength);
 
-var _required = __webpack_require__(396);
+var _required = __webpack_require__(441);
 
 var _required2 = _interopRequireDefault(_required);
 
-var _requiredIf = __webpack_require__(397);
+var _requiredIf = __webpack_require__(442);
 
 var _requiredIf2 = _interopRequireDefault(_requiredIf);
 
-var _requiredUnless = __webpack_require__(398);
+var _requiredUnless = __webpack_require__(443);
 
 var _requiredUnless2 = _interopRequireDefault(_requiredUnless);
 
-var _sameAs = __webpack_require__(399);
+var _sameAs = __webpack_require__(444);
 
 var _sameAs2 = _interopRequireDefault(_sameAs);
 
-var _url = __webpack_require__(400);
+var _url = __webpack_require__(445);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _or = __webpack_require__(401);
+var _or = __webpack_require__(446);
 
 var _or2 = _interopRequireDefault(_or);
 
-var _and = __webpack_require__(402);
+var _and = __webpack_require__(447);
 
 var _and2 = _interopRequireDefault(_and);
 
-var _minValue = __webpack_require__(403);
+var _minValue = __webpack_require__(448);
 
 var _minValue2 = _interopRequireDefault(_minValue);
 
-var _maxValue = __webpack_require__(404);
+var _maxValue = __webpack_require__(449);
 
 var _maxValue2 = _interopRequireDefault(_maxValue);
 
@@ -69830,7 +78877,7 @@ exports.minValue = _minValue2.default;
 exports.maxValue = _maxValue2.default;
 
 /***/ }),
-/* 386 */
+/* 431 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69845,7 +78892,7 @@ var _common = __webpack_require__(4);
 exports.default = (0, _common.regex)('alpha', /^[a-zA-Z]*$/);
 
 /***/ }),
-/* 387 */
+/* 432 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69860,7 +78907,7 @@ var withParams =  false ? require('./withParamsBrowser').withParams : __webpack_
 exports.default = withParams;
 
 /***/ }),
-/* 388 */
+/* 433 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69875,7 +78922,7 @@ var _common = __webpack_require__(4);
 exports.default = (0, _common.regex)('alphaNum', /^[a-zA-Z0-9]*$/);
 
 /***/ }),
-/* 389 */
+/* 434 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69890,7 +78937,7 @@ var _common = __webpack_require__(4);
 exports.default = (0, _common.regex)('numeric', /^[0-9]*$/);
 
 /***/ }),
-/* 390 */
+/* 435 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69909,7 +78956,7 @@ exports.default = function (min, max) {
 };
 
 /***/ }),
-/* 391 */
+/* 436 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69926,7 +78973,7 @@ var emailRegex = /(^$|^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+")
 exports.default = (0, _common.regex)('email', emailRegex);
 
 /***/ }),
-/* 392 */
+/* 437 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69970,7 +79017,7 @@ var nibbleValid = function nibbleValid(nibble) {
 };
 
 /***/ }),
-/* 393 */
+/* 438 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70004,7 +79051,7 @@ var hexValid = function hexValid(hex) {
 };
 
 /***/ }),
-/* 394 */
+/* 439 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70023,7 +79070,7 @@ exports.default = function (length) {
 };
 
 /***/ }),
-/* 395 */
+/* 440 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70042,7 +79089,7 @@ exports.default = function (length) {
 };
 
 /***/ }),
-/* 396 */
+/* 441 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70057,7 +79104,7 @@ var _common = __webpack_require__(4);
 exports.default = (0, _common.withParams)({ type: 'required' }, _common.req);
 
 /***/ }),
-/* 397 */
+/* 442 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70076,7 +79123,7 @@ exports.default = function (prop) {
 };
 
 /***/ }),
-/* 398 */
+/* 443 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70095,7 +79142,7 @@ exports.default = function (prop) {
 };
 
 /***/ }),
-/* 399 */
+/* 444 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70114,7 +79161,7 @@ exports.default = function (equalTo) {
 };
 
 /***/ }),
-/* 400 */
+/* 445 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70131,7 +79178,7 @@ var urlRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\
 exports.default = (0, _common.regex)('url', urlRegex);
 
 /***/ }),
-/* 401 */
+/* 446 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70162,7 +79209,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 402 */
+/* 447 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70193,7 +79240,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 403 */
+/* 448 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70212,7 +79259,7 @@ exports.default = function (min) {
 };
 
 /***/ }),
-/* 404 */
+/* 449 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70231,7 +79278,7 @@ exports.default = function (max) {
 };
 
 /***/ }),
-/* 405 */
+/* 450 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -70431,15 +79478,15 @@ if (false) {
 }
 
 /***/ }),
-/* 406 */
+/* 451 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(407)
+var __vue_script__ = __webpack_require__(452)
 /* template */
-var __vue_template__ = __webpack_require__(408)
+var __vue_template__ = __webpack_require__(453)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -70478,7 +79525,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 407 */
+/* 452 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70519,7 +79566,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 408 */
+/* 453 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -70565,7 +79612,7 @@ if (false) {
 }
 
 /***/ }),
-/* 409 */
+/* 454 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -70573,7 +79620,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(410)
+var __vue_template__ = __webpack_require__(455)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -70612,7 +79659,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 410 */
+/* 455 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -70650,7 +79697,7 @@ if (false) {
 }
 
 /***/ }),
-/* 411 */
+/* 456 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70691,15 +79738,15 @@ exports.default = {
 };
 
 /***/ }),
-/* 412 */
+/* 457 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(413)
+var __vue_script__ = __webpack_require__(458)
 /* template */
-var __vue_template__ = __webpack_require__(414)
+var __vue_template__ = __webpack_require__(459)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -70738,7 +79785,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 413 */
+/* 458 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70795,7 +79842,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 414 */
+/* 459 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -70866,7 +79913,7 @@ if (false) {
 }
 
 /***/ }),
-/* 415 */
+/* 460 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70880,19 +79927,19 @@ var _vueRouter = __webpack_require__(47);
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-var _veeValidate = __webpack_require__(416);
+var _veeValidate = __webpack_require__(461);
 
 var _veeValidate2 = _interopRequireDefault(_veeValidate);
 
-var _vuelidate = __webpack_require__(417);
+var _vuelidate = __webpack_require__(462);
 
 var _vuelidate2 = _interopRequireDefault(_vuelidate);
 
-var _vuePrism = __webpack_require__(419);
+var _vuePrism = __webpack_require__(464);
 
 var _vuePrism2 = _interopRequireDefault(_vuePrism);
 
-var _vTooltip = __webpack_require__(421);
+var _vTooltip = __webpack_require__(466);
 
 var _vTooltip2 = _interopRequireDefault(_vTooltip);
 
@@ -70900,45 +79947,45 @@ var _ls = __webpack_require__(62);
 
 var _ls2 = _interopRequireDefault(_ls);
 
-var _VDropdown = __webpack_require__(422);
+var _VDropdown = __webpack_require__(467);
 
 var _VDropdown2 = _interopRequireDefault(_VDropdown);
 
-var _VDropdownItem = __webpack_require__(425);
+var _VDropdownItem = __webpack_require__(470);
 
 var _VDropdownItem2 = _interopRequireDefault(_VDropdownItem);
 
-var _VDropdownDivider = __webpack_require__(427);
+var _VDropdownDivider = __webpack_require__(472);
 
 var _VDropdownDivider2 = _interopRequireDefault(_VDropdownDivider);
 
-var _VCollapse = __webpack_require__(429);
+var _VCollapse = __webpack_require__(474);
 
 var _VCollapse2 = _interopRequireDefault(_VCollapse);
 
-var _VCollapseItem = __webpack_require__(432);
+var _VCollapseItem = __webpack_require__(477);
 
 var _VCollapseItem2 = _interopRequireDefault(_VCollapseItem);
 
-__webpack_require__(437);
+__webpack_require__(482);
 
-__webpack_require__(440);
+__webpack_require__(485);
 
-__webpack_require__(442);
+__webpack_require__(487);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Global plugins
  */
-global.notie = __webpack_require__(444);
+global.notie = __webpack_require__(489);
 
 /**
  * Global CSS imports
  */
 
-global.toastr = __webpack_require__(445);
-global._ = __webpack_require__(448);
+global.toastr = __webpack_require__(490);
+global._ = __webpack_require__(493);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -70954,7 +80001,7 @@ global.Vue = __webpack_require__(45);
  * included with Laravel will automatically verify the header's value.
  */
 
-global.axios = __webpack_require__(449);
+global.axios = __webpack_require__(494);
 
 global.axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest'
@@ -70993,7 +80040,7 @@ global.axios.defaults.headers.common = {
 /**
  * Custom Directives
  */
-__webpack_require__(468);
+__webpack_require__(513);
 
 /**
  * Global Components
@@ -71009,10 +80056,10 @@ Vue.use(_vuePrism2.default);
 Vue.use(_vTooltip2.default);
 Vue.use(_veeValidate2.default);
 Vue.use(_vuelidate2.default);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 416 */
+/* 461 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79754,7 +88801,7 @@ var install = VeeValidate$1.install;
 
 
 /***/ }),
-/* 417 */
+/* 462 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -79767,7 +88814,7 @@ exports.withParams = exports.validationMixin = exports.Vuelidate = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _vval = __webpack_require__(418);
+var _vval = __webpack_require__(463);
 
 var _params = __webpack_require__(195);
 
@@ -80299,7 +89346,7 @@ exports.withParams = _params.withParams;
 exports.default = Vuelidate;
 
 /***/ }),
-/* 418 */
+/* 463 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -80454,12 +89501,12 @@ function h(tag, key, args) {
 }
 
 /***/ }),
-/* 419 */
+/* 464 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prismjs__ = __webpack_require__(420);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prismjs__ = __webpack_require__(465);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prismjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prismjs__);
 
 
@@ -80478,7 +89525,7 @@ const VuePrism = {
 /* harmony default export */ __webpack_exports__["default"] = (VuePrism);
 
 /***/ }),
-/* 420 */
+/* 465 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -81356,10 +90403,10 @@ Prism.languages.js = Prism.languages.javascript;
 	document.addEventListener('DOMContentLoaded', self.Prism.fileHighlight);
 
 })();
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 421 */
+/* 466 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -87769,18 +96816,18 @@ if (GlobalVue) {
 
 /* harmony default export */ __webpack_exports__["default"] = (plugin);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(14)))
 
 /***/ }),
-/* 422 */
+/* 467 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(423)
+var __vue_script__ = __webpack_require__(468)
 /* template */
-var __vue_template__ = __webpack_require__(424)
+var __vue_template__ = __webpack_require__(469)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -87819,7 +96866,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 423 */
+/* 468 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -87943,7 +96990,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 424 */
+/* 469 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -88011,7 +97058,7 @@ if (false) {
 }
 
 /***/ }),
-/* 425 */
+/* 470 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -88019,7 +97066,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(426)
+var __vue_template__ = __webpack_require__(471)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -88058,7 +97105,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 426 */
+/* 471 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -88083,7 +97130,7 @@ if (false) {
 }
 
 /***/ }),
-/* 427 */
+/* 472 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -88091,7 +97138,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(428)
+var __vue_template__ = __webpack_require__(473)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -88130,7 +97177,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 428 */
+/* 473 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -88150,15 +97197,15 @@ if (false) {
 }
 
 /***/ }),
-/* 429 */
+/* 474 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(430)
+var __vue_script__ = __webpack_require__(475)
 /* template */
-var __vue_template__ = __webpack_require__(431)
+var __vue_template__ = __webpack_require__(476)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -88197,7 +97244,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 430 */
+/* 475 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88223,7 +97270,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 431 */
+/* 476 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -88243,19 +97290,19 @@ if (false) {
 }
 
 /***/ }),
-/* 432 */
+/* 477 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(433)
+  __webpack_require__(478)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(435)
+var __vue_script__ = __webpack_require__(480)
 /* template */
-var __vue_template__ = __webpack_require__(436)
+var __vue_template__ = __webpack_require__(481)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -88294,13 +97341,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 433 */
+/* 478 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(434);
+var content = __webpack_require__(479);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -88320,21 +97367,21 @@ if(false) {
 }
 
 /***/ }),
-/* 434 */
+/* 479 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(true);
+exports = module.exports = __webpack_require__(17)(true);
 // imports
 
 
 // module
-exports.push([module.i, "\n.collapse-group-items[data-v-73599eff] {\r\n  overflow: hidden;\r\n  -webkit-transition: max-height .3s ease-in-out;\r\n  transition: max-height .3s ease-in-out;\n}\n.slide-enter-active[data-v-73599eff], .slide-leave-active[data-v-73599eff] {\r\n  overflow: hidden;\n}\n.slide-leave-to[data-v-73599eff] {\r\n  max-height: 0px !important;\n}\r\n", "", {"version":3,"sources":["E:/Work/Laravel/Projects/smartprobe/resources/js/components/collapse/resources/js/components/collapse/VCollapseItem.vue"],"names":[],"mappings":";AAqGA;EACA,iBAAA;EACA,+CAAA;EAAA,uCAAA;CACA;AACA;EACA,iBAAA;CACA;AACA;EACA,2BAAA;CACA","file":"VCollapseItem.vue","sourcesContent":["<template>\r\n  <div :class=\"['collapse-group-item', { active: isCollapseOpen } ]\">\r\n    <div class=\"collapse-item-title\" @click=\"toggleCollapse\">\r\n      <slot name=\"item-title\"/>\r\n    </div>\r\n    <transition\r\n      :duration=\"{ enter: 0 }\"\r\n      name=\"slide\"\r\n      @after-enter=\"afterEnter\"\r\n      @after-leave=\"afterLeave\"\r\n    >\r\n      <div\r\n        v-show=\"isCollapseOpen\"\r\n        v-if=\"hasChild\"\r\n        ref=\"collapseItems\"\r\n        :style=\"'max-height:' + height + 'px'\"\r\n        class=\"collapse-group-items\"\r\n      >\r\n        <slot/>\r\n      </div>\r\n    </transition>\r\n  </div>\r\n</template>\r\n<script>\r\n\r\nexport default {\r\n  props: {\r\n    activeUrl: {\r\n      type: String,\r\n      require: true,\r\n      default: ''\r\n    },\r\n    isActive: {\r\n      type: Boolean,\r\n      require: true,\r\n      default: false\r\n    }\r\n  },\r\n  data () {\r\n    return {\r\n      height: '',\r\n      originalHeight: '',\r\n      isCollapseOpen: true,\r\n      hasChild: true,\r\n      accordion: this.$parent.accordion\r\n    }\r\n  },\r\n  mounted () {\r\n    this.$nextTick(() => {\r\n      if (this.accordion === true) {\r\n        this.hasActive()\r\n      } else {\r\n        this.isCollapseOpen = false\r\n      }\r\n      this.height = this.originalHeight = this.$refs.collapseItems.clientHeight\r\n\r\n      if (this.$refs.collapseItems.children.length === 0) {\r\n        this.hasChild = false\r\n      }\r\n    })\r\n  },\r\n  methods: {\r\n    hasActiveUrl () {\r\n      return this.$route.path.indexOf(this.activeUrl) > -1\r\n    },\r\n    hasActive () {\r\n      if (this.isActive) {\r\n        this.isCollapseOpen = this.isActive\r\n      } else {\r\n        if (this.activeUrl) {\r\n          this.isCollapseOpen = this.hasActiveUrl()\r\n        } else {\r\n          this.isCollapseOpen = false\r\n        }\r\n      }\r\n    },\r\n    toggleCollapse () {\r\n      let self = this\r\n      if (this.accordion) {\r\n        if (this.isCollapseOpen === false) {\r\n          this.$parent.$children.filter((value) => {\r\n            if (value !== self) {\r\n              if (value.isCollapseOpen === true) {\r\n                value.isCollapseOpen = false\r\n              }\r\n            }\r\n          })\r\n        }\r\n      }\r\n      this.isCollapseOpen = !this.isCollapseOpen\r\n    },\r\n    afterEnter () {\r\n      this.height = this.originalHeight\r\n    },\r\n    afterLeave () {\r\n      this.height = 0\r\n    }\r\n  }\r\n}\r\n</script>\r\n<style scoped>\r\n.collapse-group-items {\r\n  overflow: hidden;\r\n  transition: max-height .3s ease-in-out;\r\n}\r\n.slide-enter-active, .slide-leave-active {\r\n  overflow: hidden;\r\n}\r\n.slide-leave-to {\r\n  max-height: 0px !important;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+exports.push([module.i, "\n.collapse-group-items[data-v-73599eff] {\n  overflow: hidden;\n  -webkit-transition: max-height .3s ease-in-out;\n  transition: max-height .3s ease-in-out;\n}\n.slide-enter-active[data-v-73599eff], .slide-leave-active[data-v-73599eff] {\n  overflow: hidden;\n}\n.slide-leave-to[data-v-73599eff] {\n  max-height: 0px !important;\n}\n", "", {"version":3,"sources":["D:/Work/Laravel/Projects/smartprobe/resources/js/components/collapse/resources/js/components/collapse/VCollapseItem.vue"],"names":[],"mappings":";AAqGA;EACA,iBAAA;EACA,+CAAA;EAAA,uCAAA;CACA;AACA;EACA,iBAAA;CACA;AACA;EACA,2BAAA;CACA","file":"VCollapseItem.vue","sourcesContent":["<template>\n  <div :class=\"['collapse-group-item', { active: isCollapseOpen } ]\">\n    <div class=\"collapse-item-title\" @click=\"toggleCollapse\">\n      <slot name=\"item-title\"/>\n    </div>\n    <transition\n      :duration=\"{ enter: 0 }\"\n      name=\"slide\"\n      @after-enter=\"afterEnter\"\n      @after-leave=\"afterLeave\"\n    >\n      <div\n        v-show=\"isCollapseOpen\"\n        v-if=\"hasChild\"\n        ref=\"collapseItems\"\n        :style=\"'max-height:' + height + 'px'\"\n        class=\"collapse-group-items\"\n      >\n        <slot/>\n      </div>\n    </transition>\n  </div>\n</template>\n<script>\n\nexport default {\n  props: {\n    activeUrl: {\n      type: String,\n      require: true,\n      default: ''\n    },\n    isActive: {\n      type: Boolean,\n      require: true,\n      default: false\n    }\n  },\n  data () {\n    return {\n      height: '',\n      originalHeight: '',\n      isCollapseOpen: true,\n      hasChild: true,\n      accordion: this.$parent.accordion\n    }\n  },\n  mounted () {\n    this.$nextTick(() => {\n      if (this.accordion === true) {\n        this.hasActive()\n      } else {\n        this.isCollapseOpen = false\n      }\n      this.height = this.originalHeight = this.$refs.collapseItems.clientHeight\n\n      if (this.$refs.collapseItems.children.length === 0) {\n        this.hasChild = false\n      }\n    })\n  },\n  methods: {\n    hasActiveUrl () {\n      return this.$route.path.indexOf(this.activeUrl) > -1\n    },\n    hasActive () {\n      if (this.isActive) {\n        this.isCollapseOpen = this.isActive\n      } else {\n        if (this.activeUrl) {\n          this.isCollapseOpen = this.hasActiveUrl()\n        } else {\n          this.isCollapseOpen = false\n        }\n      }\n    },\n    toggleCollapse () {\n      let self = this\n      if (this.accordion) {\n        if (this.isCollapseOpen === false) {\n          this.$parent.$children.filter((value) => {\n            if (value !== self) {\n              if (value.isCollapseOpen === true) {\n                value.isCollapseOpen = false\n              }\n            }\n          })\n        }\n      }\n      this.isCollapseOpen = !this.isCollapseOpen\n    },\n    afterEnter () {\n      this.height = this.originalHeight\n    },\n    afterLeave () {\n      this.height = 0\n    }\n  }\n}\n</script>\n<style scoped>\n.collapse-group-items {\n  overflow: hidden;\n  transition: max-height .3s ease-in-out;\n}\n.slide-enter-active, .slide-leave-active {\n  overflow: hidden;\n}\n.slide-leave-to {\n  max-height: 0px !important;\n}\n</style>\n"],"sourceRoot":""}]);
 
 // exports
 
 
 /***/ }),
-/* 435 */
+/* 480 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88447,7 +97494,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 436 */
+/* 481 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -88512,13 +97559,13 @@ if (false) {
 }
 
 /***/ }),
-/* 437 */
+/* 482 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(438);
+var content = __webpack_require__(483);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -88543,10 +97590,10 @@ if(false) {
 }
 
 /***/ }),
-/* 438 */
+/* 483 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(17)(false);
 // imports
 
 
@@ -88557,7 +97604,7 @@ exports.push([module.i, ".tabs-component {\n  margin: 4em 0;\n}\n\n.tabs-compone
 
 
 /***/ }),
-/* 439 */
+/* 484 */
 /***/ (function(module, exports) {
 
 
@@ -88652,13 +97699,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 440 */
+/* 485 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(441);
+var content = __webpack_require__(486);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -88683,10 +97730,10 @@ if(false) {
 }
 
 /***/ }),
-/* 441 */
+/* 486 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(17)(false);
 // imports
 
 
@@ -88697,13 +97744,13 @@ exports.push([module.i, "fieldset[disabled] .multiselect{pointer-events:none}.mu
 
 
 /***/ }),
-/* 442 */
+/* 487 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(443);
+var content = __webpack_require__(488);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -88728,10 +97775,10 @@ if(false) {
 }
 
 /***/ }),
-/* 443 */
+/* 488 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(17)(false);
 // imports
 
 
@@ -88742,13 +97789,13 @@ exports.push([module.i, "/*\n * The MIT License\n * Copyright (c) 2012 Matias Me
 
 
 /***/ }),
-/* 444 */
+/* 489 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.notie=t():e.notie=t()}(this,function(){return function(e){function t(s){if(n[s])return n[s].exports;var a=n[s]={i:s,l:!1,exports:{}};return e[s].call(a.exports,a,a.exports,t),a.l=!0,a.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,s){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:s})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=1)}([function(e,t){e.exports=function(e){return e.webpackPolyfill||(e.deprecate=function(){},e.paths=[],e.children||(e.children=[]),Object.defineProperty(e,"loaded",{enumerable:!0,get:function(){return e.l}}),Object.defineProperty(e,"id",{enumerable:!0,get:function(){return e.i}}),e.webpackPolyfill=1),e}},function(e,t,n){"use strict";(function(e){var n,s,a,i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};!function(c,o){"object"===i(t)&&"object"===i(e)?e.exports=o():(s=[],n=o,a="function"==typeof n?n.apply(t,s):n,!(void 0!==a&&(e.exports=a)))}(void 0,function(){return function(e){function t(s){if(n[s])return n[s].exports;var a=n[s]={i:s,l:!1,exports:{}};return e[s].call(a.exports,a,a.exports,t),a.l=!0,a.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,s){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:s})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){function s(e,t){var n={};for(var s in e)t.indexOf(s)>=0||Object.prototype.hasOwnProperty.call(e,s)&&(n[s]=e[s]);return n}Object.defineProperty(t,"__esModule",{value:!0});var a="function"==typeof Symbol&&"symbol"===i(Symbol.iterator)?function(e){return"undefined"==typeof e?"undefined":i(e)}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":"undefined"==typeof e?"undefined":i(e)},c=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var s in n)Object.prototype.hasOwnProperty.call(n,s)&&(e[s]=n[s])}return e},o={top:"top",bottom:"bottom"},r={alertTime:3,dateMonths:["January","February","March","April","May","June","July","August","September","October","November","December"],overlayClickDismiss:!0,overlayOpacity:.75,transitionCurve:"ease",transitionDuration:.3,transitionSelector:"all",classes:{container:"notie-container",textbox:"notie-textbox",textboxInner:"notie-textbox-inner",button:"notie-button",element:"notie-element",elementHalf:"notie-element-half",elementThird:"notie-element-third",overlay:"notie-overlay",backgroundSuccess:"notie-background-success",backgroundWarning:"notie-background-warning",backgroundError:"notie-background-error",backgroundInfo:"notie-background-info",backgroundNeutral:"notie-background-neutral",backgroundOverlay:"notie-background-overlay",alert:"notie-alert",inputField:"notie-input-field",selectChoiceRepeated:"notie-select-choice-repeated",dateSelectorInner:"notie-date-selector-inner",dateSelectorUp:"notie-date-selector-up"},ids:{overlay:"notie-overlay"},positions:{alert:o.top,force:o.top,confirm:o.top,input:o.top,select:o.bottom,date:o.top}},l=t.setOptions=function(e){r=c({},r,e,{classes:c({},r.classes,e.classes),ids:c({},r.ids,e.ids),positions:c({},r.positions,e.positions)})},d=function(){return new Promise(function(e){return setTimeout(e,0)})},u=function(e){return new Promise(function(t){return setTimeout(t,1e3*e)})},p=function(){document.activeElement&&document.activeElement.blur()},f=function(){var e="xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){var t=16*Math.random()|0,n="x"===e?t:3&t|8;return n.toString(16)});return"notie-"+e},m={1:r.classes.backgroundSuccess,success:r.classes.backgroundSuccess,2:r.classes.backgroundWarning,warning:r.classes.backgroundWarning,3:r.classes.backgroundError,error:r.classes.backgroundError,4:r.classes.backgroundInfo,info:r.classes.backgroundInfo,5:r.classes.backgroundNeutral,neutral:r.classes.backgroundNeutral},v=function(){return r.transitionSelector+" "+r.transitionDuration+"s "+r.transitionCurve},b=function(e){return 13===e.keyCode},x=function(e){return 27===e.keyCode},y=function(e,t){e.classList.add(r.classes.container),e.style[t]="-10000px",document.body.appendChild(e),e.style[t]="-"+e.offsetHeight+"px",e.listener&&window.addEventListener("keydown",e.listener),d().then(function(){e.style.transition=v(),e.style[t]=0})},L=function(e,t){var n=document.getElementById(e);n&&(n.style[t]="-"+n.offsetHeight+"px",n.listener&&window.removeEventListener("keydown",n.listener),u(r.transitionDuration).then(function(){n.parentNode&&n.parentNode.removeChild(n)}))},g=function(e,t){var n=document.createElement("div");n.id=r.ids.overlay,n.classList.add(r.classes.overlay),n.classList.add(r.classes.backgroundOverlay),n.style.opacity=0,e&&r.overlayClickDismiss&&(n.onclick=function(){L(e.id,t),h()}),document.body.appendChild(n),d().then(function(){n.style.transition=v(),n.style.opacity=r.overlayOpacity})},h=function(){var e=document.getElementById(r.ids.overlay);e.style.opacity=0,u(r.transitionDuration).then(function(){e.parentNode&&e.parentNode.removeChild(e)})},k=t.hideAlerts=function(e){var t=document.getElementsByClassName(r.classes.alert);if(t.length){for(var n=0;n<t.length;n++){var s=t[n];L(s.id,s.position)}e&&u(r.transitionDuration).then(function(){return e()})}},C=t.alert=function(e){var t=e.type,n=void 0===t?4:t,s=e.text,a=e.time,i=void 0===a?r.alertTime:a,c=e.stay,o=void 0!==c&&c,l=e.position,d=void 0===l?r.positions.alert||d.top:l;p(),k();var v=document.createElement("div"),g=f();v.id=g,v.position=d,v.classList.add(r.classes.textbox),v.classList.add(m[n]),v.classList.add(r.classes.alert),v.innerHTML='<div class="'+r.classes.textboxInner+'">'+s+"</div>",v.onclick=function(){return L(g,d)},v.listener=function(e){(b(e)||x(e))&&k()},y(v,d),i&&i<1&&(i=1),!o&&i&&u(i).then(function(){return L(g,d)})},E=t.force=function(e,t){var n=e.type,s=void 0===n?5:n,a=e.text,i=e.buttonText,c=void 0===i?"OK":i,o=e.callback,l=e.position,d=void 0===l?r.positions.force||d.top:l;p(),k();var u=document.createElement("div"),v=f();u.id=v;var x=document.createElement("div");x.classList.add(r.classes.textbox),x.classList.add(r.classes.backgroundInfo),x.innerHTML='<div class="'+r.classes.textboxInner+'">'+a+"</div>";var C=document.createElement("div");C.classList.add(r.classes.button),C.classList.add(m[s]),C.innerHTML=c,C.onclick=function(){L(v,d),h(),o?o():t&&t()},u.appendChild(x),u.appendChild(C),u.listener=function(e){b(e)&&C.click()},y(u,d),g()},T=t.confirm=function(e,t,n){var s=e.text,a=e.submitText,i=void 0===a?"Yes":a,c=e.cancelText,o=void 0===c?"Cancel":c,l=e.submitCallback,d=e.cancelCallback,u=e.position,m=void 0===u?r.positions.confirm||m.top:u;p(),k();var v=document.createElement("div"),C=f();v.id=C;var E=document.createElement("div");E.classList.add(r.classes.textbox),E.classList.add(r.classes.backgroundInfo),E.innerHTML='<div class="'+r.classes.textboxInner+'">'+s+"</div>";var T=document.createElement("div");T.classList.add(r.classes.button),T.classList.add(r.classes.elementHalf),T.classList.add(r.classes.backgroundSuccess),T.innerHTML=i,T.onclick=function(){L(C,m),h(),l?l():t&&t()};var M=document.createElement("div");M.classList.add(r.classes.button),M.classList.add(r.classes.elementHalf),M.classList.add(r.classes.backgroundError),M.innerHTML=o,M.onclick=function(){L(C,m),h(),d?d():n&&n()},v.appendChild(E),v.appendChild(T),v.appendChild(M),v.listener=function(e){b(e)?T.click():x(e)&&M.click()},y(v,m),g(v,m)},M=function(e,t,n){var i=e.text,c=e.submitText,o=void 0===c?"Submit":c,l=e.cancelText,d=void 0===l?"Cancel":l,u=e.submitCallback,m=e.cancelCallback,v=e.position,C=void 0===v?r.positions.input||C.top:v,E=s(e,["text","submitText","cancelText","submitCallback","cancelCallback","position"]);p(),k();var T=document.createElement("div"),M=f();T.id=M;var H=document.createElement("div");H.classList.add(r.classes.textbox),H.classList.add(r.classes.backgroundInfo),H.innerHTML='<div class="'+r.classes.textboxInner+'">'+i+"</div>";var S=document.createElement("input");S.classList.add(r.classes.inputField),S.setAttribute("autocapitalize",E.autocapitalize||"none"),S.setAttribute("autocomplete",E.autocomplete||"off"),S.setAttribute("autocorrect",E.autocorrect||"off"),S.setAttribute("autofocus",E.autofocus||"true"),S.setAttribute("inputmode",E.inputmode||"verbatim"),S.setAttribute("max",E.max||""),S.setAttribute("maxlength",E.maxlength||""),S.setAttribute("min",E.min||""),S.setAttribute("minlength",E.minlength||""),S.setAttribute("placeholder",E.placeholder||""),S.setAttribute("spellcheck",E.spellcheck||"default"),S.setAttribute("step",E.step||"any"),S.setAttribute("type",E.type||"text"),S.value=E.value||"",E.allowed&&(S.oninput=function(){var e=void 0;if(Array.isArray(E.allowed)){for(var t="",n=E.allowed,s=0;s<n.length;s++)"an"===n[s]?t+="0-9a-zA-Z":"a"===n[s]?t+="a-zA-Z":"n"===n[s]&&(t+="0-9"),"s"===n[s]&&(t+=" ");e=new RegExp("[^"+t+"]","g")}else"object"===a(E.allowed)&&(e=E.allowed);S.value=S.value.replace(e,"")});var w=document.createElement("div");w.classList.add(r.classes.button),w.classList.add(r.classes.elementHalf),w.classList.add(r.classes.backgroundSuccess),w.innerHTML=o,w.onclick=function(){L(M,C),h(),u?u(S.value):t&&t(S.value)};var O=document.createElement("div");O.classList.add(r.classes.button),O.classList.add(r.classes.elementHalf),O.classList.add(r.classes.backgroundError),O.innerHTML=d,O.onclick=function(){L(M,C),h(),m?m(S.value):n&&n(S.value)},T.appendChild(H),T.appendChild(S),T.appendChild(w),T.appendChild(O),T.listener=function(e){b(e)?w.click():x(e)&&O.click()},y(T,C),S.focus(),g(T,C)};t.input=M;var H=t.select=function(e,t){var n=e.text,s=e.cancelText,a=void 0===s?"Cancel":s,i=e.cancelCallback,c=e.choices,o=e.position,l=void 0===o?r.positions.select||l.top:o;p(),k();var d=document.createElement("div"),u=f();d.id=u;var v=document.createElement("div");v.classList.add(r.classes.textbox),v.classList.add(r.classes.backgroundInfo),v.innerHTML='<div class="'+r.classes.textboxInner+'">'+n+"</div>",d.appendChild(v),c.forEach(function(e,t){var n=e.type,s=void 0===n?1:n,a=e.text,i=e.handler,o=document.createElement("div");o.classList.add(m[s]),o.classList.add(r.classes.button),o.classList.add(r.classes.selectChoice);var p=c[t+1];p&&!p.type&&(p.type=1),p&&p.type===s&&o.classList.add(r.classes.selectChoiceRepeated),o.innerHTML=a,o.onclick=function(){L(u,l),h(),i()},d.appendChild(o)});var b=document.createElement("div");b.classList.add(r.classes.backgroundNeutral),b.classList.add(r.classes.button),b.innerHTML=a,b.onclick=function(){L(u,l),h(),i?i():t&&t()},d.appendChild(b),d.listener=function(e){x(e)&&b.click()},y(d,l),g(d,l)},S=t.date=function(e,t,n){var s=e.value,a=void 0===s?new Date:s,i=e.submitText,c=void 0===i?"OK":i,o=e.cancelText,l=void 0===o?"Cancel":o,d=e.submitCallback,u=e.cancelCallback,m=e.position,v=void 0===m?r.positions.date||v.top:m;p(),k();var C="&#9662",E=document.createElement("div"),T=document.createElement("div"),M=document.createElement("div"),H=function(e){E.innerHTML=r.dateMonths[e.getMonth()],T.innerHTML=e.getDate(),M.innerHTML=e.getFullYear()},S=function(e){var t=new Date(a.getFullYear(),a.getMonth()+1,0).getDate(),n=e.target.textContent.replace(/^0+/,"").replace(/[^\d]/g,"").slice(0,2);Number(n)>t&&(n=t.toString()),e.target.textContent=n,Number(n)<1&&(n="1"),a.setDate(Number(n))},w=function(e){var t=e.target.textContent.replace(/^0+/,"").replace(/[^\d]/g,"").slice(0,4);e.target.textContent=t,a.setFullYear(Number(t))},O=function(e){H(a)},A=function(e){var t=new Date(a.getFullYear(),a.getMonth()+e+1,0).getDate();a.getDate()>t&&a.setDate(t),a.setMonth(a.getMonth()+e),H(a)},D=function(e){a.setDate(a.getDate()+e),H(a)},I=function(e){var t=a.getFullYear()+e;t<0?a.setFullYear(0):a.setFullYear(a.getFullYear()+e),H(a)},j=document.createElement("div"),N=f();j.id=N;var P=document.createElement("div");P.classList.add(r.classes.backgroundInfo);var F=document.createElement("div");F.classList.add(r.classes.dateSelectorInner);var Y=document.createElement("div");Y.classList.add(r.classes.button),Y.classList.add(r.classes.elementThird),Y.classList.add(r.classes.dateSelectorUp),Y.innerHTML=C;var _=document.createElement("div");_.classList.add(r.classes.button),_.classList.add(r.classes.elementThird),_.classList.add(r.classes.dateSelectorUp),_.innerHTML=C;var z=document.createElement("div");z.classList.add(r.classes.button),z.classList.add(r.classes.elementThird),z.classList.add(r.classes.dateSelectorUp),z.innerHTML=C,E.classList.add(r.classes.element),E.classList.add(r.classes.elementThird),E.innerHTML=r.dateMonths[a.getMonth()],T.classList.add(r.classes.element),T.classList.add(r.classes.elementThird),T.setAttribute("contentEditable",!0),T.addEventListener("input",S),T.addEventListener("blur",O),T.innerHTML=a.getDate(),M.classList.add(r.classes.element),M.classList.add(r.classes.elementThird),M.setAttribute("contentEditable",!0),M.addEventListener("input",w),M.addEventListener("blur",O),M.innerHTML=a.getFullYear();var U=document.createElement("div");U.classList.add(r.classes.button),U.classList.add(r.classes.elementThird),U.innerHTML=C;var B=document.createElement("div");B.classList.add(r.classes.button),B.classList.add(r.classes.elementThird),B.innerHTML=C;var J=document.createElement("div");J.classList.add(r.classes.button),J.classList.add(r.classes.elementThird),J.innerHTML=C,Y.onclick=function(){return A(1)},_.onclick=function(){return D(1)},z.onclick=function(){return I(1)},U.onclick=function(){return A(-1)},B.onclick=function(){return D(-1)},J.onclick=function(){return I(-1)};var R=document.createElement("div");R.classList.add(r.classes.button),R.classList.add(r.classes.elementHalf),R.classList.add(r.classes.backgroundSuccess),R.innerHTML=c,R.onclick=function(){L(N,v),h(),d?d(a):t&&t(a)};var W=document.createElement("div");W.classList.add(r.classes.button),W.classList.add(r.classes.elementHalf),W.classList.add(r.classes.backgroundError),W.innerHTML=l,W.onclick=function(){L(N,v),h(),u?u(a):n&&n(a)},F.appendChild(Y),F.appendChild(_),F.appendChild(z),F.appendChild(E),F.appendChild(T),F.appendChild(M),F.appendChild(U),F.appendChild(B),F.appendChild(J),P.appendChild(F),j.appendChild(P),j.appendChild(R),j.appendChild(W),j.listener=function(e){b(e)?R.click():x(e)&&W.click()},y(j,v),g(j,v)};t.default={alert:C,force:E,confirm:T,input:M,select:H,date:S,setOptions:l,hideAlerts:k}}])})}).call(t,n(0)(e))}])});
 
 /***/ }),
-/* 445 */
+/* 490 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -88765,7 +97812,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
  */
 /* global define */
 (function (define) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(446)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(491)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
         return (function () {
             var $container;
             var listener;
@@ -89221,11 +98268,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
         })();
     }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-}(__webpack_require__(447)));
+}(__webpack_require__(492)));
 
 
 /***/ }),
-/* 446 */
+/* 491 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -99596,7 +108643,7 @@ return jQuery;
 
 
 /***/ }),
-/* 447 */
+/* 492 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -99605,7 +108652,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 448 */
+/* 493 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -116717,16 +125764,16 @@ module.exports = function() {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(70)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(70)(module)))
 
 /***/ }),
-/* 449 */
+/* 494 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(450);
+module.exports = __webpack_require__(495);
 
 /***/ }),
-/* 450 */
+/* 495 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116734,7 +125781,7 @@ module.exports = __webpack_require__(450);
 
 var utils = __webpack_require__(6);
 var bind = __webpack_require__(196);
-var Axios = __webpack_require__(452);
+var Axios = __webpack_require__(497);
 var defaults = __webpack_require__(44);
 
 /**
@@ -116769,14 +125816,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(200);
-axios.CancelToken = __webpack_require__(466);
+axios.CancelToken = __webpack_require__(511);
 axios.isCancel = __webpack_require__(199);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(467);
+axios.spread = __webpack_require__(512);
 
 module.exports = axios;
 
@@ -116785,7 +125832,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 451 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /*!
@@ -116812,7 +125859,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 452 */
+/* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116820,10 +125867,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(44);
 var utils = __webpack_require__(6);
-var InterceptorManager = __webpack_require__(461);
-var dispatchRequest = __webpack_require__(462);
-var isAbsoluteURL = __webpack_require__(464);
-var combineURLs = __webpack_require__(465);
+var InterceptorManager = __webpack_require__(506);
+var dispatchRequest = __webpack_require__(507);
+var isAbsoluteURL = __webpack_require__(509);
+var combineURLs = __webpack_require__(510);
 
 /**
  * Create a new instance of Axios
@@ -116905,7 +125952,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 453 */
+/* 498 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116924,7 +125971,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 454 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116957,7 +126004,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 455 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116985,7 +126032,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 456 */
+/* 501 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117060,7 +126107,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 457 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117104,7 +126151,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 458 */
+/* 503 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117179,7 +126226,7 @@ module.exports = (
 
 
 /***/ }),
-/* 459 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117222,7 +126269,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 460 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117282,7 +126329,7 @@ module.exports = (
 
 
 /***/ }),
-/* 461 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117341,14 +126388,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 462 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(6);
-var transformData = __webpack_require__(463);
+var transformData = __webpack_require__(508);
 var isCancel = __webpack_require__(199);
 var defaults = __webpack_require__(44);
 
@@ -117427,7 +126474,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 463 */
+/* 508 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117454,7 +126501,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 464 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117475,7 +126522,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 465 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117496,7 +126543,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 466 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117560,7 +126607,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 467 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117594,7 +126641,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 468 */
+/* 513 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117617,7 +126664,7 @@ Vue.directive('click-outside', {
 });
 
 /***/ }),
-/* 469 */
+/* 514 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

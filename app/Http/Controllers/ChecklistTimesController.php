@@ -41,6 +41,16 @@ class ChecklistTimesController extends Controller
 		return ChecklistTime::all();
 	}
 
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getChecklistTimesByOrganizationID($id)
+    {
+		return ChecklistTime::where('organization_id',$id)->with('organization')->get();
+	}
+
     /**
      * Show the form for creating a new resource.
      *

@@ -12,7 +12,7 @@
                 <h5>Add a Time</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/checklist_times" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/checklists" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
@@ -100,7 +100,7 @@ export default {
 					toastr['error']('Something went wrong while adding the time. Please contact admin about this.', 'Error!');
 				}
 				else{
-					app.$router.push('/admin/checklist_times');
+					app.$router.push('/admin/checklists');
 					toastr['success']('New time added!', 'Success!');
 				}
 			})

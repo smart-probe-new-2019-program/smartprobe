@@ -41,6 +41,16 @@ class ChecklistAreasController extends Controller
 		return ChecklistArea::all();
 	}
 
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getChecklistAreasByOrganizationID($id)
+    {
+		return ChecklistArea::where('organization_id',$id)->with('organization')->get();
+	}
+
     /**
      * Show the form for creating a new resource.
      *
