@@ -19,20 +19,43 @@
 			</router-link>
 		  </v-collapse-item>
 
+		  <v-collapse-item active-url="/admin/corrective_actions">
+			<router-link
+			slot="item-title"
+			to="/admin/corrective_actions">
+			<i class="icon-fa icon-fa-pencil-square"/>Corrective Actions
+			</router-link>
+		  </v-collapse-item>
+
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
-              <i class="icon-fa icon-fa-list-alt"/>Actions
+              <i class="icon-fa icon-fa-list-ol"/>Cook-Chill
               <span class="icon-fa arrow icon-fa-fw"/>
             </a>
-			<router-link to="/admin/corrective_action">
-              <i class="icon-fa icon-fa-circle-thin"/>Corrective Action
-            </router-link>
 			<router-link to="/admin/cook_chill_check">
               <i class="icon-fa icon-fa-circle-thin"/>Cook-Chill-Check
             </router-link>
-			<router-link to="/admin/incoming_delivery">
-              <i class="icon-fa icon-fa-circle-thin"/>Incoming Delivery
+			<router-link to="/admin/suppliers">
+              <i class="icon-fa icon-fa-circle-thin"/>Suppliers
             </router-link>
+			<router-link to="/admin/type_of_foods">
+              <i class="icon-fa icon-fa-circle-thin"/>Type of Foods
+            </router-link>
+          </v-collapse-item>
+
+		  <v-collapse-item active-url="/admin/incoming_deliveries">
+			<router-link
+			slot="item-title"
+			to="/admin/incoming_deliveries">
+			<i class="icon-fa icon-fa-truck"/>Incoming Deliveries
+			</router-link>
+		  </v-collapse-item>
+
+		  <v-collapse-item active-url="">
+            <a slot="item-title" href="#">
+              <i class="icon-fa icon-fa-check-circle-o"/>Checklists
+              <span class="icon-fa arrow icon-fa-fw"/>
+            </a>
 			<router-link to="/admin/staff_daily_checklists">
               <i class="icon-fa icon-fa-circle-thin"/>Staff Daily Checklists
             </router-link>

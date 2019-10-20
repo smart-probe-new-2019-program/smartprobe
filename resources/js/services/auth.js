@@ -15,6 +15,11 @@ export default {
 	  Ls.set('user.last_name', response.data.user.last_name)
 	  //Set user role
 	  Ls.set('user.role', response.data.user.role)
+	  //Set organization id
+	  Ls.set('user.organization_id', response.data.user.organization_id)
+	  //Set location id
+	  Ls.set('user.location_id', response.data.user.location_id)
+
 
       toastr['success']('Logged In!', 'Success')
       return response.data.token
@@ -37,6 +42,8 @@ export default {
 	  Ls.remove('user.first_name')
 	  Ls.remove('user.last_name')
 	  Ls.remove('user.role')
+	  Ls.remove('user.organization_id')
+	  Ls.remove('user.location_id')
       toastr['success']('Logged out!', 'Success')
     } catch (error) {
       console.log('Error', error.message)

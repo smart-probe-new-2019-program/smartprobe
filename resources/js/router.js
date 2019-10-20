@@ -17,6 +17,22 @@ import AddProbes from './views/admin/modules/probes/Add.vue'
 import EditProbes from './views/admin/modules/probes/Edit.vue'
 import ViewProbes from './views/admin/modules/probes/View.vue'
 
+//Corrective Actions
+import CorrectiveActions from './views/admin/modules/corrective_actions/Index.vue'
+import AddCorrectiveActions from './views/admin/modules/corrective_actions/Add.vue'
+import EditCorrectiveActions from './views/admin/modules/corrective_actions/Edit.vue'
+import ViewCorrectiveActions from './views/admin/modules/corrective_actions/View.vue'
+
+//Suppliers
+import Suppliers from './views/admin/modules/suppliers/Index.vue'
+import AddSuppliers from './views/admin/modules/suppliers/Add.vue'
+import EditSuppliers from './views/admin/modules/suppliers/Edit.vue'
+
+//Type of Foods
+import TypeOfFoods from './views/admin/modules/type_of_foods/Index.vue'
+import AddTypeOfFoods from './views/admin/modules/type_of_foods/Add.vue'
+import EditTypeOfFoods from './views/admin/modules/type_of_foods/Edit.vue'
+
 //Staff Daily Checklists
 import StaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Index.vue'
 import AddStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Add.vue'
@@ -155,6 +171,66 @@ const routes = [
         path: 'probes/view/:id',
         component: ViewProbes,
 		name: 'view_probes',
+	  },
+	  // Corrective Actions - Index
+      {
+        path: 'corrective_actions',
+        component: CorrectiveActions,
+		name: 'corrective_actions',
+	  },
+	  // Corrective Actions - Add
+      {
+        path: 'corrective_actions/add',
+        component: AddCorrectiveActions,
+		name: 'add_corrective_actions',
+	  },
+	  // Corrective Actions - Edit
+      {
+        path: 'corrective_actions/edit/:id',
+        component: EditCorrectiveActions,
+		name: 'edit_corrective_actions',
+	  },
+	  // Corrective Actions - View
+      {
+        path: 'corrective_actions/view/:id',
+        component: ViewCorrectiveActions,
+		name: 'view_corrective_actions',
+	  },
+	  // Suppliers - Index
+      {
+        path: 'suppliers',
+        component: Suppliers,
+		name: 'suppliers',
+	  },
+	  // Suppliers - Add
+      {
+        path: 'suppliers/add',
+        component: AddSuppliers,
+		name: 'add_suppliers',
+	  },
+	  // Suppliers - Edit
+      {
+        path: 'suppliers/edit/:id',
+        component: EditSuppliers,
+		name: 'edit_suppliers',
+	  },
+	  // Type of Foods - Index
+      {
+        path: 'type_of_foods',
+        component: TypeOfFoods,
+		name: 'type_of_foods',
+	  },
+	  // Type of Foods - Add
+      {
+        path: 'type_of_foods/add',
+        component: AddTypeOfFoods,
+		name: 'add_type_of_foods',
+	  },
+	  // Type of Foods - Edit
+      {
+        path: 'type_of_foods/edit/:id',
+        component: EditTypeOfFoods,
+		name: 'edit_type_of_foods',
 	  },
 	  // Organizations - Index
       {

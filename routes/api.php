@@ -46,6 +46,86 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Corrective Actions
+	Route::get('corrective_actions/get', [
+        'as' => 'admin.corrective_actions', 'uses' => 'CorrectiveActionsController@getAllCorrectiveActions'
+	]);
+
+	Route::get('corrective_actions/getCorrectiveActionsForDropdown',[
+		'as' => 'admin.corrective_actions.getCorrectiveActionsForDropdown', 'uses' => 'CorrectiveActionsController@getCorrectiveActionsForDropdown'
+	]);
+
+	Route::get('corrective_actions/getCorrectiveAction/{id}',[
+		'as' => 'admin.corrective_actions.getCorrectiveAction', 'uses' => 'CorrectiveActionsController@getCorrectiveAction'
+	]);
+
+	Route::resource('corrective_actions', 'CorrectiveActionsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Individual Comments
+	Route::get('individual_comments/get', [
+        'as' => 'admin.individual_comments', 'uses' => 'IndividualCommentsController@getAllIndividualComments'
+	]);
+
+	Route::get('individual_comments/getIndividualComment/{id}',[
+		'as' => 'admin.individual_comments.getIndividualComment', 'uses' => 'IndividualCommentsController@getIndividualComment'
+	]);
+
+	Route::get('individual_comments/getIndividualCommentsByCorrectiveActionID/{id}',[
+		'as' => 'admin.individual_comments.getIndividualCommentsByCorrectiveActionID', 'uses' => 'IndividualCommentsController@getIndividualCommentsByCorrectiveActionID'
+	]);
+
+	Route::post('individual_comments/bulk_update', [
+        'as' => 'admin.individual_comments.bulk_update', 'uses' => 'IndividualCommentsController@bulkUpdate'
+	]);
+
+	Route::resource('individual_comments', 'IndividualCommentsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Suppliers
+	Route::get('suppliers/get', [
+        'as' => 'admin.suppliers', 'uses' => 'SuppliersController@getAllSuppliers'
+	]);
+
+	Route::get('suppliers/getSupplier/{id}',[
+		'as' => 'admin.suppliers.getSupplier', 'uses' => 'SuppliersController@getSupplier'
+	]);
+
+	Route::get('suppliers/getSuppliersForDropdown',[
+		'as' => 'admin.suppliers.getSuppliersForDropdown', 'uses' => 'SuppliersController@getSuppliersForDropdown'
+	]);
+
+	Route::get('suppliers/getSuppliersByOrganizationID/{id}',[
+		'as' => 'admin.suppliers.getSuppliersByOrganizationID', 'uses' => 'SuppliersController@getSuppliersByOrganizationID'
+	]);
+
+	Route::resource('suppliers', 'SuppliersController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Type of Foods
+	Route::get('type_of_foods/get', [
+        'as' => 'admin.type_of_foods', 'uses' => 'TypeOfFoodsController@getAllTypeOfFoods'
+	]);
+
+	Route::get('type_of_foods/getTypeOfFood/{id}',[
+		'as' => 'admin.type_of_foods.getTypeOfFood', 'uses' => 'TypeOfFoodsController@getTypeOfFood'
+	]);
+
+	Route::get('type_of_foods/getTypeOfFoodsForDropdown',[
+		'as' => 'admin.type_of_foods.getTypeOfFoodsForDropdown', 'uses' => 'TypeOfFoodsController@getTypeOfFoodsForDropdown'
+	]);
+
+	Route::get('type_of_foods/getTypeOfFoodsByOrganizationID/{id}',[
+		'as' => 'admin.type_of_foods.getTypeOfFoodsByOrganizationID', 'uses' => 'TypeOfFoodsController@getTypeOfFoodsByOrganizationID'
+	]);
+
+	Route::resource('type_of_foods', 'TypeOfFoodsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Staff Daily Checklists
 	Route::get('staff_daily_checklists/get', [
         'as' => 'admin.staff_daily_checklists', 'uses' => 'StaffDailyChecklistsController@getAllStaffDailyChecklists'
