@@ -42,6 +42,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 		'as' => 'admin.probes.getProbesForDropdown', 'uses' => 'ProbesController@getProbesForDropdown'
 	]);
 
+	Route::get('probes/getProbesByOrganizationID/{id}',[
+		'as' => 'admin.probes.getProbesByOrganizationID', 'uses' => 'ProbesController@getProbesByOrganizationID'
+	]);
+
 	Route::resource('probes', 'ProbesController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
@@ -57,6 +61,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
 	Route::get('corrective_actions/getCorrectiveAction/{id}',[
 		'as' => 'admin.corrective_actions.getCorrectiveAction', 'uses' => 'CorrectiveActionsController@getCorrectiveAction'
+	]);
+
+	Route::get('corrective_actions/getCorrectiveActionsByOrganizationID/{id}',[
+		'as' => 'admin.probes.getCorrectiveActionsByOrganizationID', 'uses' => 'CorrectiveActionsController@getCorrectiveActionsByOrganizationID'
 	]);
 
 	Route::resource('corrective_actions', 'CorrectiveActionsController', ['except' => ['create', 'edit']]);
@@ -84,6 +92,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Cook Chill Checks
+	Route::get('cook_chill_checks/get', [
+        'as' => 'admin.cook_chill_checks', 'uses' => 'CookChillChecksController@getAllCookChillChecks'
+	]);
+
+	Route::get('cook_chill_checks/getCookChillCheck/{id}',[
+		'as' => 'admin.cook_chill_checks.getCookChillCheck', 'uses' => 'CookChillChecksController@getCookChillCheck'
+	]);
+
+	Route::resource('cook_chill_checks', 'CookChillChecksController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+	
 	//Suppliers
 	Route::get('suppliers/get', [
         'as' => 'admin.suppliers', 'uses' => 'SuppliersController@getAllSuppliers'
@@ -126,6 +147,111 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Incoming Deliveries
+	Route::get('incoming_deliveries/get', [
+        'as' => 'admin.incoming_deliveries', 'uses' => 'IncomingDeliveriesController@getAllIncomingDeliveries'
+	]);
+
+	Route::get('incoming_deliveries/getIncomingDelivery/{id}',[
+		'as' => 'admin.incoming_deliveries.getIncomingDelivery', 'uses' => 'IncomingDeliveriesController@getIncomingDelivery'
+	]);
+
+	Route::get('incoming_deliveries/getIncomingDeliveriesForDropdown',[
+		'as' => 'admin.incoming_deliveries.getIncomingDeliveriesForDropdown', 'uses' => 'IncomingDeliveriesController@getIncomingDeliveriesForDropdown'
+	]);
+
+	Route::get('incoming_deliveries/getIncomingDeliveriesByOrganizationID/{id}',[
+		'as' => 'admin.incoming_deliveries.getIncomingDeliveriesByOrganizationID', 'uses' => 'IncomingDeliveriesController@getIncomingDeliveriesByOrganizationID'
+	]);
+
+	Route::resource('incoming_deliveries', 'IncomingDeliveriesController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Incoming Deliveries Items
+	Route::get('incoming_deliveries_items/get', [
+        'as' => 'admin.incoming_deliveries_items', 'uses' => 'IncomingDeliveriesItemsController@getAllIncomingDeliveriesItems'
+	]);
+
+	Route::get('incoming_deliveries_items/getIncomingDeliveriesItem/{id}',[
+		'as' => 'admin.incoming_deliveries_items.getIncomingDeliveriesItem', 'uses' => 'IncomingDeliveriesItemsController@getIncomingDeliveriesItem'
+	]);
+
+	Route::get('incoming_deliveries_items/getIncomingDeliveriesItemsForDropdown',[
+		'as' => 'admin.incoming_deliveries_items.getIncomingDeliveriesItemsForDropdown', 'uses' => 'IncomingDeliveriesItemsController@getIncomingDeliveriesItemsForDropdown'
+	]);
+
+	Route::get('incoming_deliveries_items/getIncomingDeliveriesItemsByOrganizationID/{id}',[
+		'as' => 'admin.incoming_deliveries_items.getIncomingDeliveriesItemsByOrganizationID', 'uses' => 'IncomingDeliveriesItemsController@getIncomingDeliveriesItemsByOrganizationID'
+	]);
+
+	Route::resource('incoming_deliveries_items', 'IncomingDeliveriesItemsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Incoming Deliveries Categories
+	Route::get('incoming_deliveries_categories/get', [
+        'as' => 'admin.incoming_deliveries_categories', 'uses' => 'IncomingDeliveriesCategoriesController@getAllIncomingDeliveriesCategories'
+	]);
+
+	Route::get('incoming_deliveries_categories/getIncomingDeliveriesCategory/{id}',[
+		'as' => 'admin.incoming_deliveries_categories.getIncomingDeliveriesCategory', 'uses' => 'IncomingDeliveriesCategoriesController@getIncomingDeliveriesCategory'
+	]);
+
+	Route::get('incoming_deliveries_categories/getIncomingDeliveriesCategoriesForDropdown',[
+		'as' => 'admin.incoming_deliveries_categories.getIncomingDeliveriesCategoriesForDropdown', 'uses' => 'IncomingDeliveriesCategoriesController@getIncomingDeliveriesCategoriesForDropdown'
+	]);
+
+	Route::get('incoming_deliveries_categories/getIncomingDeliveriesCategoriesByOrganizationID/{id}',[
+		'as' => 'admin.incoming_deliveries_categories.getIncomingDeliveriesCategoriesByOrganizationID', 'uses' => 'IncomingDeliveriesCategoriesController@getIncomingDeliveriesCategoriesByOrganizationID'
+	]);
+
+	Route::resource('incoming_deliveries_categories', 'IncomingDeliveriesCategoriesController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Incoming Deliveries Type Of Products
+	Route::get('id_type_of_products/get', [
+        'as' => 'admin.id_type_of_products', 'uses' => 'IncomingDeliveriesTypeOfProductsController@getAllIncomingDeliveriesTypeOfProducts'
+	]);
+
+	Route::get('id_type_of_products/getIncomingDeliveriesTypeOfProduct/{id}',[
+		'as' => 'admin.id_type_of_products.getIncomingDeliveriesTypeOfProduct', 'uses' => 'IncomingDeliveriesTypeOfProductsController@getIncomingDeliveriesTypeOfProduct'
+	]);
+
+	Route::get('id_type_of_products/getIncomingDeliveriesTypeOfProductsForDropdown',[
+		'as' => 'admin.id_type_of_products.getIncomingDeliveriesTypeOfProductsForDropdown', 'uses' => 'IncomingDeliveriesTypeOfProductsController@getIncomingDeliveriesTypeOfProductsForDropdown'
+	]);
+
+	Route::get('id_type_of_products/getIncomingDeliveriesTypeOfProductsByOrganizationID/{id}',[
+		'as' => 'admin.id_type_of_products.getIncomingDeliveriesTypeOfProductsByOrganizationID', 'uses' => 'IncomingDeliveriesTypeOfProductsController@getIncomingDeliveriesTypeOfProductsByOrganizationID'
+	]);
+
+	Route::resource('id_type_of_products', 'IncomingDeliveriesTypeOfProductsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Incoming Deliveries Corrective Actions
+	Route::get('id_corrective_actions/get', [
+        'as' => 'admin.id_corrective_actions', 'uses' => 'IncomingDeliveriesCorrectiveActionsController@getAllIncomingDeliveriesCorrectiveActions'
+	]);
+
+	Route::get('id_corrective_actions/getIncomingDeliveriesCorrectiveAction/{id}',[
+		'as' => 'admin.id_corrective_actions.getIncomingDeliveriesCorrectiveAction', 'uses' => 'IncomingDeliveriesCorrectiveActionsController@getIncomingDeliveriesCorrectiveAction'
+	]);
+
+	Route::get('id_corrective_actions/getIncomingDeliveriesCorrectiveActionsTypeOfProductsForDropdown',[
+		'as' => 'admin.id_corrective_actions.getIncomingDeliveriesCorrectiveActionsTypeOfProductsForDropdown', 'uses' => 'IncomingDeliveriesCorrectiveActionsController@getIncomingDeliveriesCorrectiveActionsTypeOfProductsForDropdown'
+	]);
+
+	Route::get('id_corrective_actions/getIncomingDeliveriesCorrectiveActionsByOrganizationID/{id}',[
+		'as' => 'admin.id_corrective_actions.getIncomingDeliveriesCorrectiveActionsByOrganizationID', 'uses' => 'IncomingDeliveriesCorrectiveActionsController@getIncomingDeliveriesCorrectiveActionsByOrganizationID'
+	]);
+
+	Route::resource('id_corrective_actions', 'IncomingDeliveriesCorrectiveActionsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Staff Daily Checklists
 	Route::get('staff_daily_checklists/get', [
         'as' => 'admin.staff_daily_checklists', 'uses' => 'StaffDailyChecklistsController@getAllStaffDailyChecklists'
@@ -143,6 +269,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Staff Daily Checklists Items
+	Route::get('staff_daily_checklists_items/get', [
+        'as' => 'admin.staff_daily_checklists_items', 'uses' => 'StaffDailyChecklistsItemsController@getAllStaffDailyChecklistsItems'
+	]);
+
+	Route::get('staff_daily_checklists_items/getStaffDailyChecklistsItem/{id}',[
+		'as' => 'admin.staff_daily_checklists_items.getStaffDailyChecklistsItem', 'uses' => 'StaffDailyChecklistsItemsController@getStaffDailyChecklistsItem'
+	]);
+
+	Route::get('staff_daily_checklists_items/getStaffDailyChecklistsItemsForDropdown',[
+		'as' => 'admin.staff_daily_checklists_items.getStaffDailyChecklistsItemsForDropdown', 'uses' => 'StaffDailyChecklistsItemsController@getStaffDailyChecklistsItemsForDropdown'
+	]);
+
+	Route::get('staff_daily_checklists_items/getStaffDailyChecklistsItemsByStaffDailyChecklistsID/{id}',[
+		'as' => 'admin.staff_daily_checklists_items.getStaffDailyChecklistsItemsByStaffDailyChecklistsID', 'uses' => 'StaffDailyChecklistsItemsController@getStaffDailyChecklistsItemsByStaffDailyChecklistsID'
+	]);
+
+	Route::resource('staff_daily_checklists_items', 'StaffDailyChecklistsItemsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Matrix Checklists
 	Route::get('matrix_checklists/get', [
         'as' => 'admin.matrix_checklists', 'uses' => 'MatrixChecklistsController@getAllMatrixChecklists'
@@ -157,6 +304,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	]);
 
 	Route::resource('matrix_checklists', 'MatrixChecklistsController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
+	//Matrix Checklists Items
+	Route::get('matrix_checklists_items/get', [
+        'as' => 'admin.matrix_checklists_items', 'uses' => 'MatrixChecklistsItemsController@getAllMatrixChecklistsItems'
+	]);
+
+	Route::get('matrix_checklists_items/getMatrixChecklistsItem/{id}',[
+		'as' => 'admin.matrix_checklists_items.getMatrixChecklistsItem', 'uses' => 'MatrixChecklistsItemsController@getMatrixChecklistsItem'
+	]);
+
+	Route::get('matrix_checklists_items/getMatrixChecklistsItemsForDropdown',[
+		'as' => 'admin.matrix_checklists_items.getMatrixChecklistsItemsForDropdown', 'uses' => 'MatrixChecklistsItemsController@getMatrixChecklistsItemsForDropdown'
+	]);
+
+	Route::get('matrix_checklists_items/getMatrixChecklistsItemsByMatrixChecklistsID/{id}',[
+		'as' => 'admin.matrix_checklists_items.getMatrixChecklistsItemsByMatrixChecklistsID', 'uses' => 'MatrixChecklistsItemsController@getMatrixChecklistsItemsByMatrixChecklistsID'
+	]);
+
+	Route::resource('matrix_checklists_items', 'MatrixChecklistsItemsController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
@@ -209,6 +377,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
 	Route::get('users/getUser/{id}',[
 		'as' => 'admin.users.getUser', 'uses' => 'UsersController@getUser'
+	]);
+
+	Route::get('users/getUsersByOrganizationID/{id}',[
+		'as' => 'admin.locations.getUsersByOrganizationID', 'uses' => 'UsersController@getUsersByOrganizationID'
 	]);
 
 	Route::resource('users', 'UsersController', ['except' => ['create', 'edit']]);
@@ -314,6 +486,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
 	Route::get('manage_checklists/getChecklistItems',[
 		'as' => 'admin.manage_checklists.getChecklistItems', 'uses' => 'ManageChecklistsController@getChecklistItems'
+	]);
+
+	Route::get('manage_checklists/getMatrixChecklistItems',[
+		'as' => 'admin.manage_checklists.getMatrixChecklistItems', 'uses' => 'ManageChecklistsController@getMatrixChecklistItems'
 	]);
 
 	Route::resource('manage_checklists', 'ManageChecklistsController', ['except' => ['create', 'edit']]);

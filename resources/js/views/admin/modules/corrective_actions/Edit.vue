@@ -23,6 +23,16 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-sm-6 form-group">
+							<label class="control-label">Organization</label>
+							<select class="form-control" disabled v-model.trim="correctiveActionsData.organization_id" ref="organization_id" required>
+								<option v-for="organization in organizations" :value="organization.id">
+									{{organization.name}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
 							<label class="control-label">User</label>
 							<select class="form-control" v-model.trim="correctiveActionsData.user_id" ref="user_id" required>
 								<option v-for="user in users" :value="user.id">
@@ -72,7 +82,7 @@
 export default {
 	data() {
 		return {
-			user_organization_id: localStorage.getItem("user.organization_id"),
+			organizations: [],
 			correctiveActionsData: {},
 			users: [],
 			individual_comments: {},
@@ -80,7 +90,7 @@ export default {
 	},
 	mounted() {
 		this.getCorrectiveAction();
-		this.getUsers();
+		this.getOrganizations();
 		toastr.options = {
 			closeButton: true,
 			debug: false,
@@ -97,12 +107,23 @@ export default {
 		}
 	},
 	methods: {
+		getOrganizations() {
+			let app = this;
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown')
+			.then(function(resp) {
+				app.organizations = resp.data;
+			})
+			.catch(function() {
+				console.log("Error fetching organizations");
+			});
+		},
 		getCorrectiveAction() {
 			let app = this;
 			let id = app.$route.params.id;
 			axios.get('/api/admin/corrective_actions/getCorrectiveAction/' + id)
 			.then(function(resp) {
 				app.correctiveActionsData = resp.data;
+				app.getNeededDropdowns();
 
 				axios.get('/api/admin/individual_comments/getIndividualCommentsByCorrectiveActionID/' + id)
 				.then(function(resp) {
@@ -116,9 +137,14 @@ export default {
 				console.log("Error fetching corrective action data");
 			});
 		},
-		getUsers() {
+		getNeededDropdowns() {
 			let app = this;
-			axios.get('/api/admin/users/getUsersForDropdown')
+
+			app.getUsersByOrganizationID();
+		},
+		getUsersByOrganizationID() {
+			let app = this;
+			axios.get('/api/admin/users/getUsersByOrganizationID/'+ app.correctiveActionsData.organization_id)
 			.then(function(resp) {
 				app.users = resp.data;
 			})

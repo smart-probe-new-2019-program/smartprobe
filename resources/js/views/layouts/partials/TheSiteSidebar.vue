@@ -32,8 +32,8 @@
               <i class="icon-fa icon-fa-list-ol"/>Cook-Chill
               <span class="icon-fa arrow icon-fa-fw"/>
             </a>
-			<router-link to="/admin/cook_chill_check">
-              <i class="icon-fa icon-fa-circle-thin"/>Cook-Chill-Check
+			<router-link to="/admin/cook_chill_checks">
+              <i class="icon-fa icon-fa-circle-thin"/>Manage
             </router-link>
 			<router-link to="/admin/suppliers">
               <i class="icon-fa icon-fa-circle-thin"/>Suppliers
@@ -43,13 +43,30 @@
             </router-link>
           </v-collapse-item>
 
-		  <v-collapse-item active-url="/admin/incoming_deliveries">
-			<router-link
-			slot="item-title"
-			to="/admin/incoming_deliveries">
-			<i class="icon-fa icon-fa-truck"/>Incoming Deliveries
-			</router-link>
-		  </v-collapse-item>
+		  <v-collapse-item active-url="">
+            <a slot="item-title" href="#">
+              <i class="icon-fa icon-fa-truck"/>Incoming Deliveries
+              <span class="icon-fa arrow icon-fa-fw"/>
+            </a>
+			<router-link to="/admin/incoming_deliveries">
+              <i class="icon-fa icon-fa-circle-thin"/>Manage
+            </router-link>
+			<router-link to="/admin/incoming_deliveries_items">
+              <i class="icon-fa icon-fa-circle-thin"/>Items
+            </router-link>
+			<router-link to="/admin/suppliers">
+              <i class="icon-fa icon-fa-circle-thin"/>Suppliers
+            </router-link>
+			<router-link to="/admin/incoming_deliveries_categories">
+              <i class="icon-fa icon-fa-circle-thin"/>Categories
+            </router-link>
+			<router-link to="/admin/incoming_deliveries_type_of_products">
+              <i class="icon-fa icon-fa-circle-thin"/>Type of Products
+            </router-link>
+			<router-link to="/admin/incoming_deliveries_corrective_actions">
+              <i class="icon-fa icon-fa-circle-thin"/>Corrective Actions
+            </router-link>
+          </v-collapse-item>
 
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">

@@ -191,7 +191,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" v-if="probeData.is_monitored=='Yes'">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Online Monitoring Date</label>
 							<input type="text" v-model.trim="probeData.online_monitoring_date" class="form-control" ref="online_monitoring_date">

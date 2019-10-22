@@ -28,8 +28,18 @@ class CorrectiveActionsController extends Controller
      */
     public function getAllCorrectiveActions(Request $request)
     { 
-		return CorrectiveAction::with('user')
+		return CorrectiveAction::with('organization', 'user')
 		->orderBy('created_at','desc')->paginate(5);
+	}
+
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCorrectiveActionsByOrganizationID($id)
+    {
+		return CorrectiveAction::with('organization','user')->where('organization_id', $id)->get();
 	}
 
     /**
@@ -71,7 +81,7 @@ class CorrectiveActionsController extends Controller
      */
     public function show($id)
     {
-        return CorrectiveAction::with('user')->findOrFail($id);
+        return CorrectiveAction::with('organization','user')->findOrFail($id);
 	}
 	
 	/**

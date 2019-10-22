@@ -23,6 +23,16 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-sm-6 form-group">
+							<label class="control-label">Organization</label>
+							<select class="form-control" @change="getNeededDropdowns()" v-model.trim="correctiveActionsData.organization_id" ref="organization_id" required>
+								<option v-for="organization in organizations" :value="organization.id">
+									{{organization.name}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 form-group">
 							<label class="control-label">User</label>
 							<select class="form-control" v-model.trim="correctiveActionsData.user_id" ref="user_id" required>
 								<option v-for="user in users" :value="user.id">
@@ -47,11 +57,14 @@
 						</div>
 					</div>
 					<div class="row" v-if="correctiveActionsData.comment_type=='Individual Comment'">
-						<div class="col-sm-6 form-group">
+						<div class="col-sm-6 form-group" v-if="probes.length > 0">
 							<div v-for="(individual_comment, index) in individual_comments" :value="individual_comment.probe_id" class="form-group">
-								<label class="control-label">Comment for: {{individual_comment.probe_name}} - {{individual_comment.probe_serial_number}}</label>
+								<label class="control-label">Comment for: <b>{{individual_comment.probe_name}} - {{individual_comment.probe_serial_number}}</b></label>
 								<textarea v-model.trim="individual_comment.comment" class="form-control" rows="3" ref="comment"/>
 							</div>
+						</div>
+						<div class="col-sm-6 form-group" v-else>
+							<h5 style="color: red;">No Probes for this Organization!!</h5>
 						</div>
 					</div>
 				</div>
@@ -71,22 +84,22 @@
 export default {
 	data() {
 		return {
-			user_organization_id: localStorage.getItem("user.organization_id"),
 			correctiveActionsData: {
+				organization_id: "",
 				user_id: "",
 				comment_type: "",
 				comment: "",
 				created_by: localStorage.getItem("user.id"),
 				updated_by: localStorage.getItem("user.id")
 			},
+			organizations: [],
 			users: [],
 			probes: [],
 			individual_comments: {},
 		};
 	},
 	mounted() {
-		this.getUsers();
-		this.getProbes();
+		this.getOrganizations();
 		toastr.options = {
 			closeButton: true,
 			debug: false,
@@ -103,9 +116,28 @@ export default {
 		}
 	},
 	methods: {
-		getUsers() {
+		getOrganizations() {
 			let app = this;
-			axios.get('/api/admin/users/getUsersForDropdown')
+			axios.get('/api/admin/organizations/getOrganizationsForDropdown')
+			.then(function(resp) {
+				app.organizations = resp.data;
+			})
+			.catch(function() {
+				console.log("Error fetching organizations");
+			});
+		},
+		getNeededDropdowns() {
+			let app = this;
+
+			app.correctiveActionsData.user_id = null;
+			app.correctiveActionsData.comment_type = null;
+
+			app.getUsersByOrganizationID();
+			app.getProbesByOrganizationID();
+		},
+		getUsersByOrganizationID() {
+			let app = this;
+			axios.get('/api/admin/users/getUsersByOrganizationID/'+ app.correctiveActionsData.organization_id)
 			.then(function(resp) {
 				app.users = resp.data;
 			})
@@ -113,18 +145,23 @@ export default {
 				console.log("Error fetching users");
 			});
 		},
-		getProbes() {
+		getProbesByOrganizationID() {
 			let app = this;
-			axios.get('/api/admin/probes')
+			axios.get('/api/admin/probes/getProbesByOrganizationID/'+ app.correctiveActionsData.organization_id)
 			.then(function(resp) {
 				app.probes = resp.data;
 
-				for (let index = 0; index < app.probes.length; index++) {
-					const probe = app.probes[index];
-					app.individual_comments[index] = {'probe_id' : probe.id, 'probe_name': probe.name, 'probe_serial_number': probe.serial_number, 'comment': ''};
+				if(app.probes.length > 0){
+					app.individual_comments = {};
+					for (let index = 0; index < app.probes.length; index++) {
+						const probe = app.probes[index];
+						app.individual_comments[index] = {'probe_id' : probe.id, 'probe_name': probe.name, 'probe_serial_number': probe.serial_number, 'comment': ''};
+					}
 				}
+				else{
 
-				// console.log(app.individual_comments);
+					app.individual_comments = {};
+				}
 			})
 			.catch(function() {
 				console.log("Error fetching probes");

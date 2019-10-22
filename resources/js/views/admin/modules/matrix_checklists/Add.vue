@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="page-header">
-      <h3 class="page-title">Manage Checklists</h3>
+      <h3 class="page-title">Matrix Checklists</h3>
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -9,67 +9,37 @@
           <div class="card-header">
             <div class="row">
               <div class="col-sm-6">
-                <h5>Add a Checklist</h5>
+                <h5>Add a Matrix Checklist</h5>
               </div>
               <div class="col-sm-6">
-                <router-link to="/admin/manage_checklists" class="btn btn-dark btn-xs float-right">
+                <router-link to="/admin/matrix_checklists" class="btn btn-dark btn-xs float-right">
                   <i class="icon-fa icon-fa-arrow-left"></i>Back
                 </router-link>
               </div>
             </div>
           </div>
-          <div class="card-body">
-			<form @submit.prevent="saveForm">        
+          <div class="card-body">     
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Checklist Type</label>
-							<select class="form-control" @change="clearChecklistsDropdown()" v-model="manageChecklistsData.type" ref="type" required>
-								<option value="Staff Daily Checklists">Staff Daily Checklists</option>
-								<option value="Cleaning - Hygiene">Cleaning - Hygiene</option>
-								<option value="Pest Control - Daily - Quarterly">Pest Control - Daily - Quarterly</option>
-								<option value="Equipment">Equipment</option>
-								<option value="Misc Procedures">Misc Procedures</option>
-								<option value="Staff Manuals and Procedures">Staff Manuals and Procedures</option>
-								<option value="Matrix Checklists">Matrix Checklists</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
+						<div class="col-sm-3 form-group">
 							<label class="control-label">Organization</label>
-							<select class="form-control"  @change="getChecklistsDropdown()" v-model.trim="manageChecklistsData.organization_id" ref="organization_id" required>
+							<select class="form-control" @change="getChecklistsDropdown()" v-model.trim="organization_id" ref="organization_id" required>
 								<option v-for="organization in organizations" :value="organization.id">
 									{{organization.name}}
 								</option>
 							</select>
 						</div>
-					</div>
-					<div class="row" v-if="manageChecklistsData.type!='Matrix Checklists'">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Time</label>
-							<select class="form-control" v-model.trim="manageChecklistsData.time_id" ref="time_id" required>
-								<option v-for="checklistTime in checklistTimes" :value="checklistTime.id">
-									{{checklistTime.name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
+						<div class="col-sm-3 form-group">
 							<label class="control-label">Area</label>
-							<select class="form-control" v-model.trim="manageChecklistsData.area_id" ref="area_id" required>
+							<select class="form-control" v-model.trim="area_id" ref="area_id" required>
 								<option v-for="checklistArea in checklistAreas" :value="checklistArea.id">
 									{{checklistArea.name}}
 								</option>
 							</select>
 						</div>
-					</div>
-					<div class="row" v-if="manageChecklistsData.type=='Matrix Checklists'">
-						<div class="col-sm-6 form-group">
+						<div class="col-sm-3 form-group">
 							<label class="control-label">Day of the Week</label>
-							<select class="form-control" v-model="manageChecklistsData.day_of_the_week" ref="day_of_the_week" required>
-								<option value=""></option>
+							<select class="form-control" v-model="day_of_the_week" ref="day_of_the_week" required>
 								<option value="Sunday">Sunday</option>
 								<option value="Monday">Monday</option>
 								<option value="Tuesday">Tuesday</option>
@@ -79,33 +49,28 @@
 								<option value="Saturday">Saturday</option>
 							</select>
 						</div>
-					</div>
-					<div class="row" v-if="manageChecklistsData.type!='Matrix Checklists'">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Category</label>
-							<select class="form-control" v-model.trim="manageChecklistsData.category_id" ref="category_id" required>
-								<option v-for="checklistCategory in checklistCategories" :value="checklistCategory.id">
-									{{checklistCategory.name}}
-								</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label class="control-label">Item</label>
-							<select class="form-control" v-model.trim="manageChecklistsData.item_id" ref="item_id" required>
-								<option v-for="checklistItem in checklistItems" :value="checklistItem.id">
-									{{checklistItem.name}}
-								</option>
-							</select>
+						<div class="col-sm-3 form-group" style="margin: auto;">
+							<button @click="getChecklistItems()" class="btn btn-sm btn-success"><i class="icon-fa icon-fa-check"/> Select</button>
 						</div>
 					</div>
 				</div>
-			
-				<div class="col-xs-12 form-group">
-					<button class="btn btn-sm btn-success"><i class="icon-fa icon-fa-plus-circle"/> Create</button>
+				<br />
+				<div class="row">
+					<div class="col-sm-10">
+						<div class="card">
+							<h5 class="card-header">Checklist Items</h5>
+							<div class="card-body">
+								<h6 v-if="itemsData.length == 0"><font color="red">No Checklist Items!</font></h6>
+								<div v-else v-for="itemData in itemsData" :key="itemData.id" class="custom-control custom-checkbox mb-3">
+									<input type="checkbox" v-model="checkedItems" :value="itemData"> {{itemData.item.name}}
+								</div>
+								<div v-if="itemsData.length != 0">
+									<button @click="saveChecklist()" class="btn btn-sm btn-success"><i class="icon-fa icon-fa-save"/> Submit</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</form>
 		  </div>
         </div>
       </div>
@@ -117,22 +82,18 @@
 export default {
 	data() {
 		return {
-			manageChecklistsData: {
-				type: null,
-				organization_id: null,
-				time_id: null,
-				area_id: null,
-				day_of_the_week: null,
-				category_id: null,
-				item_id: null,
+			matrixChecklistData: {
+				organization_id: "",
 				created_by: localStorage.getItem("user.id"),
 				updated_by: localStorage.getItem("user.id")
 			},
+			organization_id: null,
+			area_id: null,
+			day_of_the_week: null,
 			organizations: [],
-			checklistTimes: [],
 			checklistAreas: [],
-			checklistCategories: [],
-			checklistItems: [],
+			checkedItems: [],
+			itemsData: {},
 		};
 	},
 	mounted() {
@@ -166,24 +127,17 @@ export default {
 		getChecklistsDropdown() {
 			let app = this;
 
-			app.getChecklistTimesByOrganizationID();
+			app.checklistAreas = [];
+			app.itemsData = {};
+			app.checkedItems = [];
+			app.area_id = null;
+			app.day_of_the_week = null;
+			
 			app.getChecklistAreasByOrganizationID();
-			app.getChecklistCategoriesByOrganizationID();
-			app.getChecklistItemsByOrganizationID();
-		},
-		getChecklistTimesByOrganizationID() {
-			let app = this;
-			axios.get('/api/admin/checklist_times/getChecklistTimesByOrganizationID/' + app.manageChecklistsData.organization_id)
-			.then(function(resp) {
-				app.checklistTimes = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching checklist time");
-			});
 		},
 		getChecklistAreasByOrganizationID() {
 			let app = this;
-			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.manageChecklistsData.organization_id)
+			axios.get('/api/admin/checklist_areas/getChecklistAreasByOrganizationID/' + app.organization_id)
 			.then(function(resp) {
 				app.checklistAreas = resp.data;
 			})
@@ -191,57 +145,70 @@ export default {
 				console.log("Error fetching checklist areas");
 			});
 		},
-		getChecklistCategoriesByOrganizationID() {
-			let app = this;
-			axios.get('/api/admin/checklist_categories/getChecklistCategoriesByOrganizationID/' + app.manageChecklistsData.organization_id)
-			.then(function(resp) {
-				app.checklistCategories = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching checklist categories");
-			});
-		},
-		getChecklistItemsByOrganizationID() {
-			let app = this;
-			axios.get('/api/admin/checklist_items/getChecklistItemsByOrganizationID/' + app.manageChecklistsData.organization_id)
-			.then(function(resp) {
-				app.checklistItems = resp.data;
-			})
-			.catch(function() {
-				console.log("Error fetching checklist items");
-			});
-		},
-		clearChecklistsDropdown() {
+		getChecklistItems() {
 			let app = this;
 
-			app.checklistTimes = [];
-			app.checklistAreas = [];
-			app.checklistCategories = [];
-			app.checklistItems = [];
-
-			app.manageChecklistsData.organization_id = null;
-			app.manageChecklistsData.time_id = null;
-			app.manageChecklistsData.area_id = null;
-			app.manageChecklistsData.day_of_the_week = null;
-			app.manageChecklistsData.category_id = null;
-			app.manageChecklistsData.item_id = null;
-		},
-		saveForm() {
-			let app = this;
-		
-			axios.post('/api/admin/manage_checklists', app.manageChecklistsData)
+			axios.get(`/api/admin/manage_checklists/getMatrixChecklistItems?organization_id=${app.organization_id}&area_id=${app.area_id}&day_of_the_week=${app.day_of_the_week}`)
 			.then(function(resp) {
-				if(resp.data.status == 'error'){
-					toastr['error']('Something went wrong while adding the checklist. Please contact admin about this.', 'Error!');
+				app.itemsData = resp.data;
+
+				if(app.itemsData.length == 0){
+					toastr['error']('No checklist items found.', 'Error!');
 				}
 				else{
-					app.$router.push('/admin/manage_checklists');
-					toastr['success']('New checklist added!', 'Success!');
+					toastr['success']('Checklist items found.', 'Success!');
 				}
 			})
 			.catch(function() {
-				console.log("Error on ajax call!");
+				console.log("Error fetching checklist data");
 			});
+		},
+		getUncheckedItems(itemsData, checkedItems) {
+			let result = [];
+
+			result = itemsData.filter(o => !checkedItems.some(v => v.id === o.id));
+			
+			return result;
+		},
+		saveChecklist() {
+			let app = this;
+			let checkedItems = app.checkedItems;
+			let uncheckedItems = app.getUncheckedItems(app.itemsData, app.checkedItems);
+			
+			app.matrixChecklistData.organization_id = app.organization_id;
+			
+			if(checkedItems.length > 0){
+				axios.post('/api/admin/matrix_checklists', app.matrixChecklistData)
+				.then(function(resp) {
+					if(resp.data.status == 'error'){
+						toastr['error']('Something went wrong while adding the matrix checklist. Please contact admin about this.', 'Error!');
+					}
+					else{
+						let combinedArray = {'matrix_checklists_id':resp.data.data.id, 'checkedItems':checkedItems, 'uncheckedItems':uncheckedItems, 'created_by':localStorage.getItem("user.id"), 'updated_by':localStorage.getItem("user.id")};
+						
+						axios.post('/api/admin/matrix_checklists_items', combinedArray)
+						.then(function(resp) {
+							if(resp.data.status == 'error'){
+								toastr['error']('Something went wrong while adding the matrix checklist items. Please contact admin about this.', 'Error!');
+							}
+							else{				
+								app.$router.push('/admin/matrix_checklists');
+								toastr['success']('New matrix checklist added!', 'Success!');
+							}
+						})
+						.catch(function() {
+							console.log("Error on ajax call!");
+						});
+					}
+				})
+				.catch(function() {
+					console.log("Error on ajax call!");
+				});
+			}
+			else{
+				toastr['warning']('Please select atleast 1 item on the checklist!', 'Warning!');
+			}
+			
 		}
 	}
 };

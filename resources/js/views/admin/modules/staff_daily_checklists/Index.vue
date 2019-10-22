@@ -17,19 +17,17 @@
 			  	</div>  
           </div>
           <div class="card-body">
-				<!-- <table-component :data="fetchData" :show-filter="false" filter-placeholder="Search checklists.." filter-no-results="No checklists found!" table-class="table" ref="table">
-					<table-column :sortable="false" :filterable="false" show="type" label="Type"/>
+				<table-component :data="fetchData" :show-filter="false" filter-placeholder="Search checklists.." filter-no-results="No checklists found!" table-class="table" ref="table">
 					<table-column :sortable="false" :filterable="false" show="organization.name" label="Organization"/>
-					<table-column :sortable="false" :filterable="false" show="area.name" label="Area"/>
-					<table-column :sortable="false" :filterable="false" show="item.name" label="Item"/>
+					<table-column :sortable="false" :filterable="false" show="user.full_name" label="Created By"/>
+					<table-column :sortable="false" :filterable="false" show="created_at" label="Created At"/>
 					<table-column :sortable="false" :filterable="false" label="Actions">
 						<template slot-scope="row">
-							<a :href="`/admin/manage_checklists/view/${row.id}`"><i class="icon-fa icon-fa-eye"/></a>
-							<a :href="`/admin/manage_checklists/edit/${row.id}`"><i class="icon-fa icon-fa-pencil-square-o"/></a>
-							<a v-on:click="deleteManageChecklist(`${row.id}`)"><i class="icon-fa icon-fa-trash"/></a>
+							<a :href="`/admin/staff_daily_checklists/view/${row.id}`"><i class="icon-fa icon-fa-eye"/></a>
+							<a v-on:click="deleteStaffDailyChecklist(`${row.id}`)"><i class="icon-fa icon-fa-trash"/></a>
 						</template>
 					</table-column>
-				</table-component> -->
+				</table-component>
           </div>
         </div>
       </div>
@@ -63,7 +61,7 @@ export default {
 		}
 	},
     async fetchData ({ page, filter, sort }) {
-      const response = await axios.get(`/api/admin/manage_checklists/get?page=${page}`)
+      const response = await axios.get(`/api/admin/staff_daily_checklists/get?page=${page}`)
 
       return {
         data: response.data.data,
@@ -74,7 +72,7 @@ export default {
         }
 	  }
 	},
-	deleteManageChecklist(id){
+	deleteStaffDailyChecklist(id){
 		let app = this;
 		notie.confirm({
 			text: "Are you sure you want to delete this Checklist?",
@@ -82,7 +80,7 @@ export default {
 				// notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
 			},
 			submitCallback: function () {
-				axios.delete('/api/admin/manage_checklists/' + id)
+				axios.delete('/api/admin/staff_daily_checklists/' + id)
 				.then((resp) => {
 					if(resp.data.status == 'error'){
 						toastr['error']('Something went wrong while deleting the checklist. Please contact admin about this.', 'Error!');

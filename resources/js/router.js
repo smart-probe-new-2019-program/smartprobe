@@ -23,6 +23,12 @@ import AddCorrectiveActions from './views/admin/modules/corrective_actions/Add.v
 import EditCorrectiveActions from './views/admin/modules/corrective_actions/Edit.vue'
 import ViewCorrectiveActions from './views/admin/modules/corrective_actions/View.vue'
 
+//Cook Chill Checks
+import CookChillChecks from './views/admin/modules/cook_chill_checks/Index.vue'
+import AddCookChillChecks from './views/admin/modules/cook_chill_checks/Add.vue'
+import EditCookChillChecks from './views/admin/modules/cook_chill_checks/Edit.vue'
+import ViewCookChillChecks from './views/admin/modules/cook_chill_checks/View.vue'
+
 //Suppliers
 import Suppliers from './views/admin/modules/suppliers/Index.vue'
 import AddSuppliers from './views/admin/modules/suppliers/Add.vue'
@@ -33,16 +39,40 @@ import TypeOfFoods from './views/admin/modules/type_of_foods/Index.vue'
 import AddTypeOfFoods from './views/admin/modules/type_of_foods/Add.vue'
 import EditTypeOfFoods from './views/admin/modules/type_of_foods/Edit.vue'
 
+//Incoming Deliveries
+import IncomingDeliveries from './views/admin/modules/incoming_deliveries/Index.vue'
+import AddIncomingDeliveries from './views/admin/modules/incoming_deliveries/Add.vue'
+import EditIncomingDeliveries from './views/admin/modules/incoming_deliveries/Edit.vue'
+import ViewIncomingDeliveries from './views/admin/modules/incoming_deliveries/View.vue'
+
+//Incoming Deliveries Items
+import IncomingDeliveriesItems from './views/admin/modules/incoming_deliveries_items/Index.vue'
+import AddIncomingDeliveriesItems from './views/admin/modules/incoming_deliveries_items/Add.vue'
+import EditIncomingDeliveriesItems from './views/admin/modules/incoming_deliveries_items/Edit.vue'
+
+//Incoming Deliveries Categories
+import IncomingDeliveriesCategories from './views/admin/modules/incoming_deliveries_categories/Index.vue'
+import AddIncomingDeliveriesCategories from './views/admin/modules/incoming_deliveries_categories/Add.vue'
+import EditIncomingDeliveriesCategories from './views/admin/modules/incoming_deliveries_categories/Edit.vue'
+
+//Incoming Deliveries Type Of Products
+import IncomingDeliveriesTypeOfProducts from './views/admin/modules/incoming_deliveries_type_of_products/Index.vue'
+import AddIncomingDeliveriesTypeOfProducts from './views/admin/modules/incoming_deliveries_type_of_products/Add.vue'
+import EditIncomingDeliveriesTypeOfProducts from './views/admin/modules/incoming_deliveries_type_of_products/Edit.vue'
+
+//Incoming Deliveries Corrective Actions
+import IncomingDeliveriesCorrectiveActions from './views/admin/modules/incoming_deliveries_corrective_actions/Index.vue'
+import AddIncomingDeliveriesCorrectiveActions from './views/admin/modules/incoming_deliveries_corrective_actions/Add.vue'
+import EditIncomingDeliveriesCorrectiveActions from './views/admin/modules/incoming_deliveries_corrective_actions/Edit.vue'
+
 //Staff Daily Checklists
 import StaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Index.vue'
 import AddStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Add.vue'
-import EditStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/Edit.vue'
 import ViewStaffDailyChecklists from './views/admin/modules/staff_daily_checklists/View.vue'
 
 //Matrix Checklists
 import MatrixChecklists from './views/admin/modules/matrix_checklists/Index.vue'
 import AddMatrixChecklists from './views/admin/modules/matrix_checklists/Add.vue'
-import EditMatrixChecklists from './views/admin/modules/matrix_checklists/Edit.vue'
 import ViewMatrixChecklists from './views/admin/modules/matrix_checklists/View.vue'
 
 //Organizations
@@ -196,6 +226,30 @@ const routes = [
         component: ViewCorrectiveActions,
 		name: 'view_corrective_actions',
 	  },
+	  // Cook Chill Checks - Index
+      {
+        path: 'cook_chill_checks',
+        component: CookChillChecks,
+		name: 'cook_chill_checks',
+	  },
+	  // Cook Chill Checks - Add
+      {
+        path: 'cook_chill_checks/add',
+        component: AddCookChillChecks,
+		name: 'add_cook_chill_checks',
+	  },
+	  // Cook Chill Checks - Edit
+      {
+        path: 'cook_chill_checks/edit/:id',
+        component: EditCookChillChecks,
+		name: 'edit_cook_chill_checks',
+	  },
+	  // Cook Chill Checks - View
+      {
+        path: 'cook_chill_checks/view/:id',
+        component: ViewCookChillChecks,
+		name: 'view_cook_chill_checks',
+	  },
 	  // Suppliers - Index
       {
         path: 'suppliers',
@@ -231,6 +285,102 @@ const routes = [
         path: 'type_of_foods/edit/:id',
         component: EditTypeOfFoods,
 		name: 'edit_type_of_foods',
+	  },
+	  // Incoming Deliveries - Index
+      {
+        path: 'incoming_deliveries',
+        component: IncomingDeliveries,
+		name: 'incoming_deliveries',
+	  },
+	  // Incoming Deliveries - Add
+      {
+        path: 'incoming_deliveries/add',
+        component: AddIncomingDeliveries,
+		name: 'add_incoming_deliveries',
+	  },
+	  // Incoming Deliveries - Edit
+      {
+        path: 'incoming_deliveries/edit/:id',
+        component: EditIncomingDeliveries,
+		name: 'edit_incoming_deliveries',
+	  },
+	  // Incoming Deliveries - View
+      {
+        path: 'incoming_deliveries/view/:id',
+        component: ViewIncomingDeliveries,
+		name: 'view_incoming_deliveries',
+	  },
+	  // Incoming Deliveries Items - Index
+      {
+        path: 'incoming_deliveries_items',
+        component: IncomingDeliveriesItems,
+		name: 'incoming_deliveries_items',
+	  },
+	  // Incoming Deliveries Items - Add
+      {
+        path: 'incoming_deliveries_items/add',
+        component: AddIncomingDeliveriesItems,
+		name: 'add_incoming_deliveries_items',
+	  },
+	  // Incoming Deliveries Items - Edit
+      {
+        path: 'incoming_deliveries_items/edit/:id',
+        component: EditIncomingDeliveriesItems,
+		name: 'edit_incoming_deliveries_items',
+	  },
+	  // Incoming Deliveries Categories - Index
+      {
+        path: 'incoming_deliveries_categories',
+        component: IncomingDeliveriesCategories,
+		name: 'incoming_deliveries_categories',
+	  },
+	  // Incoming Deliveries Categories - Add
+      {
+        path: 'incoming_deliveries_categories/add',
+        component: AddIncomingDeliveriesCategories,
+		name: 'add_incoming_deliveries_categories',
+	  },
+	  // Incoming Deliveries Categories - Edit
+      {
+        path: 'incoming_deliveries_categories/edit/:id',
+        component: EditIncomingDeliveriesCategories,
+		name: 'edit_incoming_deliveries_categories',
+	  },
+	  // Incoming Deliveries Type Of Products - Index
+      {
+        path: 'incoming_deliveries_type_of_products',
+        component: IncomingDeliveriesTypeOfProducts,
+		name: 'incoming_deliveries_type_of_products',
+	  },
+	  // Incoming Deliveries Type Of Products - Add
+      {
+        path: 'incoming_deliveries_type_of_products/add',
+        component: AddIncomingDeliveriesTypeOfProducts,
+		name: 'add_incoming_deliveries_type_of_products',
+	  },
+	  // Incoming Deliveries Type Of Products - Edit
+      {
+        path: 'incoming_deliveries_type_of_products/edit/:id',
+        component: EditIncomingDeliveriesTypeOfProducts,
+		name: 'edit_incoming_deliveries_type_of_products',
+	  },
+	  // Incoming Deliveries Corrective Actions - Index
+      {
+        path: 'incoming_deliveries_corrective_actions',
+        component: IncomingDeliveriesCorrectiveActions,
+		name: 'incoming_deliveries_corrective_actions',
+	  },
+	  // Incoming Deliveries Corrective Actions - Add
+      {
+        path: 'incoming_deliveries_corrective_actions/add',
+        component: AddIncomingDeliveriesCorrectiveActions,
+		name: 'add_incoming_deliveries_corrective_actions',
+	  },
+	  // Incoming Deliveries Corrective Actions - Edit
+      {
+        path: 'incoming_deliveries_corrective_actions/edit/:id',
+        component: EditIncomingDeliveriesCorrectiveActions,
+		name: 'edit_incoming_deliveries_corrective_actions',
 	  },
 	  // Organizations - Index
       {
@@ -394,12 +544,6 @@ const routes = [
         component: AddStaffDailyChecklists,
 		name: 'add_staff_daily_checklists',
 	  },
-	  // Staff Daily Checklists - Edit
-      {
-        path: 'staff_daily_checklists/edit/:id',
-        component: EditStaffDailyChecklists,
-		name: 'edit_staff_daily_checklists',
-	  },
 	  // Staff Daily Checklists - View
       {
         path: 'staff_daily_checklists/view/:id',
@@ -417,12 +561,6 @@ const routes = [
         path: 'matrix_checklists/add',
         component: AddMatrixChecklists,
 		name: 'add_matrix_checklists',
-	  },
-	  // Matrix Checklists - Edit
-      {
-        path: 'matrix_checklists/edit/:id',
-        component: EditMatrixChecklists,
-		name: 'edit_matrix_checklists',
 	  },
 	  // Matrix Checklists - View
       {

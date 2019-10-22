@@ -18,6 +18,7 @@
           </div>
           <div class="card-body">
 				<table-component :data="fetchData" :show-filter="false" filter-placeholder="Search corrective actions.." filter-no-results="No actions found!" table-class="table" ref="table">
+					<table-column :sortable="false" :filterable="false" show="organization.name" label="Organization"/>
 					<table-column :sortable="false" :filterable="false" show="user.full_name" label="User"/>
 					<table-column :sortable="false" :filterable="false" show="comment_type" label="Comment Type"/>
 					<table-column :sortable="false" :filterable="false" show="created_at" label="Created At"/>

@@ -78,6 +78,11 @@
 export default {
 	data() {
 		return {
+			staffDailyChecklistData: {
+				organization_id: "",
+				created_by: localStorage.getItem("user.id"),
+				updated_by: localStorage.getItem("user.id")
+			},
 			organization_id: null,
 			area_id: null,
 			time_id: null,
@@ -85,7 +90,7 @@ export default {
 			checklistTimes: [],
 			checklistAreas: [],
 			checkedItems: [],
-			itemsData: [],
+			itemsData: {},
 		};
 	},
 	mounted() {
@@ -119,6 +124,13 @@ export default {
 		getChecklistsDropdown() {
 			let app = this;
 
+			app.checklistTimes = [];
+			app.checklistAreas = [];
+			app.itemsData = {};
+			app.checkedItems = [];
+			app.area_id = null;
+			app.time_id = null;
+			
 			app.getChecklistTimesByOrganizationID();
 			app.getChecklistAreasByOrganizationID();
 		},
@@ -142,16 +154,6 @@ export default {
 				console.log("Error fetching checklist areas");
 			});
 		},
-		clearChecklistsDropdown() {
-			let app = this;
-
-			app.checklistTimes = [];
-			app.checklistAreas = [];
-
-			app.manageChecklistsData.organization_id = null;
-			app.manageChecklistsData.time_id = null;
-			app.manageChecklistsData.area_id = null;
-		},
 		getChecklistItems() {
 			let app = this;
 
@@ -170,34 +172,52 @@ export default {
 				console.log("Error fetching checklist data");
 			});
 		},
+		getUncheckedItems(itemsData, checkedItems) {
+			let result = [];
+
+			result = itemsData.filter(o => !checkedItems.some(v => v.id === o.id));
+			
+			return result;
+		},
 		saveChecklist() {
 			let app = this;
-
-			console.log(app.itemsData);
-			console.log(app.checkedItems);
-
+			let checkedItems = app.checkedItems;
+			let uncheckedItems = app.getUncheckedItems(app.itemsData, app.checkedItems);
 			
-
-			// axios.post('/api/admin/manage_checklists', app.manageChecklistsData)
-			// .then(function(resp) {
-			// 	if(resp.data.status == 'error'){
-			// 		toastr['error']('Something went wrong while adding the checklist. Please contact admin about this.', 'Error!');
-			// 	}
-			// 	else{
-			// 		app.$router.push('/admin/manage_checklists');
-			// 		toastr['success']('New checklist added!', 'Success!');
-			// 	}
-			// })
-			// .catch(function() {
-			// 	console.log("Error on ajax call!");
-			// });
-		},
-		comparer(otherArray){
-			return function(current){
-				return otherArray.filter(function(other){
-				return other.value == current.value && other.display == current.display
-				}).length == 0;
+			app.staffDailyChecklistData.organization_id = app.organization_id;
+			
+			if(checkedItems.length > 0){
+				axios.post('/api/admin/staff_daily_checklists', app.staffDailyChecklistData)
+				.then(function(resp) {
+					if(resp.data.status == 'error'){
+						toastr['error']('Something went wrong while adding the staff daily checklist. Please contact admin about this.', 'Error!');
+					}
+					else{
+						let combinedArray = {'staff_daily_checklists_id':resp.data.data.id, 'checkedItems':checkedItems, 'uncheckedItems':uncheckedItems, 'created_by':localStorage.getItem("user.id"), 'updated_by':localStorage.getItem("user.id")};
+						
+						axios.post('/api/admin/staff_daily_checklists_items', combinedArray)
+						.then(function(resp) {
+							if(resp.data.status == 'error'){
+								toastr['error']('Something went wrong while adding the staff daily checklist items. Please contact admin about this.', 'Error!');
+							}
+							else{				
+								app.$router.push('/admin/staff_daily_checklists');
+								toastr['success']('New staff daily checklist added!', 'Success!');
+							}
+						})
+						.catch(function() {
+							console.log("Error on ajax call!");
+						});
+					}
+				})
+				.catch(function() {
+					console.log("Error on ajax call!");
+				});
 			}
+			else{
+				toastr['warning']('Please select atleast 1 item on the checklist!', 'Warning!');
+			}
+			
 		}
 	}
 };

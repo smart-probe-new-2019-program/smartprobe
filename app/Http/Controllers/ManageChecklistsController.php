@@ -56,6 +56,21 @@ class ManageChecklistsController extends Controller
 		->get();
 	}
 
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getMatrixChecklistItems(Request $request)
+    {
+		return ManageChecklist::with('item')
+		->where('organization_id', $request['organization_id'])
+		->where('area_id', $request['area_id'])
+		->where('day_of_the_week', $request['day_of_the_week'])
+		->orderBy('created_at','desc')
+		->get();
+	}
+
     /**
      * Show the form for creating a new resource.
      *

@@ -16,6 +16,7 @@ class CreateCorrectiveActionsTable extends Migration
 		Schema::dropIfExists('corrective_actions');
         Schema::create('corrective_actions', function (Blueprint $table) {
 			$table->increments('id');
+			$table->integer('organization_id');
 			$table->integer('user_id');
 			$table->string('comment_type');
 			$table->text('comment')->nullable();

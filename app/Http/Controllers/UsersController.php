@@ -59,6 +59,16 @@ class UsersController extends Controller
 		return User::all();
 	}
 
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUsersByOrganizationID($id)
+    {
+		return User::where('organization_id', $id)->get();
+	}
+
     /**
      * Show the form for creating a new resource.
      *
