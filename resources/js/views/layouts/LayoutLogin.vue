@@ -4,7 +4,7 @@
       <div class="login-box">
         <div class="logo-main">
           <a href="/login">
-            <img style="width: 400px;" src="/assets/img/logo.png" alt="SmartProbe Logo">
+            <img style="width: auto;" src="/assets/img/logo.png" alt="SmartProbe Logo">
           </a>
         </div>
         <router-view/>
