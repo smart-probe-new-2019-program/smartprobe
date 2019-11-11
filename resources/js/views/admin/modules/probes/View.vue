@@ -65,6 +65,22 @@
 										<td> Probe Type </td>
 										<td> <b> {{probeData.probe_type}} </b> </td>
 									</tr>
+									<tr v-if="probeData.probe_type=='Humidity Probe'"> 
+										<td> Humidity High Warning </td>
+										<td> <b> {{probeData.humidity_warning_high}} </b> </td>
+									</tr>
+									<tr v-if="probeData.probe_type=='Humidity Probe'"> 
+										<td> Humidity Low Warning </td>
+										<td> <b> {{probeData.humidity_warning_low}} </b> </td>
+									</tr>
+									<tr v-if="probeData.probe_type=='Humidity Probe'"> 
+										<td> Humidity High Alert </td>
+										<td> <b> {{probeData.humidity_alert_high}} </b> </td>
+									</tr>
+									<tr v-if="probeData.probe_type=='Humidity Probe'"> 
+										<td> Humidity Low Alert </td>
+										<td> <b> {{probeData.humidity_alert_low}} </b> </td>
+									</tr>
 									<tr> 
 										<td> Next Calibration Date </td>
 										<td> <b> {{probeData.next_calibration_date}} </b> </td>

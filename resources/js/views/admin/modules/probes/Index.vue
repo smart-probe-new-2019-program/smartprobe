@@ -22,6 +22,7 @@
 					<table-column :sortable="false" :filterable="false" show="serial_number" label="Serial Number"/>
 					<table-column :sortable="false" :filterable="false" show="organization.name" label="Organization"/>
 					<table-column :sortable="false" :filterable="false" show="location.name" label="Location"/>
+					<table-column :sortable="false" :filterable="false" show="probe_type" label="Type"/>
 					<table-column :sortable="false" :filterable="false" show="next_calibration_date" label="Next Calibration Date"/>
 					<table-column :sortable="false" :filterable="false" show="status" label="Status"/>
 					<table-column :sortable="false" :filterable="false" label="Actions">

@@ -50,6 +50,23 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//Probes Logs
+	Route::get('probes_logs/get', [
+        'as' => 'admin.probes_logs', 'uses' => 'ProbesLogsController@getAllProbesLogs'
+	]);
+
+	Route::get('probes_logs/getProbesLog/{id}',[
+		'as' => 'admin.probes_logs.getProbesLog', 'uses' => 'ProbesLogsController@getProbesLog'
+	]);
+
+	Route::get('probes_logs/getProbesLogsByProbeID/{id}',[
+		'as' => 'admin.probes_logs.getProbesLogsByProbeID', 'uses' => 'ProbesLogsController@getProbesLogsByProbeID'
+	]);
+
+	Route::resource('probes_logs', 'ProbesLogsController', ['except' => ['create', 'edit']]);
+	
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Corrective Actions
 	Route::get('corrective_actions/get', [
         'as' => 'admin.corrective_actions', 'uses' => 'CorrectiveActionsController@getAllCorrectiveActions'

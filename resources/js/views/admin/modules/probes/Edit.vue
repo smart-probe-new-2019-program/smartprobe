@@ -89,13 +89,13 @@
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Low Temperature Warning</label>
-							<input type="text" v-model.trim="probeData.temperature_warning_low" class="form-control" ref="temperature_warning_low">
+							<input type="text" v-model.trim="probeData.temperature_warning_low" class="form-control" ref="temperature_warning_low" required>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">High Temperature Alert</label>
-							<input type="text" v-model.trim="probeData.temperature_alert_high" class="form-control" ref="temperature_alert_high">
+							<input type="text" v-model.trim="probeData.temperature_alert_high" class="form-control" ref="temperature_alert_high" required>
 						</div>
 					</div>
 					<div class="row">
@@ -107,7 +107,7 @@
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Minimum Voltage</label>
-							<input type="text" v-model.trim="probeData.minimum_voltage" class="form-control" ref="minimum_voltage">
+							<input type="text" v-model.trim="probeData.minimum_voltage" class="form-control" ref="minimum_voltage" required>
 						</div>
 					</div>
 					<div class="row">
@@ -116,7 +116,32 @@
 							<select class="form-control" v-model="probeData.probe_type" ref="probe_type" required>
 								<option value="Fridge/Freezer Probe">Fridge/Freezer Probe</option>
 								<option value="Food Probe">Food Probe</option>
+								<option value="Humidity Probe">Humidity Probe</option>
 							</select>
+						</div>
+					</div>
+					<div class="row" v-if="probeData.probe_type=='Humidity Probe'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Humidity High Warning</label>
+							<input type="text" v-model.trim="probeData.humidity_warning_high" class="form-control" ref="humidity_warning_high">
+						</div>
+					</div>
+					<div class="row" v-if="probeData.probe_type=='Humidity Probe'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Humidity Low Warning</label>
+							<input type="text" v-model.trim="probeData.humidity_warning_low" class="form-control" ref="humidity_warning_low">
+						</div>
+					</div>
+					<div class="row" v-if="probeData.probe_type=='Humidity Probe'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Humidity High Alert</label>
+							<input type="text" v-model.trim="probeData.humidity_alert_high" class="form-control" ref="humidity_alert_high">
+						</div>
+					</div>
+					<div class="row" v-if="probeData.probe_type=='Humidity Probe'">
+						<div class="col-sm-6 form-group">
+							<label class="control-label">Humidity Low Alert</label>
+							<input type="text" v-model.trim="probeData.humidity_alert_low" class="form-control" ref="humidity_alert_low">
 						</div>
 					</div>
 					<div class="row">
