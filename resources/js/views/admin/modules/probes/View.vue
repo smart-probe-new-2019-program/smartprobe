@@ -109,7 +109,7 @@
 										<td> Monitored </td>
 										<td> <b> {{probeData.is_monitored}} </b> </td>
 									</tr>
-									<tr> 
+									<tr v-if="probeData.is_monitored=='Yes'"> 
 										<td> Online Monitoring Date </td>
 										<td> <b> {{probeData.online_monitoring_date}} </b> </td>
 									</tr>

@@ -69,6 +69,14 @@ class ProbesController extends Controller
      */
     public function store(Request $request)
     {
+		if($request['next_calibration_date']){
+			$request['next_calibration_date'] = date("Y-m-d", strtotime($request['next_calibration_date']));
+		}
+		
+		if($request['online_monitoring_date']){
+			$request['online_monitoring_date'] = date("Y-m-d", strtotime($request['online_monitoring_date']));
+		}
+		
         try{
 			Probe::create($request->all());
 			$this->status = 'success';
@@ -123,6 +131,14 @@ class ProbesController extends Controller
      */
     public function update(Request $request, $id)
     {
+		if($request['next_calibration_date']){
+			$request['next_calibration_date'] = date("Y-m-d", strtotime($request['next_calibration_date']));
+		}
+		
+		if($request['online_monitoring_date']){
+			$request['online_monitoring_date'] = date("Y-m-d", strtotime($request['online_monitoring_date']));
+		}
+		
         try{
 			$probe = Probe::findOrFail($id);
 			$probe->update($request->all());

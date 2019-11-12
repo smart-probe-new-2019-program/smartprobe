@@ -147,7 +147,7 @@
 					<div class="row">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Next Calibration Date</label>
-							<input type="text" v-model.trim="probeData.next_calibration_date" class="form-control" ref="next_calibration_date">
+							<datepicker v-model="probeData.next_calibration_date" :format="format" input-class="form-control"  ref="next_calibration_date"/>
 						</div>
 					</div>
 					<div class="row">
@@ -219,7 +219,7 @@
 					<div class="row" v-if="probeData.is_monitored=='Yes'">
 						<div class="col-sm-6 form-group">
 							<label class="control-label">Online Monitoring Date</label>
-							<input type="text" v-model.trim="probeData.online_monitoring_date" class="form-control" ref="online_monitoring_date">
+							<datepicker v-model="probeData.online_monitoring_date" :format="format" input-class="form-control"  ref="online_monitoring_date" />
 						</div>
 					</div>
 					<div class="row">
@@ -256,7 +256,12 @@
 </template>
 
 <script type="text/babel">
+import Datepicker from 'vuejs-datepicker'
+
 export default {
+	components: {
+		Datepicker
+	},
 	data() {
 		return {
 			probeData: {
@@ -264,7 +269,8 @@ export default {
 				updated_by: localStorage.getItem("user.id")
 			},
 			organizations: [],
-			locations: []
+			locations: [],
+			format: 'yyyy-MM-dd',
 		};
 	},
 	mounted() {
