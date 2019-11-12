@@ -95,11 +95,20 @@ class UsersController extends Controller
 			$this->status = 'success';
 		}
 		catch(\Illuminate\Database\QueryException $ex){
-			if(strpos($ex->getMessage(), 'users_email_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Email';
-			}
-			else if(strpos($ex->getMessage(), 'users_username_unique')){
+			// if(strpos($ex->getMessage(), 'users_email_unique')){
+			// 	$this->status = 'error';
+			// 	$this->data = 'Duplicate Email';
+			// }
+			// else if(strpos($ex->getMessage(), 'users_username_unique')){
+			// 	$this->status = 'error';
+			// 	$this->data = 'Duplicate Username';
+			// }
+			// else{
+			// 	$this->status = 'error';
+			// 	$this->data = $ex->getMessage();
+			// }
+
+			if(strpos($ex->getMessage(), 'users_username_unique')){
 				$this->status = 'error';
 				$this->data = 'Duplicate Username';
 			}
@@ -171,11 +180,20 @@ class UsersController extends Controller
 			$this->status = 'success';
 		}
 		catch(\Illuminate\Database\QueryException $ex){
-			if(strpos($ex->getMessage(), 'users_email_unique')){
-				$this->status = 'error';
-				$this->data = 'Duplicate Email';
-			}
-			else if(strpos($ex->getMessage(), 'users_username_unique')){
+			// if(strpos($ex->getMessage(), 'users_email_unique')){
+			// 	$this->status = 'error';
+			// 	$this->data = 'Duplicate Email';
+			// }
+			// else if(strpos($ex->getMessage(), 'users_username_unique')){
+			// 	$this->status = 'error';
+			// 	$this->data = 'Duplicate Username';
+			// }
+			// else{
+			// 	$this->status = 'error';
+			// 	$this->data = $ex->getMessage();
+			// }
+
+			if(strpos($ex->getMessage(), 'users_username_unique')){
 				$this->status = 'error';
 				$this->data = 'Duplicate Username';
 			}
