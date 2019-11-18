@@ -46,6 +46,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 		'as' => 'admin.probes.getProbesByOrganizationID', 'uses' => 'ProbesController@getProbesByOrganizationID'
 	]);
 
+	Route::get('probes/getProbesByLocationID/{id}',[
+		'as' => 'admin.probes.getProbesByLocationID', 'uses' => 'ProbesController@getProbesByLocationID'
+	]);
+
 	Route::resource('probes', 'ProbesController', ['except' => ['create', 'edit']]);
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/

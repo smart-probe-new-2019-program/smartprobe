@@ -51,6 +51,16 @@ class ProbesController extends Controller
 		return Probe::with('organization','location')->where('organization_id', $id)->get();
 	}
 
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getProbesByLocationID($id)
+    {
+		return Probe::with('organization','location')->where('location_id', $id)->get();
+	}
+
     /**
      * Show the form for creating a new resource.
      *

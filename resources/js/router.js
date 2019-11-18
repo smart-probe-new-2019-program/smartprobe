@@ -23,6 +23,9 @@ import AddCorrectiveActions from './views/admin/modules/corrective_actions/Add.v
 import EditCorrectiveActions from './views/admin/modules/corrective_actions/Edit.vue'
 import ViewCorrectiveActions from './views/admin/modules/corrective_actions/View.vue'
 
+//Reports
+import ProbesLogs from './views/admin/modules/probes_logs/Index.vue'
+
 //Cook Chill Checks
 import CookChillChecks from './views/admin/modules/cook_chill_checks/Index.vue'
 import AddCookChillChecks from './views/admin/modules/cook_chill_checks/Add.vue'
@@ -225,6 +228,12 @@ const routes = [
         path: 'corrective_actions/view/:id',
         component: ViewCorrectiveActions,
 		name: 'view_corrective_actions',
+	  },
+	  // Reports - Probes Logs Index
+      {
+        path: 'probes_logs',
+        component: ProbesLogs,
+		name: 'probes_logs',
 	  },
 	  // Cook Chill Checks - Index
       {

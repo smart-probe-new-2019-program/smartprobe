@@ -27,6 +27,16 @@
 			</router-link>
 		  </v-collapse-item>
 
+		 <v-collapse-item active-url="">
+            <a slot="item-title" href="#">
+              <i class="icon-fa icon-fa-file-text-o"/>Reports
+              <span class="icon-fa arrow icon-fa-fw"/>
+            </a>
+			<router-link to="/admin/probes_logs">
+              <i class="icon-fa icon-fa-circle-thin"/>Probes Logs
+            </router-link>
+          </v-collapse-item>
+
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
               <i class="icon-fa icon-fa-list-ol"/>Cook-Chill

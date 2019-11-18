@@ -26,7 +26,7 @@ class ProbesLogsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllProbeLogs(Request $request)
+    public function getAllProbesLogs(Request $request)
     { 
 		return ProbesLog::with('probe')
 				->orderBy('created_at','desc')->paginate(5);
@@ -63,6 +63,8 @@ class ProbesLogsController extends Controller
 		//get probe id first based on serial number. Note: $request['probe_id'] passed is the serial number.
 		$probe = Probe::where('serial_number', $request['probe_id'])->first();
 		$request['probe_id'] = $probe['id'];
+
+		dd($request['probe_id']);
 
         try{
 			ProbesLog::create($request->all());
