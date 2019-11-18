@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Probe;
 use Illuminate\Http\Request;
 use App\ProbesLog;
+use App\Probe;
 
 class ProbesLogsController extends Controller
 {
@@ -61,7 +61,7 @@ class ProbesLogsController extends Controller
     public function store(Request $request)
     {
 		//get probe id first based on serial number. Note: $request['probe_id'] passed is the serial number.
-		$probe = Probe::where('serial_number', $request['probe_id'])->get();
+		$probe = Probe::where('serial_number', $request['probe_id'])->first();
 		$request['probe_id'] = $probe->id;
 
         try{
