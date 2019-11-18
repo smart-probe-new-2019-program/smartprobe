@@ -61,7 +61,7 @@ class ProbesLogsController extends Controller
     public function store(Request $request)
     {
 		//get probe id first based on serial number. Note: $request['probe_id'] passed is the serial number.
-		$probe = Probes::where('serial_number', $request['probe_id'])->get();
+		$probe = Probe::where('serial_number', $request['probe_id'])->get();
 		$request['probe_id'] = $probe->id;
 
         try{
