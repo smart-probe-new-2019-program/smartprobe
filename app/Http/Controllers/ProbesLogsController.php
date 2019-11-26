@@ -60,17 +60,20 @@ class ProbesLogsController extends Controller
      */
     public function store(Request $request)
     {
-		//get probe id first based on serial number. Note: $request['probe_id'] passed is the serial number.
-		$probe = Probe::where('serial_number', $request['probe_id'])->first();
-		$request['probe_id'] = $probe['id'];
+		$probes_logs = $request['data'];
 
-        try{
-			ProbesLog::create($request->all());
-			$this->status = 'success';
-		}
-		catch(\Illuminate\Database\QueryException $ex){
-			$this->status = 'error';
-			$this->data = $ex->getMessage();	
+		foreach($probes_logs as $key => $value) {
+			$probe = Probe::where('serial_number', $probes_logs[$key]['probe_id'])->get()->first();
+			$probes_logs[$key]['probe_id'] = $probe['id'];
+
+			try{
+				ProbesLog::create($probes_logs[$key]);
+				$this->status = 'success';
+			}
+			catch(\Illuminate\Database\QueryException $ex){
+				$this->status = 'error';
+				$this->data = $ex->getMessage();	
+			}
 		}
 
 		return response()->json(['status' => $this->status, 'data' => $this->data]);
