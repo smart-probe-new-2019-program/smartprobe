@@ -64,8 +64,6 @@ class ProbesLogsController extends Controller
 		$probe = Probe::where('serial_number', $request['probe_id'])->first();
 		$request['probe_id'] = $probe['id'];
 
-		dd($request['probe_id']);
-
         try{
 			ProbesLog::create($request->all());
 			$this->status = 'success';
