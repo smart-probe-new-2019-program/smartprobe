@@ -90,6 +90,10 @@ import AddLocations from './views/admin/modules/locations/Add.vue'
 import EditLocations from './views/admin/modules/locations/Edit.vue'
 import ViewLocations from './views/admin/modules/locations/View.vue'
 
+//File Entries
+import FileEntries from './views/admin/modules/file_entries/Index.vue'
+import AddFileEntries from './views/admin/modules/file_entries/Add.vue'
+
 //Users
 import Users from './views/admin/modules/users/Index.vue'
 import AddUsers from './views/admin/modules/users/Add.vue'
@@ -438,6 +442,18 @@ const routes = [
         path: 'locations/view/:id',
         component: ViewLocations,
 		name: 'view_locations',
+	  },
+	  // File Entries - Index
+      {
+        path: 'file_entries',
+        component: FileEntries,
+		name: 'file_entries',
+	  },
+	  // File Entries - Add
+      {
+        path: 'file_entries/add',
+        component: AddFileEntries,
+		name: 'add_file_entries',
 	  },
 	  // Users - Index
       {

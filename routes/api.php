@@ -387,6 +387,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
+	//File Entries
+	Route::get('file_entries/get', [
+        'as' => 'admin.file_entries', 'uses' => 'FileEntriesController@getAllFiles'
+	]);
+
+	Route::get('file_entries/{path_file}/{file}', function($path_file = null, $file = null) {
+		$path = storage_path().'/files/uploads/'.$path_file.'/'.$file;
+		if(file_exists($path)) {
+			return Response::download($path);
+		}
+	});
+
+	Route::resource('file_entries', 'FileEntriesController', ['except' => ['create', 'edit']]);
+
+	/** ------------------------------------------------------------------------------------------------------------------------- **/
+
 	//Users
 	Route::get('users/get', [
         'as' => 'admin.users', 'uses' => 'UsersController@getAllUsers'

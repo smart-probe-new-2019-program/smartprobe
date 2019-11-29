@@ -91,6 +91,14 @@
             </router-link>
           </v-collapse-item>
 
+		  <v-collapse-item active-url="/admin/file_entries">
+			<router-link
+			slot="item-title"
+			to="/admin/file_entries">
+			<i class="icon-fa icon-fa-files-o"/>File Entries
+			</router-link>
+		  </v-collapse-item>
+
 		  <v-collapse-item active-url="">
             <a slot="item-title" href="#">
               <i class="icon-fa icon-fa-user-secret"/>Administration
