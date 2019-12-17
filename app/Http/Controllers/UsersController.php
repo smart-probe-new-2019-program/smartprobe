@@ -27,7 +27,17 @@ class UsersController extends Controller
      */
     public function getAllUsers(Request $request)
     { 
-		return User::orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$users = User::with('organization');
+
+		if($organization_id){
+			$users = $users->where('organization_id', $request['organization_id']);
+		}
+		
+		$users = $users->orderBy('created_at','desc')->paginate(5);
+
+		return $users;
 
 		// $filter = $request['filter'];
 

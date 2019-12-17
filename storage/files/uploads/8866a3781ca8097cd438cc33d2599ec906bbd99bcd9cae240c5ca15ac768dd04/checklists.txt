@@ -1,0 +1,7 @@
+checklists
+
+name
+organization_id
+area_id
+day
+item

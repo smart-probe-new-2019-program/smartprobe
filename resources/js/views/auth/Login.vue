@@ -97,7 +97,20 @@ export default {
       if (!this.$v.$error) {
         Auth.login(this.loginData).then((res) => {
           if (res) {
-            this.$router.push('/admin/dashboard')
+			  let user_role = localStorage.getItem("user.role");
+			  
+			  if(user_role == 'Admin'){ //Admin
+				this.$router.push('/admin/dashboard')
+			  }
+			  else if(user_role == 'Organizer'){ //Organizer
+				this.$router.push('/organizer/dashboard')  
+			  }
+			  else if(user_role == 'Manager'){ //Manager
+			    this.$router.push('/manager/dashboard')  
+			  }
+			  else{ //Staff
+				this.$router.push('/staff/dashboard')  
+			  }
           }
         })
       }

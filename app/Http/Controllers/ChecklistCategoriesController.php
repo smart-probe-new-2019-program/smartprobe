@@ -27,8 +27,17 @@ class ChecklistCategoriesController extends Controller
      */
     public function getAllChecklistCategories(Request $request)
     { 
-		return ChecklistCategory::with('organization')
-				->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$checklist_category = ChecklistCategory::with('organization');
+
+		if($organization_id){
+			$checklist_category = $checklist_category->where('organization_id', $organization_id);
+		}
+
+		$checklist_category = $checklist_category->orderBy('created_at','desc')->paginate(5);
+
+		return $checklist_category;
 	}
 
 	/**

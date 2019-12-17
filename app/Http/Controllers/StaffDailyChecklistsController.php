@@ -28,8 +28,22 @@ class StaffDailyChecklistsController extends Controller
      */
     public function getAllStaffDailyChecklists(Request $request)
     { 
-		return StaffDailyChecklist::with('organization','user')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$user_id = $request['user_id'];
+
+		$staff_daily_checklists = StaffDailyChecklist::with('organization','user');
+
+		if($organization_id){
+			$staff_daily_checklists = $staff_daily_checklists->where('organization_id', $organization_id);
+		}
+
+		if($user_id){
+			$staff_daily_checklists = $staff_daily_checklists->where('created_by', $user_id);
+		}
+		
+		$staff_daily_checklists = $staff_daily_checklists->orderBy('created_at','desc')->paginate(5);
+
+		return $staff_daily_checklists;
 	}
 
 	/**

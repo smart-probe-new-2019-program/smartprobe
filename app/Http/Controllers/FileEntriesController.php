@@ -30,8 +30,17 @@ class FileEntriesController extends Controller
      */
     public function getAllFiles(Request $request)
     { 
-		return FileEntry::with('organization')
-				->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$files = FileEntry::with('organization');
+
+		if($organization_id){
+			$files = $files->where('organization_id', $organization_id);
+		}
+		
+		$files = $files->orderBy('created_at','desc')->paginate(5);
+
+		return $files;
 	}
 
 	/**

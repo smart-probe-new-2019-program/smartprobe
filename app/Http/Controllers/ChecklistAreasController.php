@@ -27,8 +27,17 @@ class ChecklistAreasController extends Controller
      */
     public function getAllChecklistAreas(Request $request)
     { 
-		return ChecklistArea::with('organization')
-				->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$checklist_area = ChecklistArea::with('organization');
+
+		if($organization_id){
+			$checklist_area = $checklist_area->where('organization_id', $organization_id);
+		}
+
+		$checklist_area = $checklist_area->orderBy('created_at','desc')->paginate(5);
+
+		return $checklist_area;
 	}
 
 	/**

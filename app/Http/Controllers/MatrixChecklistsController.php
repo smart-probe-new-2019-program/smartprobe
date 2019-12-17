@@ -28,8 +28,22 @@ class MatrixChecklistsController extends Controller
      */
     public function getAllMatrixChecklists(Request $request)
     { 
-		return MatrixChecklist::with('organization','user')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$user_id = $request['user_id'];
+
+		$matrix_checklists = MatrixChecklist::with('organization','user');
+
+		if($organization_id){
+			$matrix_checklists = $matrix_checklists->where('organization_id', $organization_id);
+		}
+
+		if($user_id){
+			$matrix_checklists = $matrix_checklists->where('created_by', $user_id);
+		}
+		
+		$matrix_checklists = $matrix_checklists->orderBy('created_at','desc')->paginate(5);
+
+		return $matrix_checklists;
 	}
 
 	/**

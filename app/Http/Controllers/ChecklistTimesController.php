@@ -27,8 +27,17 @@ class ChecklistTimesController extends Controller
      */
     public function getAllChecklistTimes(Request $request)
     { 
-		return ChecklistTime::with('organization')
-				->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		
+		$checklist_time = ChecklistTime::with('organization');
+
+		if($organization_id){
+			$checklist_time = $checklist_time->where('organization_id', $organization_id);
+		}
+
+		$checklist_time = $checklist_time->orderBy('created_at','desc')->paginate(5);
+
+		return $checklist_time;
 	}
 
 	/**

@@ -27,8 +27,17 @@ class LocationsController extends Controller
      */
     public function getAllLocations(Request $request)
     { 
-		return Location::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$locations = Location::with('organization');
+
+		if($organization_id){
+			$locations = $locations->where('organization_id', $organization_id);
+		}
+		
+		$locations = $locations->orderBy('created_at','desc')->paginate(5);
+
+		return $locations;
 	}
 
 	/**

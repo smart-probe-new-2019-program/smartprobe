@@ -47,7 +47,7 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<label class="control-label">Password</label>
+							<label class="control-label">Password <font color="red">(Just leave this blank if you do not want to change the password)</font></label>
 							<input type="password" v-model.trim="userData.password" class="form-control" ref="password">
 						</div>
 					</div>

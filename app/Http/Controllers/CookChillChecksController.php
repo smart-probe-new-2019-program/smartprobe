@@ -27,8 +27,22 @@ class CookChillChecksController extends Controller
      */
     public function getAllCookChillChecks(Request $request)
     { 
-		return CookChillCheck::with('user','supplier','typeOfFood','organization','probe')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$user_id = $request['user_id'];
+
+		$cook_chill_checks = CookChillCheck::with('user','supplier','typeOfFood','organization','probe');
+
+		if($organization_id){
+			$cook_chill_checks = $cook_chill_checks->where('organization_id', $organization_id);
+		}
+
+		if($user_id){
+			$cook_chill_checks = $cook_chill_checks->where('created_by', $user_id);
+		}
+		
+		$cook_chill_checks = $cook_chill_checks->orderBy('created_at','desc')->paginate(5);
+
+		return $cook_chill_checks;
 	}
 
     /**

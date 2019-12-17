@@ -44,6 +44,22 @@
 						<button @click="fetchLogs()" class="btn btn-sm btn-primary"><i class="icon-fa icon-fa-eye"/> Show</button>
 					</div>
 				</div>
+				<!-- <div class="row">
+					<div class="col-xl-4 mb-4">
+						<div class="form-group">
+							<label >From</label>
+							<datepicker input-class="form-control" @selected="highlightFrom"/>
+						</div>
+						<div class="form-group">
+							<label>To</label>
+							<datepicker input-class="form-control" @selected="highlightTo"/>
+						</div>
+						<div class="form-group">
+							<label>Result</label>
+							<datepicker :highlighted="highlighted" input-class="form-control"/>
+						</div>
+					</div>
+				</div> -->
 			  </div>
           </div>
           <div class="card-body">
@@ -72,11 +88,13 @@
 
 <script type="text/babel">
 import { TableComponent, TableColumn } from 'vue-table-component'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   components: {
     TableComponent,
-    TableColumn
+	TableColumn,
+	Datepicker,
   },
   data() {
 	return {

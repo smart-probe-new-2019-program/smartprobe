@@ -18,6 +18,7 @@
           </div>
           <div class="card-body">
 				<table-component :data="fetchData" :show-filter="false" filter-placeholder="Search cook chill checks.." filter-no-results="No entries found!" table-class="table" ref="table">
+					<table-column :sortable="false" :filterable="false" show="organization.name" label="Organization"/>
 					<table-column :sortable="false" :filterable="false" show="user.full_name" label="User"/>
 					<table-column :sortable="false" :filterable="false" show="supplier.name" label="Supplier"/>
 					<table-column :sortable="false" :filterable="false" show="type_of_food.name" label="Type of Food"/>

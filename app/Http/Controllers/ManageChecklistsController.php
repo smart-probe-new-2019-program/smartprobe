@@ -27,8 +27,17 @@ class ManageChecklistsController extends Controller
      */
     public function getAllManageChecklists(Request $request)
     { 
-		return ManageChecklist::with('organization','time','area','category','item')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$manage_checklists = ManageChecklist::with('organization','time','area','category','item');
+
+		if($organization_id){
+			$manage_checklists = $manage_checklists->where('organization_id', $organization_id);
+		}
+		
+		$manage_checklists = $manage_checklists->orderBy('created_at','desc')->paginate(5);
+
+		return $manage_checklists;
 	}
 
 	/**

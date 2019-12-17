@@ -130,7 +130,7 @@ export default {
 				end_time: "",
 				batch_number: "",
 				comment: "",
-				organization_id: localStorage.getItem("user.organization_id"),
+				organization_id: "",
 				probe_id: "",
 				created_by: localStorage.getItem("user.id"),
 				updated_by: localStorage.getItem("user.id")

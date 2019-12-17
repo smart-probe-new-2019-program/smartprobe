@@ -28,8 +28,22 @@ class CorrectiveActionsController extends Controller
      */
     public function getAllCorrectiveActions(Request $request)
     { 
-		return CorrectiveAction::with('organization', 'user')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$user_id = $request['user_id'];
+
+		$corrective_actions = CorrectiveAction::with('organization', 'user');
+
+		if($organization_id){
+			$corrective_actions = $corrective_actions->where('organization_id', $organization_id);
+		}
+
+		if($user_id){
+			$corrective_actions = $corrective_actions->where('created_by', $user_id);
+		}
+		
+		$corrective_actions = $corrective_actions->orderBy('created_at','desc')->paginate(5);
+
+		return $corrective_actions;
 	}
 
 	/**

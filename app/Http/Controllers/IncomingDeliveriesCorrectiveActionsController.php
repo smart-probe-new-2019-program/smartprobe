@@ -27,8 +27,17 @@ class IncomingDeliveriesCorrectiveActionsController extends Controller
      */
     public function getAllIncomingDeliveriesCorrectiveActions(Request $request)
     { 
-		return IncomingDeliveriesCorrectiveAction::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$incoming_deliveries_corrective_actions = IncomingDeliveriesCorrectiveAction::with('organization');
+
+		if($organization_id){
+			$incoming_deliveries_corrective_actions = $incoming_deliveries_corrective_actions->where('organization_id', $organization_id);
+		}
+		
+		$incoming_deliveries_corrective_actions = $incoming_deliveries_corrective_actions->orderBy('created_at','desc')->paginate(5);
+
+		return $incoming_deliveries_corrective_actions;
 	}
 
 	/**

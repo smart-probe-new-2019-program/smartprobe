@@ -27,8 +27,17 @@ class IncomingDeliveriesTypeOfProductsController extends Controller
      */
     public function getAllIncomingDeliveriesTypeOfProducts(Request $request)
     { 
-		return IncomingDeliveriesTypeOfProduct::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$incoming_deliveries_type_of_products = IncomingDeliveriesTypeOfProduct::with('organization');
+
+		if($organization_id){
+			$incoming_deliveries_type_of_products = $incoming_deliveries_type_of_products->where('organization_id', $organization_id);
+		}
+		
+		$incoming_deliveries_type_of_products = $incoming_deliveries_type_of_products->orderBy('created_at','desc')->paginate(5);
+
+		return $incoming_deliveries_type_of_products;
 	}
 
 	/**

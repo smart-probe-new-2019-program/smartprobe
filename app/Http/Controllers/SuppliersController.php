@@ -27,8 +27,17 @@ class SuppliersController extends Controller
      */
     public function getAllSuppliers(Request $request)
     { 
-		return Supplier::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$suppliers = Supplier::with('organization');
+
+		if($organization_id){
+			$suppliers = $suppliers->where('organization_id', $organization_id);
+		}
+		
+		$suppliers = $suppliers->orderBy('created_at','desc')->paginate(5);
+
+		return $suppliers;
 	}
 
 	/**

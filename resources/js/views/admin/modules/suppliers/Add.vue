@@ -101,7 +101,7 @@ export default {
 				}
 				else{
 					app.$router.push('/admin/suppliers');
-					toastr['success']('New area added!', 'Success!');
+					toastr['success']('New supplier added!', 'Success!');
 				}
 			})
 			.catch(function() {

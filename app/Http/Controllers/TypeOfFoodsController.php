@@ -28,8 +28,17 @@ class TypeOfFoodsController extends Controller
      */
     public function getAllTypeOfFoods(Request $request)
     { 
-		return TypeOfFood::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$type_of_foods = TypeOfFood::with('organization');
+
+		if($organization_id){
+			$type_of_foods = $type_of_foods->where('organization_id', $organization_id);
+		}
+		
+		$type_of_foods = $type_of_foods->orderBy('created_at','desc')->paginate(5);
+
+		return $type_of_foods;
 	}
 
 	/**

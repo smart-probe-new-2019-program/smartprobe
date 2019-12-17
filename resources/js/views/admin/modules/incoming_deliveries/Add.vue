@@ -178,7 +178,7 @@ export default {
 				time_24hr: true
 			},
 			incomingDeliveryData: {
-				organization_id: localStorage.getItem("user.organization_id"),
+				organization_id: "",
 				item_id: "",
 				user_id: "",
 				supplier_id: "",

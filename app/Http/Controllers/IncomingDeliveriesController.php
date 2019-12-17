@@ -27,8 +27,22 @@ class IncomingDeliveriesController extends Controller
      */
     public function getAllIncomingDeliveries(Request $request)
     { 
-		return IncomingDelivery::with('organization','item','user','supplier','category','type_of_product','corrective_action','probe')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$user_id = $request['user_id'];
+
+		$incoming_deliveries = IncomingDelivery::with('organization','item','user','supplier','category','type_of_product','corrective_action','probe');
+
+		if($organization_id){
+			$incoming_deliveries = $incoming_deliveries->where('organization_id', $organization_id);
+		}
+
+		if($user_id){
+			$incoming_deliveries = $incoming_deliveries->where('created_by', $user_id);
+		}
+		
+		$incoming_deliveries = $incoming_deliveries->orderBy('created_at','desc')->paginate(5);
+
+		return $incoming_deliveries;
 	}
 
 	/**

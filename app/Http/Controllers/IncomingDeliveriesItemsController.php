@@ -27,8 +27,17 @@ class IncomingDeliveriesItemsController extends Controller
      */
     public function getAllIncomingDeliveriesItems(Request $request)
     { 
-		return IncomingDeliveriesItem::with('organization')
-		->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+
+		$items = IncomingDeliveriesItem::with('organization');
+
+		if($organization_id){
+			$items = $items->where('organization_id', $organization_id);
+		}
+		
+		$items = $items->orderBy('created_at','desc')->paginate(5);
+
+		return $items;
 	}
 
 	/**

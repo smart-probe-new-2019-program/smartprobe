@@ -27,8 +27,22 @@ class ProbesController extends Controller
      */
     public function getAllProbes(Request $request)
     { 
-		return Probe::with('organization','location')
-				->orderBy('created_at','desc')->paginate(5);
+		$organization_id = $request['organization_id'];
+		$location_id = $request['location_id'];
+
+		$probes = Probe::with('organization','location');
+
+		if($organization_id){
+			$probes = $probes->where('organization_id', $organization_id);
+		}
+
+		if($location_id){
+			$probes = $probes->where('location_id', $location_id);
+		}
+		
+		$probes = $probes->orderBy('created_at','desc')->paginate(5);
+
+		return $probes;
 	}
 
 	/**
