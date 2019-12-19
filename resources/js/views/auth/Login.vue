@@ -1,19 +1,16 @@
 <template>
   <form @submit.prevent="validateBeforeSubmit">
-    <div :class="['form-group', {'is-invalid': $v.loginData.email.$error}]">
+    <div :class="['form-group', {'is-invalid': $v.loginData.username.$error}]">
       <input
-        :class="{ 'is-invalid': $v.loginData.email.$error }"
-        v-model.trim="loginData.email"
+        :class="{ 'is-invalid': $v.loginData.username.$error }"
+        v-model.trim="loginData.username"
         class="form-control"
-        placeholder="Enter Email"
-        type="email"
-        @input="$v.loginData.email.$touch()"
+        placeholder="Enter Username"
+        type="text"
+        @input="$v.loginData.username.$touch()"
       >
-      <span v-if="!$v.loginData.email.required" class="invalid-feedback">
+      <span v-if="!$v.loginData.username.required" class="invalid-feedback">
         Email is required
-      </span>
-      <span v-if="!$v.loginData.email.email" class="invalid-feedback">
-        Email is invalid
       </span>
     </div>
     <div :class="['form-group', {'is-invalid': $v.loginData.password.$error}]">
@@ -72,7 +69,7 @@ export default {
   data () {
     return {
       loginData: {
-        email: '',
+        username: '',
         password: '',
         remember: ''
       }
@@ -84,9 +81,8 @@ export default {
         required,
         minLength: minLength(6)
       },
-      email: {
-        required,
-        email
+      username: {
+        required
       }
     }
   },
