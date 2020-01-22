@@ -28,14 +28,21 @@ class ChecklistItemsController extends Controller
     public function getAllChecklistItems(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$checklist_item = ChecklistItem::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$checklist_item = $checklist_item->where('organization_id', $organization_id);
 		}
 
-		$checklist_item = $checklist_item->orderBy('created_at','desc')->paginate(5);
+		if($filter_keyword != 'null'){
+			$checklist_item = $checklist_item->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		$checklist_item = $checklist_item->orderBy('created_at','desc')->paginate(25);
 
 		return $checklist_item;
 	}

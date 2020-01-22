@@ -39,7 +39,10 @@ class ProbesLogsController extends Controller
      */
     public function getProbesLogsByProbeID($id)
     {
-		return ProbesLog::with('probe')->where('probe_id', $id)->get();
+		return ProbesLog::with('probe')
+				->where('probe_id', $id)
+				->orderBy('created_at','desc')
+				->paginate(25);
 	}
 
     /**

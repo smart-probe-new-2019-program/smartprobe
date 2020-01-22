@@ -29,10 +29,12 @@ class CookChillChecksController extends Controller
     { 
 		$organization_id = $request['organization_id'];
 		$user_id = $request['user_id'];
+		$start_date = $request['start_date'] . ' 00:00:00';
+		$end_date = $request['end_date'] . ' 23:59:59';
 
 		$cook_chill_checks = CookChillCheck::with('user','supplier','typeOfFood','organization','probe');
 
-		if($organization_id){
+		if($organization_id != 'All') {
 			$cook_chill_checks = $cook_chill_checks->where('organization_id', $organization_id);
 		}
 
@@ -40,7 +42,13 @@ class CookChillChecksController extends Controller
 			$cook_chill_checks = $cook_chill_checks->where('created_by', $user_id);
 		}
 		
-		$cook_chill_checks = $cook_chill_checks->orderBy('created_at','desc')->paginate(5);
+		if($start_date <= $end_date){
+			$cook_chill_checks = $cook_chill_checks
+			->where('created_at', '>=', $start_date)
+			->where('created_at', '<=', $end_date);
+		}
+
+		$cook_chill_checks = $cook_chill_checks->orderBy('created_at','desc')->paginate(100);
 
 		return $cook_chill_checks;
 	}

@@ -6,8 +6,23 @@
 import router from './router.js'
 import utils from './helpers/utilities'
 import ThemeSwitcher from './components/ThemeSwitcher'
+import pagination from 'laravel-vue-pagination'
+import { TableComponent, TableColumn } from 'vue-table-component'
+
 
 require('./bootstrap')
+
+// Added components by dev(James Budlong, 01-07-2020)
+// For table pagination
+Vue.component('pagination', pagination)
+Vue.use(pagination)
+// For tables
+Vue.component('TableComponent', TableComponent)
+Vue.use(TableComponent)
+Vue.component('TableColumn', TableColumn)
+Vue.use(TableColumn)
+
+
 
 Vue.prototype.$utils = utils
 
@@ -18,9 +33,11 @@ Vue.prototype.$utils = utils
  */
 const app = new Vue({
   router,
-
   // Theme Swiching Demo Component (You can remove it if not required)
   components: {
-    ThemeSwitcher
+	ThemeSwitcher,
+	pagination,
+	TableComponent,
+	TableColumn
   }
 }).$mount('#app')

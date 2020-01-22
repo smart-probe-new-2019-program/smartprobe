@@ -31,14 +31,21 @@ class FileEntriesController extends Controller
     public function getAllFiles(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$files = FileEntry::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$files = $files->where('organization_id', $organization_id);
 		}
 		
-		$files = $files->orderBy('created_at','desc')->paginate(5);
+		if($filter_keyword != 'null'){
+			$files = $files->where(function($q) use ($filter_keyword) {
+				$q->where('filename', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		$files = $files->orderBy('created_at','desc')->paginate(100);
 
 		return $files;
 	}

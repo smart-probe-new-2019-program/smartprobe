@@ -28,14 +28,21 @@ class IncomingDeliveriesItemsController extends Controller
     public function getAllIncomingDeliveriesItems(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$items = IncomingDeliveriesItem::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$items = $items->where('organization_id', $organization_id);
 		}
+
+		if($filter_keyword != 'null'){
+			$items = $items->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
 		
-		$items = $items->orderBy('created_at','desc')->paginate(5);
+		$items = $items->orderBy('created_at','desc')->paginate(100);
 
 		return $items;
 	}

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use \Carbon\Carbon;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -22,6 +24,18 @@ class AuthController extends Controller
 		}
 		
 		$user = auth()->user();
+
+		// save ip address and last login date of user to db
+		
+		//get last login date - from server time
+ 		$timestamp = time();
+		$last_login_date = date("Y-m-d", $timestamp);
+		
+		//get last login ip
+		$ip_address = file_get_contents('https://api.ipify.org');
+		
+		//update user on db
+		User::where('id', $user->id)->update(array('last_ip_address' => $ip_address, 'last_login_date' => $last_login_date));
 
         // all good so return the token
         return response()->json(compact('token','user'));

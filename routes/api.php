@@ -509,8 +509,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 	/** ------------------------------------------------------------------------------------------------------------------------- **/
 
 	//Manage Checklists
-	Route::get('manage_checklists/get', [
-        'as' => 'admin.manage_checklists', 'uses' => 'ManageChecklistsController@getAllManageChecklists'
+	Route::get('manage_checklists/getManageChecklistsForAdmin', [
+        'as' => 'admin.manage_checklists', 'uses' => 'ManageChecklistsController@getManageChecklistsForAdmin'
+	]);
+
+	Route::get('manage_checklists/getManageChecklistsForOrganizer', [
+        'as' => 'admin.manage_checklists', 'uses' => 'ManageChecklistsController@getManageChecklistsForOrganizer'
 	]);
 
 	Route::get('manage_checklists/getManageChecklistsForDropdown',[

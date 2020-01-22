@@ -25,17 +25,81 @@ class ManageChecklistsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllManageChecklists(Request $request)
+    public function getManageChecklistsForAdmin(Request $request)
     { 
-		$organization_id = $request['organization_id'];
+		$organization_id = $request['organization_id'] ? $request['organization_id'] : 'All';
+		$filter_keyword = $request['filter_keyword'] ? $request['filter_keyword'] : 'null';
+		$filter_type = $request['filter_type'];
 
 		$manage_checklists = ManageChecklist::with('organization','time','area','category','item');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$manage_checklists = $manage_checklists->where('organization_id', $organization_id);
 		}
-		
-		$manage_checklists = $manage_checklists->orderBy('created_at','desc')->paginate(5);
+
+		if($filter_type != 'All'){
+			$manage_checklists = $manage_checklists->where('type', $filter_type);
+		}
+
+		if($filter_keyword != 'null'){
+			$manage_checklists = $manage_checklists
+			->whereHas('item', function($q) use ($filter_keyword){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			})
+			->orWhereHas('category', function($q) use ($filter_keyword){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			})
+			->orWhereHas('area', function($q) use ($filter_keyword){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			})
+			->orWhereHas('time', function($q) use ($filter_keyword){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		$manage_checklists = $manage_checklists->orderBy('created_at','desc')->paginate(100);
+
+		return $manage_checklists;
+	}
+
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getManageChecklistsForOrganizer(Request $request)
+    { 
+		$organization_id = $request['organization_id'] ? $request['organization_id'] : 'All';
+		$filter_keyword = $request['filter_keyword'] ? $request['filter_keyword'] : 'null';
+		$filter_type = $request['filter_type'];
+
+		$manage_checklists = ManageChecklist::with('organization','time','area','category','item');
+
+		if($organization_id != 'All'){
+			$manage_checklists = $manage_checklists->where('organization_id', $organization_id);
+		}
+
+		if($filter_type != 'All'){
+			$manage_checklists = $manage_checklists->where('type', $filter_type);
+		}
+
+		if($filter_keyword != 'null' && $organization_id != 'All'){
+			$manage_checklists = $manage_checklists
+			->whereHas('item', function($q) use ($filter_keyword, $organization_id){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%')->where('organization_id', $organization_id);
+			})
+			->orWhereHas('category', function($q) use ($filter_keyword, $organization_id){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%')->where('organization_id', $organization_id);
+			})
+			->orWhereHas('area', function($q) use ($filter_keyword, $organization_id){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%')->where('organization_id', $organization_id);
+			})
+			->orWhereHas('time', function($q) use ($filter_keyword, $organization_id){
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%')->where('organization_id', $organization_id);
+			});
+		}
+
+		$manage_checklists = $manage_checklists->orderBy('created_at','desc')->paginate(100);
 
 		return $manage_checklists;
 	}

@@ -29,18 +29,26 @@ class IncomingDeliveriesController extends Controller
     { 
 		$organization_id = $request['organization_id'];
 		$user_id = $request['user_id'];
+		$start_date = $request['start_date'] . ' 00:00:00';
+		$end_date = $request['end_date'] . ' 23:59:59';
 
 		$incoming_deliveries = IncomingDelivery::with('organization','item','user','supplier','category','type_of_product','corrective_action','probe');
 
-		if($organization_id){
+		if($organization_id != 'All') {
 			$incoming_deliveries = $incoming_deliveries->where('organization_id', $organization_id);
 		}
 
 		if($user_id){
 			$incoming_deliveries = $incoming_deliveries->where('created_by', $user_id);
 		}
+
+		if($start_date <= $end_date){
+			$incoming_deliveries = $incoming_deliveries
+			->where('created_at', '>=', $start_date)
+			->where('created_at', '<=', $end_date);
+		}
 		
-		$incoming_deliveries = $incoming_deliveries->orderBy('created_at','desc')->paginate(5);
+		$incoming_deliveries = $incoming_deliveries->orderBy('created_at','desc')->paginate(100);
 
 		return $incoming_deliveries;
 	}

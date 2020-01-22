@@ -28,35 +28,31 @@ class UsersController extends Controller
     public function getAllUsers(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_role = $request['filter_role'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$users = User::with('organization');
 
 		if($organization_id){
-			$users = $users->where('organization_id', $request['organization_id']);
+			$users = $users->where('organization_id', $organization_id);
+		}
+
+		if($filter_role != 'All'){
+			$users = $users->where('role', $filter_role);
+		}
+
+		if($filter_keyword != 'null'){
+			$users = $users->where(function($q) use ($filter_keyword) {
+				$q->where('first_name', 'LIKE', '%'.$filter_keyword.'%')
+				->orWhere('last_name', 'LIKE', '%' . $filter_keyword . '%')
+				->orWhere('email', 'LIKE', '%' . $filter_keyword . '%')
+				->orWhere('username', 'LIKE', '%' . $filter_keyword . '%');
+			});
 		}
 		
-		$users = $users->orderBy('created_at','desc')->paginate(5);
+		$users = $users->orderBy('created_at','desc')->paginate(100);
 
 		return $users;
-
-		// $filter = $request['filter'];
-
-		// if($filter){
-		// 	return User::with('process')
-		// 			->with('shift')
-		// 			->with('line')
-		// 			->where('first_name', 'like', '%' . $filter . '%')
-		// 			->orWhere('last_name', 'like', '%' . $filter . '%')
-		// 			->orderBy('created_at','desc')
-		// 			->paginate(5);
-		// }
-		// else{
-		// 	return User::with('process')
-		// 			->with('shift')
-		// 			->with('line')
-		// 			->orderBy('created_at','desc')
-		// 			->paginate(5);
-		// }
 	}
 	
 	/**

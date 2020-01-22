@@ -28,14 +28,21 @@ class LocationsController extends Controller
     public function getAllLocations(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$locations = Location::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$locations = $locations->where('organization_id', $organization_id);
 		}
+
+		if($filter_keyword != 'null'){
+			$locations = $locations->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
 		
-		$locations = $locations->orderBy('created_at','desc')->paginate(5);
+		$locations = $locations->orderBy('created_at','desc')->paginate(100);
 
 		return $locations;
 	}

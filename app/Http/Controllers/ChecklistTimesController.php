@@ -28,14 +28,21 @@ class ChecklistTimesController extends Controller
     public function getAllChecklistTimes(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 		
 		$checklist_time = ChecklistTime::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$checklist_time = $checklist_time->where('organization_id', $organization_id);
 		}
 
-		$checklist_time = $checklist_time->orderBy('created_at','desc')->paginate(5);
+		if($filter_keyword != 'null'){
+			$checklist_time = $checklist_time->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		$checklist_time = $checklist_time->orderBy('created_at','desc')->paginate(25);
 
 		return $checklist_time;
 	}

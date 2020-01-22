@@ -28,14 +28,21 @@ class SuppliersController extends Controller
     public function getAllSuppliers(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$suppliers = Supplier::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$suppliers = $suppliers->where('organization_id', $organization_id);
 		}
+
+		if($filter_keyword != 'null'){
+			$suppliers = $suppliers->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
 		
-		$suppliers = $suppliers->orderBy('created_at','desc')->paginate(5);
+		$suppliers = $suppliers->orderBy('created_at','desc')->paginate(100);
 
 		return $suppliers;
 	}

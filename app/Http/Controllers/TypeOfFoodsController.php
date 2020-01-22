@@ -29,14 +29,21 @@ class TypeOfFoodsController extends Controller
     public function getAllTypeOfFoods(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$type_of_foods = TypeOfFood::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$type_of_foods = $type_of_foods->where('organization_id', $organization_id);
 		}
+
+		if($filter_keyword != 'null'){
+			$type_of_foods = $type_of_foods->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
 		
-		$type_of_foods = $type_of_foods->orderBy('created_at','desc')->paginate(5);
+		$type_of_foods = $type_of_foods->orderBy('created_at','desc')->paginate(100);
 
 		return $type_of_foods;
 	}

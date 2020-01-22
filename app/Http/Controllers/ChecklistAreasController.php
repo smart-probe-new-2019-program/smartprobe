@@ -28,14 +28,21 @@ class ChecklistAreasController extends Controller
     public function getAllChecklistAreas(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
 
 		$checklist_area = ChecklistArea::with('organization');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$checklist_area = $checklist_area->where('organization_id', $organization_id);
 		}
 
-		$checklist_area = $checklist_area->orderBy('created_at','desc')->paginate(5);
+		if($filter_keyword != 'null'){
+			$checklist_area = $checklist_area->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		$checklist_area = $checklist_area->orderBy('created_at','desc')->paginate(25);
 
 		return $checklist_area;
 	}

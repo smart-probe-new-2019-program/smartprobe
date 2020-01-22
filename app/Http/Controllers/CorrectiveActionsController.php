@@ -30,18 +30,26 @@ class CorrectiveActionsController extends Controller
     { 
 		$organization_id = $request['organization_id'];
 		$user_id = $request['user_id'];
+		$start_date = $request['start_date'] . ' 00:00:00';
+		$end_date = $request['end_date'] . ' 23:59:59';
 
 		$corrective_actions = CorrectiveAction::with('organization', 'user');
 
-		if($organization_id){
+		if($organization_id != 'All') {
 			$corrective_actions = $corrective_actions->where('organization_id', $organization_id);
 		}
 
 		if($user_id){
 			$corrective_actions = $corrective_actions->where('created_by', $user_id);
 		}
+
+		if($start_date <= $end_date){
+			$corrective_actions = $corrective_actions
+			->where('created_at', '>=', $start_date)
+			->where('created_at', '<=', $end_date);
+		}
 		
-		$corrective_actions = $corrective_actions->orderBy('created_at','desc')->paginate(5);
+		$corrective_actions = $corrective_actions->orderBy('created_at','desc')->paginate(100);
 
 		return $corrective_actions;
 	}

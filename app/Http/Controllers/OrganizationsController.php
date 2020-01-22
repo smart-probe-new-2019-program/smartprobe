@@ -27,7 +27,20 @@ class OrganizationsController extends Controller
      */
     public function getAllOrganizations(Request $request)
     { 
-		return Organization::orderBy('created_at','desc')->paginate(5);
+		$filter_keyword = $request['filter_keyword'];
+
+		$organizations = Organization::query();
+
+		if($filter_keyword != 'null'){
+			$organizations = $organizations->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%')
+				->orWhere('description', 'LIKE', '%' . $filter_keyword . '%');
+			});
+		}
+
+		$organizations = $organizations->orderBy('created_at','desc')->paginate(100);
+
+		return $organizations;
 	}
 
 	/**

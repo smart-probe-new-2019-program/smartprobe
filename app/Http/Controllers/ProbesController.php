@@ -28,19 +28,32 @@ class ProbesController extends Controller
     public function getAllProbes(Request $request)
     { 
 		$organization_id = $request['organization_id'];
+		$filter_keyword = $request['filter_keyword'];
+		$filter_status = $request['filter_status'];
 		$location_id = $request['location_id'];
 
 		$probes = Probe::with('organization','location');
 
-		if($organization_id){
+		if($organization_id != 'All'){
 			$probes = $probes->where('organization_id', $organization_id);
 		}
 
 		if($location_id){
 			$probes = $probes->where('location_id', $location_id);
 		}
+
+		if($filter_keyword != 'null'){
+			$probes = $probes->where(function($q) use ($filter_keyword) {
+				$q->where('name', 'LIKE', '%'.$filter_keyword.'%');
+				$q->where('serial_number', 'LIKE', '%'.$filter_keyword.'%');
+			});
+		}
+
+		if($filter_status != 'All'){
+			$probes = $probes->where('status', $filter_status);
+		}
 		
-		$probes = $probes->orderBy('created_at','desc')->paginate(5);
+		$probes = $probes->orderBy('created_at','desc')->paginate(100);
 
 		return $probes;
 	}
