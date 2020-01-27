@@ -30,6 +30,9 @@
             <router-link to="/admin/probes_logs">
               <i class="icon-fa icon-fa-circle-thin" />Probes Logs
             </router-link>
+            <!-- <router-link to="/admin/latest_logs">
+              <i class="icon-fa icon-fa-circle-thin" />Latest Logs
+            </router-link>-->
           </v-collapse-item>
 
           <v-collapse-item active-url>
@@ -152,6 +155,9 @@
             <router-link to="/organizer/probes_logs">
               <i class="icon-fa icon-fa-circle-thin" />Probes Logs
             </router-link>
+            <!-- <router-link to="/organizer/latest_logs">
+              <i class="icon-fa icon-fa-circle-thin" />Latest Logs
+            </router-link>-->
           </v-collapse-item>
 
           <v-collapse-item active-url>
@@ -265,6 +271,9 @@
             <router-link to="/manager/probes_logs">
               <i class="icon-fa icon-fa-circle-thin" />Probes Logs
             </router-link>
+            <!-- <router-link to="/manager/latest_logs">
+              <i class="icon-fa icon-fa-circle-thin" />Latest Logs
+            </router-link>-->
           </v-collapse-item>
 
           <v-collapse-item active-url="/manager/file_entries">
@@ -291,19 +300,19 @@
             </router-link>
           </v-collapse-item>
 
-          <v-collapse-item active-url="/staff/corrective_actions">
-            <router-link slot="item-title" to="/staff/corrective_actions">
-              <i class="icon-fa icon-fa-pencil-square" />Corrective Actions
-            </router-link>
-          </v-collapse-item>
-
-          <v-collapse-item active-url>
+          <!-- <v-collapse-item active-url>
             <a slot="item-title" href="#">
               <i class="icon-fa icon-fa-file-text-o" />Reports
               <span class="icon-fa arrow icon-fa-fw" />
             </a>
-            <router-link to="/staff/probes_logs">
-              <i class="icon-fa icon-fa-circle-thin" />Probes Logs
+            <router-link to="/manager/latest_logs">
+              <i class="icon-fa icon-fa-circle-thin" />Latest Logs
+            </router-link>
+          </v-collapse-item>-->
+
+          <v-collapse-item active-url="/staff/corrective_actions">
+            <router-link slot="item-title" to="/staff/corrective_actions">
+              <i class="icon-fa icon-fa-pencil-square" />Corrective Actions
             </router-link>
           </v-collapse-item>
 

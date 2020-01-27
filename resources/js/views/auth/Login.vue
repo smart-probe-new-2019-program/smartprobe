@@ -8,10 +8,8 @@
         placeholder="Enter Username"
         type="text"
         @input="$v.loginData.username.$touch()"
-      >
-      <span v-if="!$v.loginData.username.required" class="invalid-feedback">
-        Email is required
-      </span>
+      />
+      <span v-if="!$v.loginData.username.required" class="invalid-feedback">Email is required</span>
     </div>
     <div :class="['form-group', {'is-invalid': $v.loginData.password.$error}]">
       <input
@@ -21,24 +19,19 @@
         placeholder="Enter Password"
         type="password"
         @input="$v.loginData.password.$touch()"
-      >
-      <span v-if="!$v.loginData.password.required" class="invalid-feedback">
-        Password is required
-      </span>
-      <span v-if="!$v.loginData.password.minLength" class="invalid-feedback">
-        Password must have at least {{ $v.loginData.password.$params.minLength.min }} letters.
-      </span>
+      />
+      <span v-if="!$v.loginData.password.required" class="invalid-feedback">Password is required</span>
+      <span
+        v-if="!$v.loginData.password.minLength"
+        class="invalid-feedback"
+      >Password must have at least {{ $v.loginData.password.$params.minLength.min }} letters.</span>
     </div>
     <div class="other-actions row">
       <div class="col-sm-6">
         <div class="checkbox">
           <label class="c-input c-checkbox">
-            <input
-              v-model="loginData.remember"
-              type="checkbox"
-              name="remember"
-            >
-            <span class="c-indicator"/>
+            <input v-model="loginData.remember" type="checkbox" name="remember" />
+            <span class="c-indicator" />
             Remember Me
           </label>
         </div>
@@ -47,33 +40,33 @@
         <a href="#" class="forgot-link">
           Forgot Password?
         </a>
-      </div> -->
+      </div>-->
     </div>
     <button class="btn btn-theme btn-full">Login</button>
   </form>
 </template>
 
 <script type="text/babel">
-import {required, minLength, email} from 'vuelidate/lib/validators'
-import Auth from '../../services/auth'
+import { required, minLength, email } from "vuelidate/lib/validators";
+import Auth from "../../services/auth";
 
 export default {
   mounted() {
-	//Redirect user to dashboard if already logged in
-	let userid = localStorage.getItem("user.id");
-	
-	if(userid){
-		this.$router.push('/admin/dashboard') 
-	} 
+    //Redirect user to dashboard if already logged in
+    let userid = localStorage.getItem("user.id");
+
+    if (userid) {
+      this.$router.push("/admin/dashboard");
+    }
   },
-  data () {
+  data() {
     return {
       loginData: {
-        username: '',
-        password: '',
-        remember: ''
+        username: "",
+        password: "",
+        remember: ""
       }
-    }
+    };
   },
   validations: {
     loginData: {
@@ -87,30 +80,31 @@ export default {
     }
   },
   methods: {
-    validateBeforeSubmit () {
-      this.$v.$touch()
+    validateBeforeSubmit() {
+      this.$v.$touch();
 
       if (!this.$v.$error) {
-        Auth.login(this.loginData).then((res) => {
+        Auth.login(this.loginData).then(res => {
           if (res) {
-			  let user_role = localStorage.getItem("user.role");
-			  
-			  if(user_role == 'Admin'){ //Admin
-				this.$router.push('/admin/dashboard')
-			  }
-			  else if(user_role == 'Organizer'){ //Organizer
-				this.$router.push('/organizer/dashboard')  
-			  }
-			  else if(user_role == 'Manager'){ //Manager
-			    this.$router.push('/manager/dashboard')  
-			  }
-			  else{ //Staff
-				this.$router.push('/staff/dashboard')  
-			  }
+            let user_role = localStorage.getItem("user.role");
+
+            if (user_role == "Admin") {
+              //Admin
+              this.$router.push("/admin/dashboard");
+            } else if (user_role == "Organizer") {
+              //Organizer
+              this.$router.push("/organizer/dashboard");
+            } else if (user_role == "Manager") {
+              //Manager
+              this.$router.push("/manager/dashboard");
+            } else {
+              //Staff
+              this.$router.push("/staff/dashboard");
+            }
           }
-        })
+        });
       }
     }
   }
-}
+};
 </script>
