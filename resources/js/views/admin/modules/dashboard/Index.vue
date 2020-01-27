@@ -25,7 +25,6 @@
                     ref="organization"
                     required
                   >
-                    <option value="All" selected>All</option>
                     <option
                       v-for="organization in organizations"
                       :value="organization.id"
@@ -115,7 +114,7 @@ export default {
   data() {
     return {
       filterData: {
-        organization: "All"
+        organization: null
       },
       organizations: [],
       latestLogs: {}
@@ -123,7 +122,7 @@ export default {
   },
   mounted() {
     this.getOrganizations();
-    this.getLatestLogs();
+    // this.getLatestLogs();
     toastr.options = {
       closeButton: true,
       debug: false,
