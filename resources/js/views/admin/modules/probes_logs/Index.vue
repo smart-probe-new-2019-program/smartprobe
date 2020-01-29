@@ -93,7 +93,7 @@
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="temperature_low"
+                show="temperature_high"
                 label="Sensor 1"
               />
               <table-column
@@ -106,7 +106,7 @@
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="temperature_high"
+                show="temperature_low"
                 label="Sensor 2"
               />
               <table-column

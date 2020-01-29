@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class Probe extends Model
 {
-    use Notifiable;
+	use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,53 +58,5 @@ class Probe extends Model
 
 	public function latest_log() {
 		return $this->hasOne('App\ProbesLog', 'probe_id')->orderBy('id','desc')->limit(1);
-	}
-
-	public function max_temp_sensor_1() {
-		$start = Carbon::now()->toDateString() . ' 00:00:00';
-		$end = Carbon::now()->toDateString() . ' 23:59:59';
-		$orderByQuery = "CAST(temperature_high as DECIMAL(18,2)) DESC";
-
-		return $this->hasOne('App\ProbesLog', 'probe_id')
-					->where('created_at', '>=', $start)
-					->where('created_at', '<=', $end)
-					->orderByRaw($orderByQuery)
-					->limit(1);
-	}
-
-	public function min_temp_sensor_1() {
-		$start = Carbon::now()->toDateString() . ' 00:00:00';
-		$end = Carbon::now()->toDateString() . ' 23:59:59';
-		$orderByQuery = "CAST(temperature_high as DECIMAL(18,2)) ASC";
-
-		return $this->hasOne('App\ProbesLog', 'probe_id')
-					->where('created_at', '>=', $start)
-					->where('created_at', '<=', $end)
-					->orderByRaw($orderByQuery)
-					->limit(1);
-	}
-
-	public function max_temp_sensor_2() {
-		$start = Carbon::now()->toDateString() . ' 00:00:00';
-		$end = Carbon::now()->toDateString() . ' 23:59:59';
-		$orderByQuery = "CAST(temperature_low as DECIMAL(18,2)) DESC";
-
-		return $this->hasOne('App\ProbesLog', 'probe_id')
-					->where('created_at', '>=', $start)
-					->where('created_at', '<=', $end)
-					->orderByRaw($orderByQuery)
-					->limit(1);
-	}
-
-	public function min_temp_sensor_2() {
-		$start = Carbon::now()->toDateString() . ' 00:00:00';
-		$end = Carbon::now()->toDateString() . ' 23:59:59';
-		$orderByQuery = "CAST(temperature_low as DECIMAL(18,2)) ASC";
-
-		return $this->hasOne('App\ProbesLog', 'probe_id')
-					->where('created_at', '>=', $start)
-					->where('created_at', '<=', $end)
-					->orderByRaw($orderByQuery)
-					->limit(1);
 	}
 }

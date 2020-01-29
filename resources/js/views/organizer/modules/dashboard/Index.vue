@@ -44,28 +44,28 @@
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="min_temp_sensor_1.temperature_high"
+                show="min_temperature_high"
                 label="Daily Min(Sensor 1)"
               />
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="max_temp_sensor_1.temperature_high"
+                show="max_temperature_high"
                 label="Daily Max(Sensor 1)"
               />
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="min_temp_sensor_2.temperature_low"
+                show="min_temperature_low"
                 label="Daily Min(Sensor 2)"
               />
               <table-column
                 :sortable="false"
                 :filterable="false"
-                show="max_temp_sensor_2.temperature_low"
+                show="max_temperature_low"
                 label="Daily Max(Sensor 2)"
               />
-              <table-column :sortable="false" :filterable="false" show="name" label="Probe" />
+              <table-column :sortable="false" :filterable="false" show="probe_name" label="Probe" />
               <table-column
                 :sortable="false"
                 :filterable="false"

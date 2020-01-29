@@ -60,11 +60,51 @@ class ProbesLogsController extends Controller
      */
     public function getLatestLogs($organization)
     {	
+		$start = Carbon::now()->toDateString() . ' 00:00:00';
+		$end = Carbon::now()->toDateString() . ' 23:59:59';
+
 		if($organization == 'All'){
-			$latest_logs = Probe::select('id','name')->has('latest_log')->with('latest_log','max_temp_sensor_1','min_temp_sensor_1','max_temp_sensor_2','min_temp_sensor_2')->paginate(25);
+			$latest_logs = Probe::selectRaw('probes.id as probe_id, 
+				probes.name as probe_name,
+				MAX(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as max_temperature_high,  
+				MIN(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as min_temperature_high, 
+				MAX(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as max_temperature_low, 
+				MIN(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as min_temperature_low')
+				->join('probes_logs', function ($q) {
+					$q->on('probes.id', '=', 'probes_logs.probe_id');
+				});
+
+			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
+						->where('probes_logs.created_at', '<=', $end)
+						->groupBy('probes.id')
+						->paginate(25);
+			
+			foreach ($latest_logs as $key => $value) {
+				$latest_log = Probe::with('latest_log')->whereHas('latest_log')->get();
+				$value->latest_log = $latest_log[0]['latest_log'];
+			}
 		}
 		else{
-			$latest_logs = Probe::select('id','name')->has('latest_log')->with('latest_log','max_temp_sensor_1','min_temp_sensor_1','max_temp_sensor_2','min_temp_sensor_2')->where('organization_id', $organization)->paginate(25);
+			$latest_logs = Probe::selectRaw('probes.id as probe_id, 
+				probes.name as probe_name,
+				MAX(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as max_temperature_high,  
+				MIN(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as min_temperature_high, 
+				MAX(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as max_temperature_low, 
+				MIN(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as min_temperature_low')
+				->join('probes_logs', function ($q) {
+					$q->on('probes.id', '=', 'probes_logs.probe_id');
+				});
+
+			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
+						->where('probes_logs.created_at', '<=', $end)
+						->where('probes.organization_id', $organization)
+						->groupBy('probes.id')
+						->paginate(25);
+			
+			foreach ($latest_logs as $key => $value) {
+				$latest_log = Probe::with('latest_log')->whereHas('latest_log')->get();
+				$value->latest_log = $latest_log[0]['latest_log'];
+			}
 		}
 
 		return $latest_logs;
@@ -77,7 +117,29 @@ class ProbesLogsController extends Controller
      */
     public function getLatestLogsByLocationID($location)
     {	
-		$latest_logs = Probe::select('id','name')->has('latest_log')->with('latest_log','max_temp_sensor_1','min_temp_sensor_1','max_temp_sensor_2','min_temp_sensor_2')->where('location_id', $location)->paginate(25);
+		$start = Carbon::now()->toDateString() . ' 00:00:00';
+		$end = Carbon::now()->toDateString() . ' 23:59:59';
+		
+		$latest_logs = Probe::selectRaw('probes.id as probe_id, 
+				probes.name as probe_name,
+				MAX(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as max_temperature_high,  
+				MIN(CAST(probes_logs.temperature_high as DECIMAL(18,1))) as min_temperature_high, 
+				MAX(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as max_temperature_low, 
+				MIN(CAST(probes_logs.temperature_low as DECIMAL(18,1))) as min_temperature_low')
+				->join('probes_logs', function ($q) {
+					$q->on('probes.id', '=', 'probes_logs.probe_id');
+				});
+
+			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
+						->where('probes_logs.created_at', '<=', $end)
+						->where('probes.location_id', $location)
+						->groupBy('probes.id')
+						->paginate(25);
+			
+			foreach ($latest_logs as $key => $value) {
+				$latest_log = Probe::with('latest_log')->whereHas('latest_log')->get();
+				$value->latest_log = $latest_log[0]['latest_log'];
+			}
 		
 		return $latest_logs;
 	}
