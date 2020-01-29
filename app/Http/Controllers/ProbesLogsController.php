@@ -129,9 +129,7 @@ class ProbesLogsController extends Controller
 					$q->on('probes.id', '=', 'probes_logs.probe_id');
 				});
 
-			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
-						->where('probes_logs.created_at', '<=', $end)
-						->where('probes.location_id', $location)
+			$latest_logs = $latest_logs->where('probes.location_id', $location)
 						->groupBy('probes.id')
 						->paginate(25);
 			
