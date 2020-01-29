@@ -55,8 +55,4 @@ class Probe extends Model
 	public function location() {
 		return $this->belongsTo('App\Location', 'location_id');
 	}
-
-	public function latest_log() {
-		return $this->hasOne('App\ProbesLog', 'probe_id')->orderBy('id','desc')->limit(1);
-	}
 }

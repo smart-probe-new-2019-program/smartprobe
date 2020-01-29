@@ -74,14 +74,13 @@ class ProbesLogsController extends Controller
 					$q->on('probes.id', '=', 'probes_logs.probe_id');
 				});
 
-			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
-						->where('probes_logs.created_at', '<=', $end)
-						->groupBy('probes.id')
+			$latest_logs = $latest_logs->groupBy('probes.id')
 						->paginate(25);
 			
 			foreach ($latest_logs as $key => $value) {
-				$latest_log = Probe::with('latest_log')->whereHas('latest_log')->get();
-				$value->latest_log = $latest_log[0]['latest_log'];
+				$probe_id = $latest_logs[$key]['probe_id'];
+				$latest_log = ProbesLog::where('probe_id', $probe_id)->orderBy('id','desc')->limit(1)->get();
+				$value->latest_log = $latest_log[0];
 			}
 		}
 		else{
@@ -95,15 +94,15 @@ class ProbesLogsController extends Controller
 					$q->on('probes.id', '=', 'probes_logs.probe_id');
 				});
 
-			$latest_logs = $latest_logs->where('probes_logs.created_at', '>=', $start)
-						->where('probes_logs.created_at', '<=', $end)
+			$latest_logs = $latest_logs
 						->where('probes.organization_id', $organization)
 						->groupBy('probes.id')
 						->paginate(25);
 			
 			foreach ($latest_logs as $key => $value) {
-				$latest_log = Probe::with('latest_log')->whereHas('latest_log')->get();
-				$value->latest_log = $latest_log[0]['latest_log'];
+				$probe_id = $latest_logs[$key]['probe_id'];
+				$latest_log = ProbesLog::where('probe_id', $probe_id)->orderBy('id','desc')->limit(1)->get();
+				$value->latest_log = $latest_log[0];
 			}
 		}
 
