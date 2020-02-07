@@ -13,15 +13,21 @@ import { TableComponent, TableColumn } from 'vue-table-component'
 require('./bootstrap')
 
 // Added components by dev(James Budlong, 01-07-2020)
+
 // For table pagination
 Vue.component('pagination', pagination)
 Vue.use(pagination)
+
 // For tables
 Vue.component('TableComponent', TableComponent)
 Vue.use(TableComponent)
 Vue.component('TableColumn', TableColumn)
 Vue.use(TableColumn)
 
+//For Graphs
+import apexchart from 'vue-apexcharts'
+Vue.component('apexchart', apexchart)
+Vue.use(apexchart)
 
 
 Vue.prototype.$utils = utils

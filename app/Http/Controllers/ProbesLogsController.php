@@ -44,8 +44,8 @@ class ProbesLogsController extends Controller
 		$end = $request['end_date'] . " 23:59:59";
 		$probe = $request['probe'];
 
-
-		return ProbesLog::with('probe')
+		return ProbesLog::selectRaw('*, UNIX_TIMESTAMP(probes_logs.created_at) AS unix_timestamp')
+				->with('probe')
 				->where('probe_id', $probe)
 				->where('created_at', '>=', $start)
 				->where('created_at', '<=', $end)

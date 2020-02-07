@@ -24,6 +24,7 @@
     "laravel-mix": "^2.1.11"
   },
   "dependencies": {
+    "apexcharts": "^3.15.5",
     "axios": "^0.16.2",
     "bootstrap": "^4.1.0",
     "chart.js": "^2.7.1",
@@ -43,6 +44,7 @@
     "v-tooltip": "^2.0.0-rc.31",
     "vee-validate": "^2.0.9",
     "vue": "^2.5.16",
+    "vue-apexcharts": "^1.5.2",
     "vue-carousel": "^0.6.14",
     "vue-color": "^2.4.5",
     "vue-datatables": "^0.1.4",
