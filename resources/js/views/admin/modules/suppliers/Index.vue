@@ -172,7 +172,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Supplier deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getSuppliers();
               }
             })
             .catch(error => {

@@ -175,7 +175,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Type deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getTypeOfProducts();
               }
             })
             .catch(error => {

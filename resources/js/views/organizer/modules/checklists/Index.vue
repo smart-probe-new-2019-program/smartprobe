@@ -407,7 +407,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Checklist Area deleted!", "Success!");
-                app.$refs.checklistAreaTable.refresh();
+                app.getChecklistAreas();
               }
             })
             .catch(error => {
@@ -434,7 +434,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Checklist Time deleted!", "Success!");
-                app.$refs.checklistTimeTable.refresh();
+                app.getChecklistTimes();
               }
             })
             .catch(error => {
@@ -461,7 +461,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Checklist Category deleted!", "Success!");
-                app.$refs.checklistCategoryTable.refresh();
+                app.getChecklistCategories();
               }
             })
             .catch(error => {
@@ -488,7 +488,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Checklist Item deleted!", "Success!");
-                app.$refs.checklistItemTable.refresh();
+                app.getChecklistItems();
               }
             })
             .catch(error => {

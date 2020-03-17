@@ -6,33 +6,32 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCorrectiveActionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
 		Schema::dropIfExists('corrective_actions');
-        Schema::create('corrective_actions', function (Blueprint $table) {
+		Schema::create('corrective_actions', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('organization_id');
 			$table->integer('user_id');
 			$table->string('comment_type');
-			$table->text('comment')->nullable();
 			$table->string('created_by');
 			$table->string('updated_by');
-            $table->timestamps();
-        });
-    }
+			$table->timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('corrective_actions');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::dropIfExists('corrective_actions');
+	}
 }

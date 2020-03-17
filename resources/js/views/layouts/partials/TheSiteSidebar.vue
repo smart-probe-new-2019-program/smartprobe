@@ -30,9 +30,9 @@
             <router-link to="/admin/probes_logs">
               <i class="icon-fa icon-fa-circle-thin" />Probes Logs
             </router-link>
-            <!-- <router-link to="/admin/latest_logs">
-              <i class="icon-fa icon-fa-circle-thin" />Latest Logs
-            </router-link>-->
+            <router-link to="/admin/temp_check_logs">
+              <i class="icon-fa icon-fa-circle-thin" />Temp Check Logs
+            </router-link>
           </v-collapse-item>
 
           <v-collapse-item active-url>
@@ -111,6 +111,9 @@
             </router-link>
             <router-link to="/admin/locations">
               <i class="icon-fa icon-fa-circle-thin" />Locations
+            </router-link>
+            <router-link to="/admin/contacts">
+              <i class="icon-fa icon-fa-circle-thin" />Contacts
             </router-link>
             <router-link to="/admin/users">
               <i class="icon-fa icon-fa-circle-thin" />Users
@@ -233,6 +236,9 @@
             </a>
             <router-link to="/organizer/locations">
               <i class="icon-fa icon-fa-circle-thin" />Locations
+            </router-link>
+            <router-link to="/organizer/contacts">
+              <i class="icon-fa icon-fa-circle-thin" />Contacts
             </router-link>
             <router-link to="/organizer/users">
               <i class="icon-fa icon-fa-circle-thin" />Users

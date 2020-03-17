@@ -175,7 +175,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Action deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getCorrectiveActions();
               }
             })
             .catch(error => {

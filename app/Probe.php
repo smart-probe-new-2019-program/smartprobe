@@ -10,12 +10,12 @@ class Probe extends Model
 {
 	use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = [
 		'serial_number',
 		'name',
 		'cooling_device',
@@ -48,11 +48,13 @@ class Probe extends Model
 		'updated_by',
 	];
 
-	public function organization() {
+	public function organization()
+	{
 		return $this->belongsTo('App\Organization', 'organization_id');
 	}
 
-	public function location() {
+	public function location()
+	{
 		return $this->belongsTo('App\Location', 'location_id');
 	}
 }

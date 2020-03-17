@@ -24,6 +24,7 @@ import AdminViewCorrectiveActions from "../views/admin/modules/corrective_action
 
 //Admin Reports
 import AdminProbesLogs from "../views/admin/modules/probes_logs/Index.vue";
+import AdminTempCheckLogs from "../views/admin/modules/temp_check_logs/Index.vue";
 
 //Admin Cook Chill Checks
 import AdminCookChillChecks from "../views/admin/modules/cook_chill_checks/Index.vue";
@@ -88,6 +89,11 @@ import AdminLocations from "../views/admin/modules/locations/Index.vue";
 import AdminAddLocations from "../views/admin/modules/locations/Add.vue";
 import AdminEditLocations from "../views/admin/modules/locations/Edit.vue";
 import AdminViewLocations from "../views/admin/modules/locations/View.vue";
+
+//Admin Contacts
+import AdminContacts from "../views/admin/modules/contacts/Index.vue";
+import AdminAddContacts from "../views/admin/modules/contacts/Add.vue";
+import AdminEditContacts from "../views/admin/modules/contacts/Edit.vue";
 
 //Admin File Entries
 import AdminFileEntries from "../views/admin/modules/file_entries/Index.vue";
@@ -194,6 +200,12 @@ const routes = [
         path: "probes_logs",
         component: AdminProbesLogs,
         name: "admin_probes_logs"
+      },
+      // Reports - Temp Check Logs Index
+      {
+        path: "temp_check_logs",
+        component: AdminTempCheckLogs,
+        name: "admin_temp_check_logs"
       },
       // Cook Chill Checks - Index
       {
@@ -398,6 +410,24 @@ const routes = [
         path: "locations/view/:id",
         component: AdminViewLocations,
         name: "admin_view_locations"
+	  },
+	  // Contacts - Index
+      {
+        path: "contacts",
+        component: AdminContacts,
+        name: "admin_contacts"
+      },
+      // Contacts - Add
+      {
+        path: "contacts/add",
+        component: AdminAddContacts,
+        name: "admin_add_contacts"
+      },
+      // Contacts - Edit
+      {
+        path: "contacts/edit/:id",
+        component: AdminEditContacts,
+        name: "admin_edit_contacts"
       },
       // File Entries - Index
       {

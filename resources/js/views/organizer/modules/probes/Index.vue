@@ -172,7 +172,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Probe deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getProbes();
               }
             })
             .catch(error => {

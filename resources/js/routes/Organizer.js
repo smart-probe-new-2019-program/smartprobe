@@ -87,6 +87,11 @@ import OrganizerViewLocations from "../views/organizer/modules/locations/View.vu
 import OrganizerFileEntries from "../views/organizer/modules/file_entries/Index.vue";
 import OrganizerAddFileEntries from "../views/organizer/modules/file_entries/Add.vue";
 
+//Organizer Contacts
+import OrganizerContacts from "../views/organizer/modules/contacts/Index.vue";
+import OrganizerAddContacts from "../views/organizer/modules/contacts/Add.vue";
+import OrganizerEditContacts from "../views/organizer/modules/contacts/Edit.vue";
+
 //Organizer Users
 import OrganizerUsers from "../views/organizer/modules/users/Index.vue";
 import OrganizerAddUsers from "../views/organizer/modules/users/Add.vue";
@@ -380,6 +385,24 @@ const routes = [
         path: "file_entries/add",
         component: OrganizerAddFileEntries,
         name: "organizer_add_file_entries"
+      },
+      // Contacts - Index
+      {
+        path: "contacts",
+        component: OrganizerContacts,
+        name: "organizer_contacts"
+      },
+      // Contacts - Add
+      {
+        path: "contacts/add",
+        component: OrganizerAddContacts,
+        name: "organizer_add_contacts"
+      },
+      // Contacts - Edit
+      {
+        path: "contacts/edit/:id",
+        component: OrganizerEditContacts,
+        name: "organizer_edit_contacts"
       },
       // Users - Index
       {

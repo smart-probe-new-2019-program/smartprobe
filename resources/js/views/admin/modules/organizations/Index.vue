@@ -144,7 +144,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Organization deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getOrganizations();
               }
             })
             .catch(error => {

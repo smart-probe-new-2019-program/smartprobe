@@ -175,7 +175,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Category deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getCategories();
               }
             })
             .catch(error => {

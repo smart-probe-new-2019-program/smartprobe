@@ -208,7 +208,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Delivery deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getIncomingDeliveries();
               }
             })
             .catch(error => {

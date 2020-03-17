@@ -141,7 +141,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Item deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getItems();
               }
             })
             .catch(error => {

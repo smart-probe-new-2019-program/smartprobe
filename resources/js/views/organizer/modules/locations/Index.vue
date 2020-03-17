@@ -145,7 +145,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Location deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getLocations();
               }
             })
             .catch(error => {

@@ -7,14 +7,14 @@ use Illuminate\Notifications\Notifiable;
 
 class ProbesLog extends Model
 {
-    use Notifiable;
+	use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = [
 		'probe_id',
 		'temperature_high',
 		'temperature_low',
@@ -36,7 +36,8 @@ class ProbesLog extends Model
 		'updated_by',
 	];
 
-	public function probe() {
+	public function probe()
+	{
 		return $this->belongsTo('App\Probe', 'probe_id');
 	}
 }

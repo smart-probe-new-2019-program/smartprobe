@@ -190,7 +190,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Checklist deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getStaffDailyChecklists();
               }
             })
             .catch(error => {

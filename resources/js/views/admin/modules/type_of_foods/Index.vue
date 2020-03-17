@@ -175,7 +175,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Type of Food deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getTypeOfFoods();
               }
             })
             .catch(error => {

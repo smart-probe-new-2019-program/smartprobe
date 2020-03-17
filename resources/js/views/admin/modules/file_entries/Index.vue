@@ -186,7 +186,7 @@ export default {
                 );
               } else {
                 toastr["success"]("File deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getFileEntries();
               }
             })
             .catch(error => {

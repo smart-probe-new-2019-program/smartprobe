@@ -56,9 +56,6 @@
                     <a v-on:click="downloadFile(`${row.path}`,`${row.filename}`)">
                       <i class="icon-fa icon-fa-download" />
                     </a>
-                    <a v-on:click="deleteFileEntry(`${row.id}`)">
-                      <i class="icon-fa icon-fa-trash" />
-                    </a>
                   </template>
                 </table-column>
               </table-component>
@@ -126,33 +123,6 @@ export default {
           console.log("Error fetching filtered file entries");
         });
     }, 500),
-    deleteFileEntry(id) {
-      let app = this;
-      notie.confirm({
-        text: "Are you sure you want to delete this File?",
-        cancelCallback: function() {
-          // notie.alert({ type: 3, text: 'Aw, why not? :(', time: 2 })
-        },
-        submitCallback: function() {
-          axios
-            .delete("/api/admin/file_entries/" + id)
-            .then(resp => {
-              if (resp.data.status == "error") {
-                toastr["error"](
-                  "Something went wrong while deleting the file. Please contact admin about this.",
-                  "Error!"
-                );
-              } else {
-                toastr["success"]("File deleted!", "Success!");
-                app.$refs.table.refresh();
-              }
-            })
-            .catch(error => {
-              console.log("Error on ajax call!");
-            });
-        }
-      });
-    },
     downloadFile(path, filename) {
       axios
         .get("/api/admin/file_entries/" + path + "/" + filename)

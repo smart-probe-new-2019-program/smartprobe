@@ -200,7 +200,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Entry deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getCookChillChecks();
               }
             })
             .catch(error => {

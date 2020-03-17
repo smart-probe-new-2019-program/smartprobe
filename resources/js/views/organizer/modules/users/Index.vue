@@ -175,7 +175,7 @@ export default {
                 );
               } else {
                 toastr["success"]("User deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getUsers();
               }
             })
             .catch(error => {

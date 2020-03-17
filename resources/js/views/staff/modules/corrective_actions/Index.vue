@@ -80,9 +80,9 @@
                     <a :href="`/staff/corrective_actions/view/${row.id}`">
                       <i class="icon-fa icon-fa-eye" />
                     </a>
-                    <a :href="`/staff/corrective_actions/edit/${row.id}`">
+                    <!-- <a :href="`/staff/corrective_actions/edit/${row.id}`">
                       <i class="icon-fa icon-fa-pencil-square-o" />
-                    </a>
+                    </a>-->
                     <a v-on:click="deleteCorrectiveAction(`${row.id}`)">
                       <i class="icon-fa icon-fa-trash" />
                     </a>
@@ -194,7 +194,7 @@ export default {
                 );
               } else {
                 toastr["success"]("Corrective Action deleted!", "Success!");
-                app.$refs.table.refresh();
+                app.getCorrectiveActions();
               }
             })
             .catch(error => {
